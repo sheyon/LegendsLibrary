@@ -1,6 +1,8 @@
 package com.sheyon.fivecats.legendslibrary.data;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 public class LegendsHelper extends SQLiteAssetHelper
@@ -11,5 +13,12 @@ public class LegendsHelper extends SQLiteAssetHelper
     public LegendsHelper(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    @Override
+    public void onOpen(SQLiteDatabase db)
+    {
+        super.onOpen(db);
+        db.execSQL("PRAGMA foreign_keys=ON;");
     }
 }
