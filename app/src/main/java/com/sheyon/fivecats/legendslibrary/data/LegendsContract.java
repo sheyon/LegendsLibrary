@@ -26,7 +26,7 @@ public final class LegendsContract
         public static final String SUBCAT_NAME = "SubCatName";
     }
 
-    //Returns Lore + Category
+    //Returns ALL Lore + Category
     public static final String MY_QUERY = "SELECT " + LoreLibrary.LORE_ID + " , " + LoreLibrary.LORE_TITLE + " , " + LoreLibrary.CATEGORY_NAME +
             " FROM " + LoreLibrary.LORE_TABLE_NAME +
             " INNER JOIN " + LoreLibrary.CATEGORY_TABLE_NAME +
