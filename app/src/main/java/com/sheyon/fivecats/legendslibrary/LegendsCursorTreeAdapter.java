@@ -14,12 +14,12 @@ import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 
 
-public class LegendsCursorTreeAdaptor extends CursorTreeAdapter
+public class LegendsCursorTreeAdapter extends CursorTreeAdapter
 {
     private Context mContext;
     private Cursor mCursor;
 
-    public LegendsCursorTreeAdaptor(Cursor cursor, Context context)
+    public LegendsCursorTreeAdapter(Cursor cursor, Context context)
     {
         super(cursor, context, false);
         mContext = context;
