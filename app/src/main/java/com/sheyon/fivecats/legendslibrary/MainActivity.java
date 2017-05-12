@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract;
@@ -16,6 +15,7 @@ import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 
 public class MainActivity extends AppCompatActivity {
 
+    private SQLiteDatabase legendsDB;
     private ExpandableListView legendsExpandableView;
     private Cursor cursor;
 
@@ -24,15 +24,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //OPEN DATABASE
+        LegendsHelper legendsHelper = new LegendsHelper(this);
+        legendsDB = legendsHelper.getReadableDatabase();
+
         legendsExpandableView = (ExpandableListView) findViewById(R.id.legends_expandable_list);
 
         legendsExpandableView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-
                 LinearLayout ll = (LinearLayout) v;
                 TextView tv = (TextView) ll.findViewById(R.id.subcategory_text_view);
                 String clickedSubcatText = tv.getText().toString();
+                displaySubcategoryScreen(groupPosition, childPosition);
 
                 Log.v("***STRING: " , "" + clickedSubcatText);
                 Log.v("***GROUP:CHILD POS" , "" + groupPosition + " : " + childPosition);
@@ -40,18 +44,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        displayDatabaseInfo();
+        displayCategoryScreen();
     }
 
-    private void displayDatabaseInfo()
+    private void displayCategoryScreen()
     {
-        LegendsHelper legendsHelper = new LegendsHelper(this);
-        SQLiteDatabase legendsDB = legendsHelper.getReadableDatabase();
-
         cursor = legendsDB.rawQuery(LegendsContract.CAT_QUERY, null, null);
 
-        LegendsCursorTreeAdapter legendsCursorTreeAdaptor = new LegendsCursorTreeAdapter(cursor, this);
-        legendsExpandableView.setAdapter(legendsCursorTreeAdaptor);
+        LegendsCursorTreeAdapter legendsCursorTreeAdapter = new LegendsCursorTreeAdapter(cursor, this);
+        legendsExpandableView.setAdapter(legendsCursorTreeAdapter);
+    }
+
+    private void displaySubcategoryScreen(int groupPosition, int childPosition)
+    {
+        closeCursor();
+
+        int adjustedGroupPos = groupPosition + 1;
+        String query = "select lore._id AS _id, lore.CategoryID, subcat.SubCatName\n" +
+                "from lore\n" +
+                "join subcat\n" +
+                "on lore.SubCatID = subcat._id\n" +
+                "where lore.CategoryID = ?\n" +
+                "group by subcat.SubCatName";
+
+        String[] selectionArgs = { Integer.toString(adjustedGroupPos) };
+
+        cursor = legendsDB.rawQuery(query, selectionArgs);
+        LegendsCursorTreeAdapter legendsCursorTreeAdapter = new LegendsCursorTreeAdapter(cursor, this);
+        legendsExpandableView.setAdapter(legendsCursorTreeAdapter);
+
+        //EXPAND THE GROUP THE USER CLICKED ON
+        legendsExpandableView.expandGroup(childPosition);
     }
 
     @Override
@@ -66,8 +89,16 @@ public class MainActivity extends AppCompatActivity {
         closeCursor();
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        closeCursor();
+        displayCategoryScreen();
+    }
+
     private void closeCursor()
     {
+        //USED TO CLOSE THE PREVIOUS CURSOR WHEN SWAPPING BETWEEN CATEGORY AND SUBCAT VIEWS
         if (cursor != null)
         {
             cursor.close();

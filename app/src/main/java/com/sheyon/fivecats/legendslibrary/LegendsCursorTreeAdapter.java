@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorTreeAdapter;
-import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
@@ -70,8 +68,16 @@ public class LegendsCursorTreeAdapter extends CursorTreeAdapter
     protected void bindGroupView(View view, Context context, Cursor cursor, boolean isExpanded)
     {
         TextView categoryHeader = (TextView) view.findViewById(R.id.category_text_view);
+        String categoryText;
 
-        String categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_NAME));
+        if (cursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_NAME) == -1)
+        {
+            categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_SUBCAT_NAME));
+        }
+        else
+        {
+            categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_NAME));
+        }
 
         categoryHeader.setText(categoryText);
     }
