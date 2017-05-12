@@ -34,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
                 TextView tv = (TextView) ll.findViewById(R.id.subcategory_text_view);
                 String clickedSubcatText = tv.getText().toString();
 
-                Log.v("***STRING: ", "" + clickedSubcatText);
+                Log.v("***STRING: " , "" + clickedSubcatText);
+                Log.v("***GROUP:CHILD POS" , "" + groupPosition + " : " + childPosition);
                 return false;
             }
         });

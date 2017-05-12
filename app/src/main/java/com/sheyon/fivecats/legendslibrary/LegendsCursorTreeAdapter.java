@@ -4,10 +4,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorTreeAdapter;
+import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
@@ -85,13 +88,23 @@ public class LegendsCursorTreeAdapter extends CursorTreeAdapter
         String subcategoryText;
         TextView subcategoryHeader = (TextView) view.findViewById(R.id.subcategory_text_view);
 
+        //RESET STYLES IN CASE VIEWS ARE RECYCLED
+        subcategoryHeader.setAllCaps(false);
+        subcategoryHeader.setTypeface(Typeface.defaultFromStyle(0), 0);
+
         subcategoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_SUBCAT_NAME));
 
         if (subcategoryText == null)
         {
+            //ALL LORE WITHOUT SUBCATEGORIES WILL BE INSTANTIATED UNDER THEIR APPROPRIATE CATEGORIES
             subcategoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
+            subcategoryHeader.setText(subcategoryText);
+            return;
         }
 
+        //SUBCATS WILL APPEAR IN BOLD AND CAPS
         subcategoryHeader.setText(subcategoryText);
+        subcategoryHeader.setAllCaps(true);
+        subcategoryHeader.setTypeface(Typeface.defaultFromStyle(0), 1);
     }
 }
