@@ -2,6 +2,7 @@ package com.sheyon.fivecats.legendslibrary;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +11,7 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract;
+import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 
 public class MainActivity extends AppCompatActivity {
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayCategoryScreen()
     {
-        cursor = legendsDB.rawQuery(LegendsContract.CAT_QUERY, null, null);
+        cursor = legendsDB.rawQuery(Queries.CAT_QUERY, null, null);
 
         LegendsCursorTreeAdapter legendsCursorTreeAdapter = new LegendsCursorTreeAdapter(cursor, this);
         legendsExpandableView.setAdapter(legendsCursorTreeAdapter);
@@ -60,16 +61,14 @@ public class MainActivity extends AppCompatActivity {
         closeCursor();
 
         int adjustedGroupPos = groupPosition + 1;
-        String query = "select lore._id AS _id, lore.CategoryID, subcat.SubCatName\n" +
-                "from lore\n" +
-                "join subcat\n" +
-                "on lore.SubCatID = subcat._id\n" +
-                "where lore.CategoryID = ?\n" +
-                "group by subcat.SubCatName";
+        String[] selectionArgs = { Integer.toString(adjustedGroupPos), Integer.toString(adjustedGroupPos) };
+        String[] mergedQuery = { Queries.UNION_1, Queries.UNION_2};
 
-        String[] selectionArgs = { Integer.toString(adjustedGroupPos) };
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        String unionQuery = qb.buildUnionQuery(mergedQuery, null, null);
 
-        cursor = legendsDB.rawQuery(query, selectionArgs);
+        cursor = legendsDB.rawQuery(unionQuery, selectionArgs);
+
         LegendsCursorTreeAdapter legendsCursorTreeAdapter = new LegendsCursorTreeAdapter(cursor, this);
         legendsExpandableView.setAdapter(legendsCursorTreeAdapter);
 

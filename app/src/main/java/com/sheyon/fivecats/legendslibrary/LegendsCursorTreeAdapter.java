@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.CursorTreeAdapter;
 import android.widget.TextView;
 
+import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 
@@ -34,26 +35,13 @@ public class LegendsCursorTreeAdapter extends CursorTreeAdapter
         SQLiteDatabase legendsDB = legendsHelper.getReadableDatabase();
 
         int categoryNumber = mCursor.getInt(mCursor.getColumnIndexOrThrow(LoreLibrary._ID));
-
-        String union1 = "SELECT lore._id AS _id, lore.CategoryID, Title, SubCatName, subcat._id\n" +
-                "FROM lore\n" +
-                "LEFT OUTER JOIN subcat\n" +
-                "ON lore.SubCatID = subcat._id\n" +
-                "WHERE lore.SubCatID IS NOT NULL AND lore.CategoryID = " + categoryNumber + "\n" +
-                "GROUP BY subcat._id";
-
-        String union2 = "SELECT lore._id AS _id, lore.CategoryID, Title, SubCatName, subcat._id\n" +
-                "FROM lore\n" +
-                "LEFT OUTER JOIN subcat\n" +
-                "ON lore.SubCatID = subcat._id\n" +
-                "WHERE lore.SubCatID IS NULL AND lore.CategoryID = " + categoryNumber + "\n" +
-                "ORDER BY lore.CategoryID";
+        String [] selectionArgs = { Integer.toString(categoryNumber), Integer.toString(categoryNumber) };
+        String [] union = {Queries.UNION_1, Queries.UNION_2};
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        String [] union = { union1, union2 };
         String unionQuery = qb.buildUnionQuery(union, null, null);
 
-        groupCursor = legendsDB.rawQuery(unionQuery, null);
+        groupCursor = legendsDB.rawQuery(unionQuery, selectionArgs);
 
         return groupCursor;
         }
@@ -70,12 +58,32 @@ public class LegendsCursorTreeAdapter extends CursorTreeAdapter
         TextView categoryHeader = (TextView) view.findViewById(R.id.category_text_view);
         String categoryText;
 
+        //RESET STYLES
+        categoryHeader.setAllCaps(true);
+        categoryHeader.setTypeface(Typeface.defaultFromStyle(0), 1);
+        categoryHeader.setTextSize(2, 20);
+
+        //CHECK IF A CATEGORY OR SUBCATEGORY HEADER IS BEING FILLED
         if (cursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_NAME) == -1)
         {
+            //FILL THE SUBCATEGORY HEADER FIRST
             categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_SUBCAT_NAME));
+
+            //HOWEVER IF THE SUBCAT HEADER CONTAINS UNCATEGORIZED LORE
+            if (categoryText == null)
+            {
+                //FILL THE LORE HEADER UNDER ANY SUBCATS AND STYLE IT
+                categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
+                categoryHeader.setText(categoryText);
+                categoryHeader.setAllCaps(false);
+                categoryHeader.setTypeface(Typeface.defaultFromStyle(0), 0);
+                categoryHeader.setTextSize(2, 16);
+                return;
+            }
         }
         else
         {
+            //FILL THE CATEGORY HEADER
             categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_NAME));
         }
 
