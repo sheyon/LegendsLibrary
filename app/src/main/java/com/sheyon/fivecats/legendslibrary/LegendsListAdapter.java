@@ -11,10 +11,10 @@ import android.widget.TextView;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 
 
-public class LegendsAdapter extends CursorAdapter
+public class LegendsListAdapter extends CursorAdapter
 {
 
-    public LegendsAdapter(Context context, Cursor c)
+    public LegendsListAdapter(Context context, Cursor c)
     {
         super(context, c, 0);
     }
@@ -28,13 +28,13 @@ public class LegendsAdapter extends CursorAdapter
     @Override
     public void bindView(View view, Context context, Cursor cursor)
     {
-        TextView loreTitleTextView = (TextView) view.findViewById(R.id.list_title);
-        TextView loreCategoryTextView = (TextView) view.findViewById(R.id.list_category);
+        TextView loreTitle_TV = (TextView) view.findViewById(R.id.lore_title_text_view);
+        TextView loreCategory_TV = (TextView) view.findViewById(R.id.lore_category_text_view);
 
-        String loreTitle = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.LORE_TITLE));
-        String loreCategory = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.CATEGORY_NAME));
+        String titleText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
+        String categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_NAME));
 
-        loreTitleTextView.setText(loreTitle);
-        loreCategoryTextView.setText(loreCategory);
+        loreTitle_TV.setText(titleText);
+        loreCategory_TV.setText(categoryText);
     }
 }

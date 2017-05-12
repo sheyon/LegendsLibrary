@@ -1,6 +1,5 @@
 package com.sheyon.fivecats.legendslibrary;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract;
@@ -51,10 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
         LegendsCursorTreeAdapter legendsCursorTreeAdaptor = new LegendsCursorTreeAdapter(cursor, this);
         legendsExpandableView.setAdapter(legendsCursorTreeAdaptor);
-
-        //TO UTILISE THE CURSOR ADAPTOR
-        //LegendsAdapter legendsAdapter = new LegendsAdapter(this, cursor);
-        //legendsListView.setAdapter(legendsAdapter);
     }
 
     @Override
