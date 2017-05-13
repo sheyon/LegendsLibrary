@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayCategoryScreen()
     {
+        closeCursor();
         cursor = legendsDB.rawQuery(Queries.CAT_QUERY, null, null);
 
         LegendsCursorTreeAdapter legendsCursorTreeAdapter = new LegendsCursorTreeAdapter(cursor, this);
