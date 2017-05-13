@@ -36,19 +36,26 @@ public final class LegendsContract
                 " FROM " + LoreLibrary.CATEGORY_TABLE_NAME;
 
         //UNION 1 and UNION 2 returns Uncategorized Lore and Unique Subcats to populate the Expandable View
-        public static final String UNION_1 = "select lore._id AS _id, lore.CategoryID, Title, SubCatName\n" +
+        public static final String UNION_1 = "select lore._id AS _id, lore.CategoryID, Title, SubCatName, lore.SubCatID\n" +
                 "from lore\n" +
                 "left outer join subcat\n" +
                 "on lore.SubCatID = subcat._id\n" +
                 "where lore.SubCatID IS NOT NULL and lore.CategoryID = ?\n" +
-                "group by subcat._id";
+                "group by lore.SubCatID";
 
-        public static final String UNION_2 = "select lore._id AS _id, lore.CategoryID, Title, SubCatName\n" +
+        public static final String UNION_2 = "select lore._id AS _id, lore.CategoryID, Title, SubCatName, lore.SubCatID\n" +
                 "from lore\n" +
                 "left outer join subcat\n" +
                 "on lore.SubCatID = subcat._id\n" +
                 "where lore.SubCatID IS NULL AND lore.CategoryID = ?\n" +
                 "order by lore.CategoryID;";
+
+        public static final String SUBCAT_LORE = "select lore._id as _id, Title, lore.CategoryID, SubCatName, SubCatID\n" +
+                "from lore\n" +
+                "join subcat\n" +
+                "on lore.SubCatID = subcat._id\n" +
+                "where lore.CategoryID = ?\n" +
+                "order by lore.SubCatID";
     }
 
 }
