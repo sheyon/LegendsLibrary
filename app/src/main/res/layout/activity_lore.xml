@@ -45,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginBottom="16dp"
                 android:text="The Buzzing Text"
                 android:textSize="16sp"/>
 
@@ -69,6 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginBottom="16dp"
                 android:text="The Black Signal Text"
                 android:textSize="16sp"
                 android:gravity="top"

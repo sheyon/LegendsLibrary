@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -43,22 +42,55 @@ public class MainActivity extends AppCompatActivity {
 
         legendsExpandableView = (ExpandableListView) findViewById(R.id.legends_expandable_list);
 
+        legendsExpandableView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                LinearLayout ll = (LinearLayout) v;
+                TextView tv = (TextView) ll.findViewById(R.id.category_text_view);
+
+                int style = tv.getTypeface().getStyle();
+
+                //IF THE TEXT STYLE IS BOLDED, EXPAND AS NORMAL
+                if ( style == 1 )
+                {
+                    return false;
+                }
+
+                else
+                {
+                    boolean clickedFromGroup = true;
+
+                    String clickedText = tv.getText().toString();
+
+                    Intent intent = new Intent(MainActivity.this, LoreActivity.class);
+                    intent.putExtra("catPosition", spinnerCatNumber);
+                    intent.putExtra("catName", categoryName);
+                    intent.putExtra("searchParam", clickedText);
+                    intent.putExtra("clickedFromGroup", clickedFromGroup);
+
+                    closeCursor();
+
+                    startActivity(intent);
+                    return false;
+                }
+            }
+        });
+
         legendsExpandableView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 LinearLayout ll = (LinearLayout) v;
                 TextView tv = (TextView) ll.findViewById(R.id.subcategory_text_view);
-                String clickedSubcatText = tv.getText().toString();
 
-                int adjustedGroup = groupPosition + 1;
-
-                Log.v("***STRING: " , "" + clickedSubcatText);
-                Log.v("***GROUP:CHILD POS" , "" + spinnerCatNumber + " : " + adjustedGroup);
+                String clickedText = tv.getText().toString();
 
                 Intent intent = new Intent(MainActivity.this, LoreActivity.class);
                 intent.putExtra("catPosition", spinnerCatNumber);
                 intent.putExtra("catName", categoryName);
-                intent.putExtra("searchParam", clickedSubcatText);
+                intent.putExtra("searchParam", clickedText);
+
+                closeCursor();
+
                 startActivity(intent);
                 return false;
             }

@@ -71,6 +71,10 @@ public final class LegendsContract
                 "join subcat\n" +
                 "on lore.SubCatID = subcat._id\n" +
                 "where lore.CategoryID = ? and ( lore.title LIKE ? or subcat.SubCatName LIKE ?)";
+
+        public static final String SINGLE_LORE_UNCAT = "select lore._id AS _id, Title, lore.CategoryID, Legend, BlackLore\n" +
+                "from lore\n" +
+                "where lore.CategoryID = ? and Title LIKE ? ";
     }
 
 }

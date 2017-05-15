@@ -12,11 +12,10 @@ import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 
-import static android.R.color.black;
-
-
 public class LoreActivity extends AppCompatActivity
 {
+    private Cursor cursor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -26,13 +25,26 @@ public class LoreActivity extends AppCompatActivity
         int categoryNumber = getIntent().getIntExtra("catPosition", 0);
         String categoryString = getIntent().getStringExtra("catName");
         String titleString = getIntent().getStringExtra("searchParam");
+        boolean clickedFromGroup = getIntent().getBooleanExtra("clickedFromGroup", false);
 
         LegendsHelper legendsHelper = new LegendsHelper(this);
         SQLiteDatabase legendsDB = legendsHelper.getReadableDatabase();
 
-        String[] selectionArgs = { Integer.toString(categoryNumber), titleString, titleString };
-        Cursor cursor = legendsDB.rawQuery(Queries.SINGLE_LORE, selectionArgs);
-        cursor.moveToFirst();
+        if (clickedFromGroup)
+        {
+            //USE THIS QUERY IF YOU CAME HERE FROM THE GROUP CLICK LISTENER
+            String[] selectionArgs = { Integer.toString(categoryNumber), titleString };
+            cursor = legendsDB.rawQuery(Queries.SINGLE_LORE_UNCAT, selectionArgs);
+            cursor.moveToFirst();
+        }
+
+        else
+        {
+            //USE THIS QUERY IF YOU CAME HERE FROM THE CHILD CLICK LISTENER
+            String[] selectionArgs = { Integer.toString(categoryNumber), titleString, titleString };
+            cursor = legendsDB.rawQuery(Queries.SINGLE_LORE, selectionArgs);
+            cursor.moveToFirst();
+        }
 
         String buzzingText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BUZZING));
         String blackSignalText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BLACK_SIGNAL));
