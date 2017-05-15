@@ -27,6 +27,8 @@ public final class LegendsContract
         public static final String COLUMN_SUBCAT_NAME = "SubCatName";
         public static final String COLUMN_CATEGORY_ID = "CategoryID";
         public static final String COLUMN_SUBCAT_ID = "SubCatID";
+        public static final String COLUMN_BUZZING = "Legend";
+        public static final String COLUMN_BLACK_SIGNAL = "BlackLore";
 
         //VALUES FOR SPINNER SELECTION
         public static final int CAT_1_SOL = 1;
@@ -63,6 +65,12 @@ public final class LegendsContract
                 "on lore.SubCatID = subcat._id\n" +
                 "where lore.SubCatID = ?\n" +
                 "order by lore.SubCatID";
+
+        public static final String SINGLE_LORE = "select lore._id AS _id, Title, lore.CategoryID, subcat.SubCatName, Legend, BlackLore\n" +
+                "from lore\n" +
+                "join subcat\n" +
+                "on lore.SubCatID = subcat._id\n" +
+                "where lore.CategoryID = ? and ( lore.title LIKE ? or subcat.SubCatName LIKE ?)";
     }
 
 }

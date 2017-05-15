@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private ExpandableListView legendsExpandableView;
     private Cursor cursor;
     private int spinnerCatNumber;
+    private String categoryName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -49,10 +50,15 @@ public class MainActivity extends AppCompatActivity {
                 TextView tv = (TextView) ll.findViewById(R.id.subcategory_text_view);
                 String clickedSubcatText = tv.getText().toString();
 
+                int adjustedGroup = groupPosition + 1;
+
                 Log.v("***STRING: " , "" + clickedSubcatText);
-                Log.v("***GROUP:CHILD POS" , "" + groupPosition + " : " + childPosition);
+                Log.v("***GROUP:CHILD POS" , "" + spinnerCatNumber + " : " + adjustedGroup);
 
                 Intent intent = new Intent(MainActivity.this, LoreActivity.class);
+                intent.putExtra("catPosition", spinnerCatNumber);
+                intent.putExtra("catName", categoryName);
+                intent.putExtra("searchParam", clickedSubcatText);
                 startActivity(intent);
                 return false;
             }
@@ -73,34 +79,42 @@ public class MainActivity extends AppCompatActivity {
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
                     if (selection.equals("Solomon Island")) {
+                        categoryName = "Solomon Island";
                         spinnerCatNumber = LoreLibrary.CAT_1_SOL;
                         displayCategoryScreen();
                     }
                     if (selection.equals("Valley of the Sun God")) {
+                        categoryName = "Valley of the Sun God";
                         spinnerCatNumber = LoreLibrary.CAT_2_EGY;
                         displayCategoryScreen();
                     }
                     if (selection.equals("Transylvania")) {
+                        categoryName = "Transylvania";
                         spinnerCatNumber = LoreLibrary.CAT_3_TRN;
                         displayCategoryScreen();
                     }
                     if (selection.equals("Tokyo")) {
+                        categoryName = "Tokyo";
                         spinnerCatNumber = LoreLibrary.CAT_4_TOK;
                         displayCategoryScreen();
                     }
                     if (selection.equals("Global")) {
+                        categoryName = "Global";
                         spinnerCatNumber = LoreLibrary.CAT_5_GBL;
                         displayCategoryScreen();
                     }
                     if (selection.equals("The Bestiary")) {
+                        categoryName = "The Bestiary";
                         spinnerCatNumber = LoreLibrary.CAT_6_BES;
                         displayCategoryScreen();
                     }
                     if (selection.equals("Events")) {
+                        categoryName = "Events";
                         spinnerCatNumber = LoreLibrary.CAT_7_EVN;
                         displayCategoryScreen();
                     }
                     if (selection.equals("Issues")) {
+                        categoryName = "Issues";
                         spinnerCatNumber = LoreLibrary.CAT_8_ISU;
                         displayCategoryScreen();
                     }
