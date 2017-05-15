@@ -41,10 +41,6 @@ public final class LegendsContract
 
     public static final class Queries
     {
-        //Returns all Categories
-        public static final String CAT_QUERY = "SELECT " + LoreLibrary.BASE_CATEGORY_ID + " AS " + LoreLibrary._ID + " , " + LoreLibrary.COLUMN_CATEGORY_NAME +
-                " FROM " + LoreLibrary.CATEGORY_TABLE_NAME;
-
         //UNION 1 and UNION 2 returns Uncategorized Lore and Unique Subcats to populate the Expandable View
         public static final String UNION_1 = "select lore._id AS _id, lore.CategoryID, Title, SubCatName, lore.SubCatID AS SubCatID\n" +
                 "from lore\n" +
@@ -60,6 +56,7 @@ public final class LegendsContract
                 "where lore.SubCatID IS NULL AND lore.CategoryID = ?\n" +
                 "order by lore.CategoryID;";
 
+        //Returns all other lore
         public static final String LORES = "select lore._id as _id, Title, lore.CategoryID, SubCatName, lore.SubCatID\n" +
                 "from lore\n" +
                 "join subcat\n" +

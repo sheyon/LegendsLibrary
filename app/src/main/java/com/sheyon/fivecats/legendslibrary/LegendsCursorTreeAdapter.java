@@ -98,7 +98,7 @@ public class LegendsCursorTreeAdapter extends CursorTreeAdapter
 
         subcategoryText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_TITLE));
 
-        //SUBCATS WILL APPEAR IN BOLD AND CAPS
+        //LORES WILL APPEAR REGULAR SIZED AND UNBOLDED
         subcategoryHeader.setText(subcategoryText);
         subcategoryHeader.setAllCaps(false);
         subcategoryHeader.setTypeface(Typeface.defaultFromStyle(0), 0);

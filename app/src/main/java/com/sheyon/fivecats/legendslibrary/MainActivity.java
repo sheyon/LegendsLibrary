@@ -1,5 +1,6 @@
 package com.sheyon.fivecats.legendslibrary;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -50,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.v("***STRING: " , "" + clickedSubcatText);
                 Log.v("***GROUP:CHILD POS" , "" + groupPosition + " : " + childPosition);
+
+                Intent intent = new Intent(MainActivity.this, LoreActivity.class);
+                startActivity(intent);
                 return false;
             }
         });
@@ -157,13 +161,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         closeCursor();
-    }
-
-    @Override
-    public void onBackPressed()
-    {
-        closeCursor();
-        displayCategoryScreen();
     }
 
     private void closeCursor()
