@@ -25,8 +25,10 @@ public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase legendsDB;
     private ExpandableListView legendsExpandableView;
     private Cursor cursor;
+
     private int spinnerCatNumber;
     private String categoryName;
+    private String clickedText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -47,30 +49,16 @@ public class MainActivity extends AppCompatActivity {
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 LinearLayout ll = (LinearLayout) v;
                 TextView tv = (TextView) ll.findViewById(R.id.category_text_view);
-
                 int style = tv.getTypeface().getStyle();
 
-                //IF THE TEXT STYLE IS BOLDED, EXPAND AS NORMAL
-                if ( style == 1 )
-                {
+                //IF THE TEXT STYLE IS BOLDED, EXPAND THE CATEGORY
+                if ( style == 1 ) {
                     return false;
                 }
-
-                else
-                {
-                    boolean clickedFromGroup = true;
-
-                    String clickedText = tv.getText().toString();
-
-                    Intent intent = new Intent(MainActivity.this, LoreActivity.class);
-                    intent.putExtra("catPosition", spinnerCatNumber);
-                    intent.putExtra("catName", categoryName);
-                    intent.putExtra("searchParam", clickedText);
-                    intent.putExtra("clickedFromGroup", clickedFromGroup);
-
-                    closeCursor();
-
-                    startActivity(intent);
+                //IF NOT, LAUNCH THE LORE PAGE
+                else {
+                    clickedText = tv.getText().toString();
+                    startLoreActivity();
                     return false;
                 }
             }
@@ -81,21 +69,22 @@ public class MainActivity extends AppCompatActivity {
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 LinearLayout ll = (LinearLayout) v;
                 TextView tv = (TextView) ll.findViewById(R.id.subcategory_text_view);
+                clickedText = tv.getText().toString();
 
-                String clickedText = tv.getText().toString();
-
-                Intent intent = new Intent(MainActivity.this, LoreActivity.class);
-                intent.putExtra("catPosition", spinnerCatNumber);
-                intent.putExtra("catName", categoryName);
-                intent.putExtra("searchParam", clickedText);
-
-                closeCursor();
-
-                startActivity(intent);
+                startLoreActivity();
                 return false;
             }
         });
+    }
 
+    private void startLoreActivity() {
+        Intent intent = new Intent(MainActivity.this, LoreActivity.class);
+        intent.putExtra("catPosition", spinnerCatNumber);
+        intent.putExtra("catName", categoryName);
+        intent.putExtra("searchParam", clickedText);
+
+        closeCursor();
+        startActivity(intent);
     }
 
     private void setupSpinner()
@@ -154,15 +143,13 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
+            public void onNothingSelected(AdapterView<?> parent) {
                 //Do nothing
             }
         });
     }
 
-    private void displayCategoryScreen()
-    {
+    private void displayCategoryScreen() {
         closeCursor();
 
         String[] selectionArgs = { Integer.toString(spinnerCatNumber), Integer.toString(spinnerCatNumber) };
@@ -177,26 +164,6 @@ public class MainActivity extends AppCompatActivity {
         legendsExpandableView.setAdapter(legendsCursorTreeAdapter);
     }
 
-    private void displaySubcategoryScreen(int groupPosition, int childPosition)
-    {
-        closeCursor();
-
-        int adjustedGroupPos = groupPosition + 1;
-        String[] selectionArgs = { Integer.toString(adjustedGroupPos), Integer.toString(adjustedGroupPos) };
-        String[] mergedQuery = { Queries.UNION_1, Queries.UNION_2};
-
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        String unionQuery = qb.buildUnionQuery(mergedQuery, null, null);
-
-        cursor = legendsDB.rawQuery(unionQuery, selectionArgs);
-
-        LegendsCursorTreeAdapter legendsCursorTreeAdapter = new LegendsCursorTreeAdapter(cursor, this);
-        legendsExpandableView.setAdapter(legendsCursorTreeAdapter);
-
-        //EXPAND THE GROUP THE USER CLICKED ON
-        legendsExpandableView.expandGroup(childPosition);
-    }
-
     @Override
     protected void onStop() {
         super.onStop();
@@ -209,11 +176,8 @@ public class MainActivity extends AppCompatActivity {
         closeCursor();
     }
 
-    private void closeCursor()
-    {
-        //USED TO CLOSE THE PREVIOUS CURSOR WHEN SWAPPING BETWEEN CATEGORY AND SUBCAT VIEWS
-        if (cursor != null)
-        {
+    private void closeCursor() {
+        if (cursor != null) {
             cursor.close();
         }
     }

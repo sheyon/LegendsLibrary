@@ -22,8 +22,7 @@
             android:id="@+id/loreActivity_category_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-
+            android:layout_marginBottom="16dp"
             android:text="Lore Category"
             android:textSize="20sp" />
 
@@ -31,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -45,7 +44,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginBottom="16dp"
                 android:text="The Buzzing Text"
                 android:textSize="16sp"/>
 
@@ -55,6 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -70,7 +69,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginBottom="16dp"
                 android:text="The Black Signal Text"
                 android:textSize="16sp"
                 android:gravity="top"
