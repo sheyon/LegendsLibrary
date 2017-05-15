@@ -42,7 +42,7 @@ public class SubcategoryAdapter extends CursorTreeAdapter
         Log.v ("***COLUMN INDEX", ""+subcatNumber);
         String [] selectionArgs = { Integer.toString(subcatNumber) };
 
-        groupCursor = legendsDB.rawQuery(Queries.SUBCAT_LORE, selectionArgs);
+        groupCursor = legendsDB.rawQuery(Queries.LORES, selectionArgs);
 
         return groupCursor;
     }

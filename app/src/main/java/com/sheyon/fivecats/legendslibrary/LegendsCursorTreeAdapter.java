@@ -34,14 +34,17 @@ public class LegendsCursorTreeAdapter extends CursorTreeAdapter
         LegendsHelper legendsHelper = new LegendsHelper(mContext);
         SQLiteDatabase legendsDB = legendsHelper.getReadableDatabase();
 
-        int categoryNumber = mCursor.getInt(mCursor.getColumnIndexOrThrow(LoreLibrary._ID));
-        String [] selectionArgs = { Integer.toString(categoryNumber), Integer.toString(categoryNumber) };
-        String [] union = {Queries.UNION_1, Queries.UNION_2};
+        int subcatNumber = mCursor.getInt(mCursor.getColumnIndex(LoreLibrary.COLUMN_SUBCAT_ID));
 
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        String unionQuery = qb.buildUnionQuery(union, null, null);
+        //THE PREVIOUS CURSOR INCLUDES SUBCAT IDS WHICH MAY BE NULL. SKIP THESE ENTRIES.
+        if (Integer.toString(subcatNumber) == null)
+        {
+            return null;
+        }
 
-        groupCursor = legendsDB.rawQuery(unionQuery, selectionArgs);
+        String [] selectionArgs = { Integer.toString(subcatNumber) };
+
+        groupCursor = legendsDB.rawQuery(Queries.LORES, selectionArgs);
 
         return groupCursor;
         }
@@ -63,28 +66,19 @@ public class LegendsCursorTreeAdapter extends CursorTreeAdapter
         categoryHeader.setTypeface(Typeface.defaultFromStyle(0), 1);
         categoryHeader.setTextSize(2, 20);
 
-        //CHECK IF A CATEGORY OR SUBCATEGORY HEADER IS BEING FILLED
-        if (cursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_NAME) == -1)
-        {
-            //FILL THE SUBCATEGORY HEADER FIRST
-            categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_SUBCAT_NAME));
+        //FILL IN THE CATEGORY HEADER
+        categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_SUBCAT_NAME));
 
-            //HOWEVER IF THE SUBCAT HEADER CONTAINS UNCATEGORIZED LORE
-            if (categoryText == null)
-            {
-                //FILL THE LORE HEADER UNDER ANY SUBCATS AND STYLE IT
-                categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
-                categoryHeader.setText(categoryText);
-                categoryHeader.setAllCaps(false);
-                categoryHeader.setTypeface(Typeface.defaultFromStyle(0), 0);
-                categoryHeader.setTextSize(2, 16);
-                return;
-            }
-        }
-        else
+        //HOWEVER IF THE CAT HEADER CONTAINS UNCATEGORIZED LORE
+        if (categoryText == null)
         {
-            //FILL THE CATEGORY HEADER
-            categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_NAME));
+            //TAKE THE HEADER FROM THE LORE TITLE INSTEAD AND STYLE IT
+            categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
+            categoryHeader.setText(categoryText);
+            categoryHeader.setAllCaps(false);
+            categoryHeader.setTypeface(Typeface.defaultFromStyle(0), 0);
+            categoryHeader.setTextSize(2, 16);
+            return;
         }
 
         categoryHeader.setText(categoryText);
@@ -102,23 +96,12 @@ public class LegendsCursorTreeAdapter extends CursorTreeAdapter
         String subcategoryText;
         TextView subcategoryHeader = (TextView) view.findViewById(R.id.subcategory_text_view);
 
-        //RESET STYLES IN CASE VIEWS ARE RECYCLED
-        subcategoryHeader.setAllCaps(false);
-        subcategoryHeader.setTypeface(Typeface.defaultFromStyle(0), 0);
-
-        subcategoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_SUBCAT_NAME));
-
-        if (subcategoryText == null)
-        {
-            //ALL LORE WITHOUT SUBCATEGORIES WILL BE INSTANTIATED UNDER THEIR APPROPRIATE CATEGORIES
-            subcategoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
-            subcategoryHeader.setText(subcategoryText);
-            return;
-        }
+        subcategoryText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_TITLE));
 
         //SUBCATS WILL APPEAR IN BOLD AND CAPS
         subcategoryHeader.setText(subcategoryText);
-        subcategoryHeader.setAllCaps(true);
-        subcategoryHeader.setTypeface(Typeface.defaultFromStyle(0), 1);
+        subcategoryHeader.setAllCaps(false);
+        subcategoryHeader.setTypeface(Typeface.defaultFromStyle(0), 0);
+        subcategoryHeader.setTextSize(2, 16);
     }
 }

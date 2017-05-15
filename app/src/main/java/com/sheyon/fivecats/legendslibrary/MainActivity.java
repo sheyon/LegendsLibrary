@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 
@@ -23,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase legendsDB;
     private ExpandableListView legendsExpandableView;
     private Cursor cursor;
-    private int spinnerSelection;
+    private int spinnerCatNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -45,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout ll = (LinearLayout) v;
                 TextView tv = (TextView) ll.findViewById(R.id.subcategory_text_view);
                 String clickedSubcatText = tv.getText().toString();
-                displaySubcategoryScreen(groupPosition, childPosition);
 
                 Log.v("***STRING: " , "" + clickedSubcatText);
                 Log.v("***GROUP:CHILD POS" , "" + groupPosition + " : " + childPosition);
@@ -53,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        displayCategoryScreen();
     }
 
     private void setupSpinner()
@@ -67,12 +67,46 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
-
+                if (!TextUtils.isEmpty(selection)) {
+                    if (selection.equals("Solomon Island")) {
+                        spinnerCatNumber = LoreLibrary.CAT_1_SOL;
+                        displayCategoryScreen();
+                    }
+                    if (selection.equals("Valley of the Sun God")) {
+                        spinnerCatNumber = LoreLibrary.CAT_2_EGY;
+                        displayCategoryScreen();
+                    }
+                    if (selection.equals("Transylvania")) {
+                        spinnerCatNumber = LoreLibrary.CAT_3_TRN;
+                        displayCategoryScreen();
+                    }
+                    if (selection.equals("Tokyo")) {
+                        spinnerCatNumber = LoreLibrary.CAT_4_TOK;
+                        displayCategoryScreen();
+                    }
+                    if (selection.equals("Global")) {
+                        spinnerCatNumber = LoreLibrary.CAT_5_GBL;
+                        displayCategoryScreen();
+                    }
+                    if (selection.equals("The Bestiary")) {
+                        spinnerCatNumber = LoreLibrary.CAT_6_BES;
+                        displayCategoryScreen();
+                    }
+                    if (selection.equals("Events")) {
+                        spinnerCatNumber = LoreLibrary.CAT_7_EVN;
+                        displayCategoryScreen();
+                    }
+                    if (selection.equals("Issues")) {
+                        spinnerCatNumber = LoreLibrary.CAT_8_ISU;
+                        displayCategoryScreen();
+                    }
+                }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+                //Do nothing
             }
         });
     }
@@ -80,7 +114,14 @@ public class MainActivity extends AppCompatActivity {
     private void displayCategoryScreen()
     {
         closeCursor();
-        cursor = legendsDB.rawQuery(Queries.CAT_QUERY, null, null);
+
+        String[] selectionArgs = { Integer.toString(spinnerCatNumber), Integer.toString(spinnerCatNumber) };
+        String[] mergedQuery = { Queries.UNION_1, Queries.UNION_2};
+
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        String unionQuery = qb.buildUnionQuery(mergedQuery, null, null);
+
+        cursor = legendsDB.rawQuery(unionQuery, selectionArgs);
 
         LegendsCursorTreeAdapter legendsCursorTreeAdapter = new LegendsCursorTreeAdapter(cursor, this);
         legendsExpandableView.setAdapter(legendsCursorTreeAdapter);
