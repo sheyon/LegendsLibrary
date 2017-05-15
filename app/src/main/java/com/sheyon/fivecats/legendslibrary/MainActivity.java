@@ -99,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
+                    if (selection.equals("Select a category:")) {
+                        spinnerCatNumber = LoreLibrary.CAT_0;
+                    }
                     if (selection.equals("Solomon Island")) {
                         categoryName = "Solomon Island";
                         spinnerCatNumber = LoreLibrary.CAT_1_SOL;
@@ -160,8 +163,20 @@ public class MainActivity extends AppCompatActivity {
 
         cursor = legendsDB.rawQuery(unionQuery, selectionArgs);
 
-        LegendsCursorTreeAdapter legendsCursorTreeAdapter = new LegendsCursorTreeAdapter(cursor, this);
+        LegendsCursorTreeAdapter legendsCursorTreeAdapter = new LegendsCursorTreeAdapter(cursor, this, legendsDB);
         legendsExpandableView.setAdapter(legendsCursorTreeAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        displayCategoryScreen();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        closeCursor();
     }
 
     @Override
@@ -174,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         closeCursor();
+        legendsDB.close();
     }
 
     private void closeCursor() {

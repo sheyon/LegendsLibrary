@@ -2,6 +2,7 @@
     <string name="app_name">Legends Library</string>
 
     <string-array name="categories_array">
+        <item>Select a category:</item>
         <item>Solomon Island</item>
         <item>Valley of the Sun God</item>
         <item>Transylvania</item>

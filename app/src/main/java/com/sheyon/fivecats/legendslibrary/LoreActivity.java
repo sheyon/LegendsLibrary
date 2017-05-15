@@ -46,8 +46,7 @@ public class LoreActivity extends AppCompatActivity
         buzzingTextview.setText(buzzingText);
         blackSignalTextview.setText(blackSignalText);
 
-        if (blackSignalText != null)
-        {
+        if (blackSignalText != null) {
             blackSignalTextview.setVisibility(View.VISIBLE);
             blackSignalImageview.setVisibility(View.VISIBLE);
         }

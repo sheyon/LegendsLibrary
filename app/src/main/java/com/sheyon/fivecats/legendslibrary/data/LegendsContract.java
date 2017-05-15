@@ -31,6 +31,7 @@ public final class LegendsContract
         public static final String COLUMN_BLACK_SIGNAL = "BlackLore";
 
         //VALUES FOR SPINNER SELECTION
+        public static final int CAT_0 = 0;
         public static final int CAT_1_SOL = 1;
         public static final int CAT_2_EGY = 2;
         public static final int CAT_3_TRN = 3;

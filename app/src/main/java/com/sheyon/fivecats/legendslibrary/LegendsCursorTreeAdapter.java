@@ -18,46 +18,48 @@ import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 
 public class LegendsCursorTreeAdapter extends CursorTreeAdapter
 {
-    private Context mContext;
     private Cursor mCursor;
+    private SQLiteDatabase legendsDB;
 
-    public LegendsCursorTreeAdapter(Cursor cursor, Context context)
-    {
+    public LegendsCursorTreeAdapter(Cursor cursor, Context context, SQLiteDatabase db) {
         super(cursor, context, false);
-        mContext = context;
         mCursor = cursor;
+        legendsDB = db;
     }
 
     @Override
-    protected Cursor getChildrenCursor(Cursor groupCursor)
-    {
-        LegendsHelper legendsHelper = new LegendsHelper(mContext);
-        SQLiteDatabase legendsDB = legendsHelper.getReadableDatabase();
+    public void onGroupCollapsed(int groupPosition) {
+        super.onGroupCollapsed(groupPosition);
 
+        Cursor cursor = getChildrenCursor(mCursor);
+
+        if (cursor != null) {
+            cursor.close();
+        }
+    }
+
+    @Override
+    protected Cursor getChildrenCursor(Cursor groupCursor) {
         int subcatNumber = mCursor.getInt(mCursor.getColumnIndex(LoreLibrary.COLUMN_SUBCAT_ID));
 
         //THE PREVIOUS CURSOR INCLUDES SUBCAT IDS WHICH MAY BE NULL. SKIP THESE ENTRIES.
-        if (Integer.toString(subcatNumber) == null)
-        {
+        if (Integer.toString(subcatNumber) == null) {
             return null;
         }
 
         String [] selectionArgs = { Integer.toString(subcatNumber) };
-
         groupCursor = legendsDB.rawQuery(Queries.LORES, selectionArgs);
 
         return groupCursor;
         }
 
     @Override
-    protected View newGroupView(Context context, Cursor cursor, boolean isExpanded, ViewGroup parent)
-    {
+    protected View newGroupView(Context context, Cursor cursor, boolean isExpanded, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(R.layout.expandable_category_header, parent, false);
     }
 
     @Override
-    protected void bindGroupView(View view, Context context, Cursor cursor, boolean isExpanded)
-    {
+    protected void bindGroupView(View view, Context context, Cursor cursor, boolean isExpanded) {
         TextView categoryHeader = (TextView) view.findViewById(R.id.category_text_view);
         String categoryText;
 
@@ -70,8 +72,8 @@ public class LegendsCursorTreeAdapter extends CursorTreeAdapter
         categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_SUBCAT_NAME));
 
         //HOWEVER IF THE CAT HEADER CONTAINS UNCATEGORIZED LORE
-        if (categoryText == null)
-        {
+        if (categoryText == null) {
+
             //TAKE THE HEADER FROM THE LORE TITLE INSTEAD AND STYLE IT
             categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
             categoryHeader.setText(categoryText);
@@ -85,14 +87,12 @@ public class LegendsCursorTreeAdapter extends CursorTreeAdapter
     }
 
     @Override
-    protected View newChildView(Context context, Cursor cursor, boolean isLastChild, ViewGroup parent)
-    {
+    protected View newChildView(Context context, Cursor cursor, boolean isLastChild, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(R.layout.expandable_subcat_header, parent, false);
     }
 
     @Override
-    protected void bindChildView(View view, Context context, Cursor cursor, boolean isLastChild)
-    {
+    protected void bindChildView(View view, Context context, Cursor cursor, boolean isLastChild) {
         String subcategoryText;
         TextView subcategoryHeader = (TextView) view.findViewById(R.id.subcategory_text_view);
 
