@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,22 +20,18 @@ import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 public class LegendsCursorTreeAdapter extends CursorTreeAdapter
 {
     private Cursor mCursor;
-    private SQLiteDatabase legendsDB;
 
-    public LegendsCursorTreeAdapter(Cursor cursor, Context context, SQLiteDatabase db) {
+    public LegendsCursorTreeAdapter(Cursor cursor, Context context) {
         super(cursor, context, false);
         mCursor = cursor;
-        legendsDB = db;
     }
 
     @Override
     public void onGroupCollapsed(int groupPosition) {
         super.onGroupCollapsed(groupPosition);
 
-        Cursor cursor = getChildrenCursor(mCursor);
-
-        if (cursor != null) {
-            cursor.close();
+        if (getChildrenCursor(mCursor) != null) {
+            getChildrenCursor(mCursor).close();
         }
     }
 
@@ -48,7 +45,7 @@ public class LegendsCursorTreeAdapter extends CursorTreeAdapter
         }
 
         String [] selectionArgs = { Integer.toString(subcatNumber) };
-        groupCursor = legendsDB.rawQuery(Queries.LORES, selectionArgs);
+        groupCursor = MainActivity.legendsDB.rawQuery(Queries.LORES, selectionArgs);
 
         return groupCursor;
         }

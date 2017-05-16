@@ -1,7 +1,6 @@
 package com.sheyon.fivecats.legendslibrary;
 
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,6 +10,8 @@ import android.widget.TextView;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
+
+import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 public class LoreActivity extends AppCompatActivity
 {
@@ -25,7 +26,7 @@ public class LoreActivity extends AppCompatActivity
         String titleString = getIntent().getStringExtra("searchParam");
 
         LegendsHelper legendsHelper = new LegendsHelper(this);
-        SQLiteDatabase legendsDB = legendsHelper.getReadableDatabase();
+        legendsDB = legendsHelper.getReadableDatabase();
 
         String[] selectionArgs = { Integer.toString(categoryNumber), titleString };
         Cursor cursor = legendsDB.rawQuery(Queries.SINGLE_LORE, selectionArgs);
