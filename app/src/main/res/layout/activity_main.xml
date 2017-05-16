@@ -8,16 +8,12 @@
     android:orientation="vertical"
     tools:context="com.sheyon.fivecats.legendslibrary.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Choose a Category:"/>
-
     <Spinner
         android:id="@+id/category_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/categories_array" />
+        android:entries="@array/categories_array"
+        android:layout_margin="10dp" />
 
     <ExpandableListView
         android:id="@+id/legends_expandable_list"

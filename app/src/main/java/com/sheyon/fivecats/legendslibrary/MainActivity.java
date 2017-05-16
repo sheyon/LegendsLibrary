@@ -22,7 +22,7 @@ import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 
 public class MainActivity extends AppCompatActivity {
 
-    private SQLiteDatabase legendsDB;
+    public SQLiteDatabase legendsDB;
     private ExpandableListView legendsExpandableView;
     private Cursor cursor;
 
@@ -90,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
     private void setupSpinner()
     {
         Spinner spinner = (Spinner) findViewById(R.id.category_spinner);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.categories_array, android.R.layout.simple_spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.categories_array, R.layout.spinner_custom_layout);
+        spinnerAdapter.setDropDownViewResource(R.layout.spinner_custom_dropdown_text);
         spinner.setAdapter(spinnerAdapter);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -99,8 +99,9 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
-                    if (selection.equals("Select a category:")) {
+                    if (selection.equals("[Choose a category:]")) {
                         spinnerCatNumber = LoreLibrary.CAT_0;
+                        cursor.close();
                     }
                     if (selection.equals("Solomon Island")) {
                         categoryName = "Solomon Island";
@@ -174,6 +175,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onNavigateUp() {
+        return super.onNavigateUp();
+        //figure this out
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         closeCursor();
@@ -197,4 +204,6 @@ public class MainActivity extends AppCompatActivity {
             cursor.close();
         }
     }
+
+
 }
