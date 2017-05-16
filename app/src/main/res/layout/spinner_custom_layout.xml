@@ -4,4 +4,5 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:maxLines="1"
-    android:textSize="24sp" />
+    android:textSize="24sp"
+    android:textColor="@android:color/black"/>

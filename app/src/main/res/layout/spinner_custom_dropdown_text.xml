@@ -6,4 +6,5 @@
     android:maxLines="1"
     android:padding="10dp"
     android:text="Example Text"
-    android:textSize="20sp" />
+    android:textSize="24sp"
+    android:textColor="@android:color/black" />

@@ -1,13 +1,17 @@
 package com.sheyon.fivecats.legendslibrary;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -175,12 +179,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onNavigateUp() {
-        return super.onNavigateUp();
-        //figure this out
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         closeCursor();
@@ -204,6 +202,4 @@ public class MainActivity extends AppCompatActivity {
             cursor.close();
         }
     }
-
-
 }
