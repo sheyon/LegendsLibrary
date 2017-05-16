@@ -25,9 +25,6 @@ public class LoreActivity extends AppCompatActivity
         String categoryString = getIntent().getStringExtra("catName");
         String titleString = getIntent().getStringExtra("searchParam");
 
-        LegendsHelper legendsHelper = new LegendsHelper(this);
-        legendsDB = legendsHelper.getReadableDatabase();
-
         String[] selectionArgs = { Integer.toString(categoryNumber), titleString };
         Cursor cursor = legendsDB.rawQuery(Queries.SINGLE_LORE, selectionArgs);
         cursor.moveToFirst();

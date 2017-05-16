@@ -10,11 +10,14 @@
         android:layout_margin="8dp"
         android:orientation="vertical">
 
+        <requestFocus/>
+
         <TextView
             android:id="@+id/loreActivity_title_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Lore Title"
+            android:textIsSelectable="true"
             android:textSize="24sp"
             android:textStyle="bold" />
 
@@ -24,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:text="Lore Category"
+            android:textIsSelectable="true"
             android:textSize="20sp" />
 
         <LinearLayout
@@ -45,6 +49,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:text="The Buzzing Text"
+                android:textIsSelectable="true"
                 android:textSize="16sp"/>
 
         </LinearLayout>
@@ -70,6 +75,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:text="The Black Signal Text"
+                android:textIsSelectable="true"
                 android:textSize="16sp"
                 android:gravity="top"
                 android:visibility="gone" />
