@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Legends Library</string>
+
+    <string-array name="categories_array">
+        <item>[Choose a category:]</item>
+        <item>Solomon Island</item>
+        <item>Valley of the Sun God</item>
+        <item>Transylvania</item>
+        <item>Tokyo</item>
+        <item>Global</item>
+        <item>The Bestiary</item>
+        <item>Events</item>
+        <item>Issues</item>
+    </string-array>
+
 </resources>

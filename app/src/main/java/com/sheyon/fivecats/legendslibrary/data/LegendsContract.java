@@ -27,35 +27,49 @@ public final class LegendsContract
         public static final String COLUMN_SUBCAT_NAME = "SubCatName";
         public static final String COLUMN_CATEGORY_ID = "CategoryID";
         public static final String COLUMN_SUBCAT_ID = "SubCatID";
+        public static final String COLUMN_BUZZING = "Legend";
+        public static final String COLUMN_BLACK_SIGNAL = "BlackLore";
+
+        //VALUES FOR SPINNER SELECTION
+        public static final int CAT_0 = 0;
+        public static final int CAT_1_SOL = 1;
+        public static final int CAT_2_EGY = 2;
+        public static final int CAT_3_TRN = 3;
+        public static final int CAT_4_TOK = 4;
+        public static final int CAT_5_GBL = 5;
+        public static final int CAT_6_BES = 6;
+        public static final int CAT_7_EVN = 7;
+        public static final int CAT_8_ISU = 8;
     }
 
     public static final class Queries
     {
-        //Returns all Categories
-        public static final String CAT_QUERY = "SELECT " + LoreLibrary.BASE_CATEGORY_ID + " AS " + LoreLibrary._ID + " , " + LoreLibrary.COLUMN_CATEGORY_NAME +
-                " FROM " + LoreLibrary.CATEGORY_TABLE_NAME;
-
         //UNION 1 and UNION 2 returns Uncategorized Lore and Unique Subcats to populate the Expandable View
-        public static final String UNION_1 = "select lore._id AS _id, lore.CategoryID, Title, SubCatName, lore.SubCatID\n" +
+        public static final String UNION_1 = "select lore._id AS _id, lore.CategoryID, Title, SubCatName, lore.SubCatID AS SubCatID\n" +
                 "from lore\n" +
                 "left outer join subcat\n" +
                 "on lore.SubCatID = subcat._id\n" +
                 "where lore.SubCatID IS NOT NULL and lore.CategoryID = ?\n" +
                 "group by lore.SubCatID";
 
-        public static final String UNION_2 = "select lore._id AS _id, lore.CategoryID, Title, SubCatName, lore.SubCatID\n" +
+        public static final String UNION_2 = "select lore._id AS _id, lore.CategoryID, Title, SubCatName, lore.SubCatID AS SubCatID\n" +
                 "from lore\n" +
                 "left outer join subcat\n" +
                 "on lore.SubCatID = subcat._id\n" +
                 "where lore.SubCatID IS NULL AND lore.CategoryID = ?\n" +
                 "order by lore.CategoryID;";
 
-        public static final String SUBCAT_LORE = "select lore._id as _id, Title, lore.CategoryID, SubCatName, SubCatID\n" +
+        //Returns all other lore
+        public static final String LORES = "select lore._id as _id, Title, lore.CategoryID, SubCatName, lore.SubCatID\n" +
                 "from lore\n" +
                 "join subcat\n" +
                 "on lore.SubCatID = subcat._id\n" +
-                "where lore.CategoryID = ?\n" +
+                "where lore.SubCatID = ?\n" +
                 "order by lore.SubCatID";
+
+        public static final String SINGLE_LORE = "select lore._id AS _id, Title, lore.CategoryID, Legend, BlackLore\n" +
+                "from lore\n" +
+                "where lore.CategoryID = ? and Title LIKE ? ";
     }
 
 }

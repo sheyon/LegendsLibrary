@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,43 +19,44 @@ import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 
 public class LegendsCursorTreeAdapter extends CursorTreeAdapter
 {
-    private Context mContext;
     private Cursor mCursor;
 
-    public LegendsCursorTreeAdapter(Cursor cursor, Context context)
-    {
+    public LegendsCursorTreeAdapter(Cursor cursor, Context context) {
         super(cursor, context, false);
-        mContext = context;
         mCursor = cursor;
     }
 
     @Override
-    protected Cursor getChildrenCursor(Cursor groupCursor)
-    {
-        LegendsHelper legendsHelper = new LegendsHelper(mContext);
-        SQLiteDatabase legendsDB = legendsHelper.getReadableDatabase();
+    public void onGroupCollapsed(int groupPosition) {
+        super.onGroupCollapsed(groupPosition);
 
-        int categoryNumber = mCursor.getInt(mCursor.getColumnIndexOrThrow(LoreLibrary._ID));
-        String [] selectionArgs = { Integer.toString(categoryNumber), Integer.toString(categoryNumber) };
-        String [] union = {Queries.UNION_1, Queries.UNION_2};
+        if (getChildrenCursor(mCursor) != null) {
+            getChildrenCursor(mCursor).close();
+        }
+    }
 
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        String unionQuery = qb.buildUnionQuery(union, null, null);
+    @Override
+    protected Cursor getChildrenCursor(Cursor groupCursor) {
+        int subcatNumber = mCursor.getInt(mCursor.getColumnIndex(LoreLibrary.COLUMN_SUBCAT_ID));
 
-        groupCursor = legendsDB.rawQuery(unionQuery, selectionArgs);
+        //THE PREVIOUS CURSOR INCLUDES SUBCAT IDS WHICH MAY BE NULL. SKIP THESE ENTRIES.
+        if (Integer.toString(subcatNumber) == null) {
+            return null;
+        }
+
+        String [] selectionArgs = { Integer.toString(subcatNumber) };
+        groupCursor = MainActivity.legendsDB.rawQuery(Queries.LORES, selectionArgs);
 
         return groupCursor;
         }
 
     @Override
-    protected View newGroupView(Context context, Cursor cursor, boolean isExpanded, ViewGroup parent)
-    {
+    protected View newGroupView(Context context, Cursor cursor, boolean isExpanded, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(R.layout.expandable_category_header, parent, false);
     }
 
     @Override
-    protected void bindGroupView(View view, Context context, Cursor cursor, boolean isExpanded)
-    {
+    protected void bindGroupView(View view, Context context, Cursor cursor, boolean isExpanded) {
         TextView categoryHeader = (TextView) view.findViewById(R.id.category_text_view);
         String categoryText;
 
@@ -63,62 +65,40 @@ public class LegendsCursorTreeAdapter extends CursorTreeAdapter
         categoryHeader.setTypeface(Typeface.defaultFromStyle(0), 1);
         categoryHeader.setTextSize(2, 20);
 
-        //CHECK IF A CATEGORY OR SUBCATEGORY HEADER IS BEING FILLED
-        if (cursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_NAME) == -1)
-        {
-            //FILL THE SUBCATEGORY HEADER FIRST
-            categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_SUBCAT_NAME));
+        //FILL IN THE CATEGORY HEADER
+        categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_SUBCAT_NAME));
 
-            //HOWEVER IF THE SUBCAT HEADER CONTAINS UNCATEGORIZED LORE
-            if (categoryText == null)
-            {
-                //FILL THE LORE HEADER UNDER ANY SUBCATS AND STYLE IT
-                categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
-                categoryHeader.setText(categoryText);
-                categoryHeader.setAllCaps(false);
-                categoryHeader.setTypeface(Typeface.defaultFromStyle(0), 0);
-                categoryHeader.setTextSize(2, 16);
-                return;
-            }
-        }
-        else
-        {
-            //FILL THE CATEGORY HEADER
-            categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_NAME));
+        //HOWEVER IF THE CAT HEADER CONTAINS UNCATEGORIZED LORE
+        if (categoryText == null) {
+
+            //TAKE THE HEADER FROM THE LORE TITLE INSTEAD AND STYLE IT
+            categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
+            categoryHeader.setText(categoryText);
+            categoryHeader.setAllCaps(false);
+            categoryHeader.setTypeface(Typeface.defaultFromStyle(0), 0);
+            categoryHeader.setTextSize(2, 16);
+            return;
         }
 
         categoryHeader.setText(categoryText);
     }
 
     @Override
-    protected View newChildView(Context context, Cursor cursor, boolean isLastChild, ViewGroup parent)
-    {
+    protected View newChildView(Context context, Cursor cursor, boolean isLastChild, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(R.layout.expandable_subcat_header, parent, false);
     }
 
     @Override
-    protected void bindChildView(View view, Context context, Cursor cursor, boolean isLastChild)
-    {
+    protected void bindChildView(View view, Context context, Cursor cursor, boolean isLastChild) {
         String subcategoryText;
         TextView subcategoryHeader = (TextView) view.findViewById(R.id.subcategory_text_view);
 
-        //RESET STYLES IN CASE VIEWS ARE RECYCLED
+        subcategoryText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_TITLE));
+
+        //LORES WILL APPEAR REGULAR SIZED AND UNBOLDED
+        subcategoryHeader.setText(subcategoryText);
         subcategoryHeader.setAllCaps(false);
         subcategoryHeader.setTypeface(Typeface.defaultFromStyle(0), 0);
-
-        subcategoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_SUBCAT_NAME));
-
-        if (subcategoryText == null)
-        {
-            //ALL LORE WITHOUT SUBCATEGORIES WILL BE INSTANTIATED UNDER THEIR APPROPRIATE CATEGORIES
-            subcategoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
-            subcategoryHeader.setText(subcategoryText);
-            return;
-        }
-
-        //SUBCATS WILL APPEAR IN BOLD AND CAPS
-        subcategoryHeader.setText(subcategoryText);
-        subcategoryHeader.setAllCaps(true);
-        subcategoryHeader.setTypeface(Typeface.defaultFromStyle(0), 1);
+        subcategoryHeader.setTextSize(2, 16);
     }
 }
