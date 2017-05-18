@@ -70,6 +70,12 @@ public final class LegendsContract
         public static final String SINGLE_LORE = "select lore._id AS _id, Title, lore.CategoryID, Legend, BlackLore\n" +
                 "from lore\n" +
                 "where lore.CategoryID = ? and Title LIKE ? ";
+
+        public static final String SEARCH = "select lore._id, lore.CategoryID, category.CategoryName, lore.Title, lore.Legend, lore.BlackLore\n" +
+                "from lore\n" +
+                "join category\n" +
+                "on lore.CategoryID = category._id\n" +
+                "where (lore.Title like ?) or (lore.Legend like ?) or (lore.BlackLore like ?)";
     }
 
 }

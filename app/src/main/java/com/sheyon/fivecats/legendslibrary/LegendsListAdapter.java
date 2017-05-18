@@ -29,12 +29,12 @@ public class LegendsListAdapter extends CursorAdapter
     public void bindView(View view, Context context, Cursor cursor)
     {
         TextView loreTitle_TV = (TextView) view.findViewById(R.id.lore_title_text_view);
-        //TextView loreCategory_TV = (TextView) view.findViewById(R.id.lore_category_text_view);
+        TextView loreCategory_TV = (TextView) view.findViewById(R.id.lore_category_text_view);
 
         String titleText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
-        //String categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_NAME));
+        String categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_NAME));
 
         loreTitle_TV.setText(titleText);
-        //loreCategory_TV.setText(categoryText);
+        loreCategory_TV.setText(categoryText);
     }
 }

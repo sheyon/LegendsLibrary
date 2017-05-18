@@ -8,6 +8,12 @@
     android:orientation="vertical"
     tools:context="com.sheyon.fivecats.legendslibrary.MainActivity">
 
+    <SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="Search the Library"/>
+
     <Spinner
         android:id="@+id/category_spinner"
         android:layout_width="match_parent"
@@ -21,5 +27,7 @@
         android:layout_height="match_parent"
         android:groupIndicator="@android:color/transparent">
     </ExpandableListView>
+
+
 
 </LinearLayout>
