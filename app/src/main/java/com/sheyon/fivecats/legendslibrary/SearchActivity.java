@@ -28,7 +28,7 @@ public class SearchActivity extends AppCompatActivity
         cursor = legendsDB.rawQuery(Queries.SEARCH, selectionArgs);
         cursor.moveToFirst();
 
-        ExpandableSearchAdapter adapter = new ExpandableSearchAdapter(cursor, this);
+        ExpandableSearchAdapter adapter = new ExpandableSearchAdapter(cursor, this, searchString);
         searchExpandableView.setAdapter(adapter);
     }
 

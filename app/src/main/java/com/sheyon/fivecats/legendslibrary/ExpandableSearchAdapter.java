@@ -1,7 +1,13 @@
 package com.sheyon.fivecats.legendslibrary;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.TextAppearanceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +18,20 @@ import android.widget.TextView;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 
+import java.util.Locale;
+
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 
 public class ExpandableSearchAdapter extends CursorTreeAdapter
 {
     private Cursor mCursor;
+    private String filter;
 
-    public ExpandableSearchAdapter(Cursor cursor, Context context) {
+    public ExpandableSearchAdapter(Cursor cursor, Context context, String string) {
         super(cursor, context, false);
         mCursor = cursor;
+        filter = string;
     }
 
     @Override
@@ -86,12 +96,40 @@ public class ExpandableSearchAdapter extends CursorTreeAdapter
         String blackSignalText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BLACK_SIGNAL));
 
         TextView buzzingTextview = (TextView) view.findViewById(R.id.loreActivity_buzzing_text_view);
-        buzzingTextview.setText(buzzingText);
-        blackSignalTextview.setText(blackSignalText);
+
+        styleSearchResults(buzzingTextview, buzzingText);
+
+        //buzzingTextview.setText(buzzingText);
+        //blackSignalTextview.setText(blackSignalText);
 
         if (blackSignalText != null) {
+            styleSearchResults(blackSignalTextview, blackSignalText);
             blackSignalTextview.setVisibility(View.VISIBLE);
             blackSignalImageview.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private TextView styleSearchResults(TextView textView, String string)
+    {
+        String itemValue = string;
+
+        int startPos = itemValue.toLowerCase(Locale.US).indexOf(filter.toLowerCase(Locale.US));
+        int endPos = startPos + filter.length();
+
+        if (startPos != -1) // This should always be true, just a sanity check
+        {
+            Spannable spannable = new SpannableString(itemValue);
+            ColorStateList blueColor = new ColorStateList(new int[][] { new int[] {}}, new int[] { Color.BLUE });
+            TextAppearanceSpan highlightSpan = new TextAppearanceSpan(null, Typeface.BOLD, -1, blueColor, null);
+
+            spannable.setSpan(highlightSpan, startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            textView.setText(spannable);
+            return null;
+        }
+        else
+        {
+            textView.setText(itemValue);
+            return null;
         }
     }
 }
