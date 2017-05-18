@@ -67,15 +67,24 @@ public final class LegendsContract
                 "where lore.SubCatID = ?\n" +
                 "order by lore.SubCatID";
 
+        //Returns info for the LoreActivity
         public static final String SINGLE_LORE = "select lore._id AS _id, Title, lore.CategoryID, Legend, BlackLore\n" +
                 "from lore\n" +
                 "where lore.CategoryID = ? and Title LIKE ? ";
 
-        public static final String SEARCH = "select lore._id, lore.CategoryID, category.CategoryName, lore.Title, lore.Legend, lore.BlackLore\n" +
+        //Returns results from the SearchView
+        public static final String SEARCH = "select lore._id AS _id, lore.CategoryID, category.CategoryName, lore.Title, lore.Legend, lore.BlackLore\n" +
                 "from lore\n" +
                 "join category\n" +
                 "on lore.CategoryID = category._id\n" +
                 "where (lore.Title like ?) or (lore.Legend like ?) or (lore.BlackLore like ?)";
+
+        //Returns dropdown results for the Search ExpandableViewList
+        public static final String SEARCH_CHILD_TABLE = "select lore._id AS _id, category.CategoryName, lore.Title, lore.Legend, lore.BlackLore\n" +
+                "from lore\n" +
+                "join category\n" +
+                "on lore.CategoryID = category._id\n" +
+                "where lore._id = ?";
     }
 
 }

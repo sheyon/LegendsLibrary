@@ -4,10 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/search_list_view"
+    <ExpandableListView
+        android:id="@+id/search_expandable_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ListView>
+        android:layout_height="match_parent"
+        android:groupIndicator="@android:color/transparent">
+    </ExpandableListView>
 
 </LinearLayout>
