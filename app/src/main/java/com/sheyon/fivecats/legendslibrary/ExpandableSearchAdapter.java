@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,15 +24,14 @@ import java.util.Locale;
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 
-public class ExpandableSearchAdapter extends CursorTreeAdapter
-{
+public class ExpandableSearchAdapter extends CursorTreeAdapter {
     private Cursor mCursor;
-    private String filter;
+    private String searchString;
 
     public ExpandableSearchAdapter(Cursor cursor, Context context, String string) {
         super(cursor, context, false);
         mCursor = cursor;
-        filter = string;
+        searchString = string;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ExpandableSearchAdapter extends CursorTreeAdapter
     protected Cursor getChildrenCursor(Cursor groupCursor) {
         int index = mCursor.getInt(mCursor.getColumnIndexOrThrow(LoreLibrary._ID));
 
-        String [] selectionArgs = { Integer.toString(index) };
+        String[] selectionArgs = {Integer.toString(index)};
         groupCursor = legendsDB.rawQuery(Queries.SEARCH_CHILD_TABLE, selectionArgs);
 
         return groupCursor;
@@ -86,49 +86,59 @@ public class ExpandableSearchAdapter extends CursorTreeAdapter
         loreTitleDupe.setVisibility(View.GONE);
         loreCategoryDupe.setVisibility(View.GONE);
 
-        //IN CASE OF RECYCLING, HIDE THE BLACK SIGNAL STUFF TO BEGIN
-        TextView blackSignalTextview = (TextView) view.findViewById(R.id.loreActivity_signal_text_view);
-        ImageView blackSignalImageview = (ImageView) view.findViewById(R.id.loreActivity_signal_image_view);
-        blackSignalTextview.setVisibility(View.GONE);
-        blackSignalImageview.setVisibility(View.GONE);
+        //SET EVERYTHING TO GONE; RELEVENT LORE WILL BECOME VISIBLE IF NEEDED, WITH AN OPTION TO EXPAND
+        TextView blackSignalTextView = (TextView) view.findViewById(R.id.loreActivity_signal_text_view);
+        ImageView blackSignalImageView = (ImageView) view.findViewById(R.id.loreActivity_signal_image_view);
+        TextView buzzingTextView = (TextView) view.findViewById(R.id.loreActivity_buzzing_text_view);
+        ImageView buzzingImageView = (ImageView) view.findViewById(R.id.loreActivity_buzzing_image_view);
+
+        blackSignalTextView.setVisibility(View.GONE);
+        buzzingTextView.setVisibility(View.GONE);
+        blackSignalImageView.setVisibility(View.GONE);
 
         String buzzingText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BUZZING));
         String blackSignalText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BLACK_SIGNAL));
 
-        TextView buzzingTextview = (TextView) view.findViewById(R.id.loreActivity_buzzing_text_view);
-
-        styleSearchResults(buzzingTextview, buzzingText);
-
-        //buzzingTextview.setText(buzzingText);
-        //blackSignalTextview.setText(blackSignalText);
+        highlight(buzzingText, buzzingTextView);
 
         if (blackSignalText != null) {
-            styleSearchResults(blackSignalTextview, blackSignalText);
-            blackSignalTextview.setVisibility(View.VISIBLE);
-            blackSignalImageview.setVisibility(View.VISIBLE);
+            highlight(blackSignalText, blackSignalTextView);
+            blackSignalImageView.setVisibility(View.VISIBLE);
         }
     }
 
-    private TextView styleSearchResults(TextView textView, String string)
-    {
-        String itemValue = string;
+    private CharSequence highlight(String originalText, TextView textView) {
 
-        int startPos = itemValue.toLowerCase(Locale.US).indexOf(filter.toLowerCase(Locale.US));
-        int endPos = startPos + filter.length();
+        String normalizedText = originalText.toLowerCase(Locale.US);
 
-        if (startPos != -1) // This should always be true, just a sanity check
-        {
-            Spannable spannable = new SpannableString(itemValue);
-            ColorStateList blueColor = new ColorStateList(new int[][] { new int[] {}}, new int[] { Color.BLUE });
-            TextAppearanceSpan highlightSpan = new TextAppearanceSpan(null, Typeface.BOLD, -1, blueColor, null);
+        ColorStateList blueColor = new ColorStateList(new int[][]{new int[]{}}, new int[]{Color.BLUE});
+        //TextAppearanceSpan highlightSpan = new TextAppearanceSpan(null, Typeface.BOLD, -1, blueColor, null);
 
-            spannable.setSpan(highlightSpan, startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            textView.setText(spannable);
+        int start = normalizedText.indexOf(searchString);
+
+        if (start < 0) {
+            textView.setText(originalText);
+            textView.setVisibility(View.VISIBLE);
             return null;
         }
         else
         {
-            textView.setText(itemValue);
+            Spannable highlighted = new SpannableString(originalText);
+
+            while (start >= 0) {
+                //GETS THE START AND END POSITIONS OF THE WORD TO BE HIGHLIGHTED
+                int spanStart = Math.min(start, originalText.length());
+                int spanEnd = Math.min(start + searchString.length(), originalText.length());
+
+                //HIGHLIGHTS THE WORD
+                highlighted.setSpan(new TextAppearanceSpan(null, Typeface.BOLD, -1, blueColor, null),
+                        spanStart, spanEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                textView.setText(highlighted);
+                textView.setVisibility(View.VISIBLE);
+
+                //SETS THE NEW START POINT
+                start = normalizedText.indexOf(searchString, spanEnd);
+            }
             return null;
         }
     }
