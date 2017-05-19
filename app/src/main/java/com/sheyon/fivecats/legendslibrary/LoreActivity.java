@@ -3,13 +3,13 @@ package com.sheyon.fivecats.legendslibrary;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
-import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
@@ -20,6 +20,12 @@ public class LoreActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lore);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.loreActivity_toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         int categoryNumber = getIntent().getIntExtra("catPosition", 0);
         String categoryString = getIntent().getStringExtra("catName");

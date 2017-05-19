@@ -1,33 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    android:id="@+id/main_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.sheyon.fivecats.legendslibrary.MainActivity">
+    tools:context=".MainActivity">
 
-    <SearchView
-        android:id="@+id/search_view"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/mainActivity_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:queryHint="Search the Library"/>
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimaryDark"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize" />
 
-    <Spinner
-        android:id="@+id/category_spinner"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/mainActivity_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/categories_array"
-        android:layout_margin="10dp"/>
+        android:layout_below="@id/mainActivity_toolbar"
+        android:background="?attr/colorPrimaryDark"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize" />
 
-    <ExpandableListView
-        android:id="@+id/legends_expandable_list"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:groupIndicator="@android:color/transparent">
-    </ExpandableListView>
+        android:layout_height="fill_parent"
+        android:layout_below="@id/mainActivity_tab_layout"/>
 
-
-
-</LinearLayout>
+</RelativeLayout>
