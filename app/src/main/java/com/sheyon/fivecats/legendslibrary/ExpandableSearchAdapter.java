@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
@@ -21,6 +22,7 @@ import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 
 import java.util.Locale;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 
@@ -81,8 +83,10 @@ public class ExpandableSearchAdapter extends CursorTreeAdapter {
     @Override
     protected void bindChildView(View view, Context context, Cursor cursor, boolean isLastChild) {
         //HIDE THE TITLE AND CATEGORY VIEWS; THE PARENT ALREADY HAS IT
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.loreActivity_toolbar);
         TextView loreTitleDupe = (TextView) view.findViewById(R.id.loreActivity_title_text_view);
         TextView loreCategoryDupe = (TextView) view.findViewById(R.id.loreActivity_category_text_view);
+        toolbar.setVisibility(View.GONE);
         loreTitleDupe.setVisibility(View.GONE);
         loreCategoryDupe.setVisibility(View.GONE);
 

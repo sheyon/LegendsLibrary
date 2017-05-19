@@ -1,11 +1,9 @@
 package com.sheyon.fivecats.legendslibrary;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,9 @@ import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 public class SearchFragment extends Fragment
 {
+    ExpandableListView searchExpandableView;
     Cursor cursor;
+    String searchString;
 
     @Nullable
     @Override
@@ -26,23 +26,9 @@ public class SearchFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_search_layout, container, false);
 
         setupSearchBar(view);
-        setupExpandableView(view);
+        setupExpandableList(view);
+
         return view;
-    }
-
-    private void setupExpandableView(View view){
-
-//            String searchString = getIntent().getStringExtra("query");
-//            String modString = "%"+searchString+"%";
-//            String[] selectionArgs = { modString, modString, modString };
-//
-//            ExpandableListView searchExpandableView = (ExpandableListView) view.findViewById(R.id.search_expandable_view);
-//
-//            cursor = legendsDB.rawQuery(Queries.SEARCH, selectionArgs);
-//            cursor.moveToFirst();
-//
-//            ExpandableSearchAdapter adapter = new ExpandableSearchAdapter(cursor, getContext(), searchString);
-//            searchExpandableView.setAdapter(adapter);
     }
 
     private void setupSearchBar(View view)
@@ -52,21 +38,17 @@ public class SearchFragment extends Fragment
         final SearchView searchView = (SearchView) view.findViewById(R.id.search_view);
         // Assumes current activity is the searchable activity
         //  searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(true);
+        searchView.setIconifiedByDefault(false);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+
                 //CLEAR FOCUS IS NEEDED TO PREVENT THE QUERY FROM FIRING TWICE IN CASE OF PHYSICAL KEYBOARDS [ ANDROID BUG :( ]
-                String searchString = searchView.getQuery().toString().toLowerCase().trim();
+                searchString = searchView.getQuery().toString().toLowerCase().trim();
                 searchView.clearFocus();
 
-//                Intent intent = new Intent(CategoriesFragment.this, SearchActivity.class);
-//                intent.putExtra("query", searchString);
-//
-//                closeCursor();
-//                startActivity(intent);
-
+                runQuery();
                 return false;
             }
 
@@ -75,6 +57,37 @@ public class SearchFragment extends Fragment
                 return false;
             }
         });
+    }
+
+    private void setupExpandableList(View view)
+    {
+        searchExpandableView = (ExpandableListView) view.findViewById(R.id.search_expandable_view);
+    }
+
+    private void runQuery()
+    {
+        closeCursor();
+
+        String modString = "%"+searchString+"%";
+        String[] selectionArgs = { modString, modString, modString };
+
+        cursor = legendsDB.rawQuery(Queries.SEARCH, selectionArgs);
+        cursor.moveToFirst();
+
+        ExpandableSearchAdapter adapter = new ExpandableSearchAdapter(cursor, getContext(), searchString);
+        searchExpandableView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        closeCursor();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        closeCursor();
     }
 
     private void closeCursor() {

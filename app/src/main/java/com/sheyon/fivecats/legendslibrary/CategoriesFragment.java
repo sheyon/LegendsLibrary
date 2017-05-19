@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,13 @@ public class CategoriesFragment extends Fragment {
     private int spinnerCatNumber;
     private String categoryName;
     private String clickedText;
+    private int oldPosition = -1;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.v ("***CATEGORY", "I am being created!");
+    }
 
     @Nullable
     @Override
@@ -40,12 +48,28 @@ public class CategoriesFragment extends Fragment {
         setupSpinner(view);
         setupExpandableView(view);
 
+        Log.v ("***CATEGORY", "I am creating view!");
+
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        displayCategoryScreen();
+        Log.v ("***CATEGORY", "I am starting!");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.v ("***CATEGORY", "I am resuming!");
     }
 
     private void setupSpinner(View view)
     {
-        Spinner spinner = (Spinner) view.findViewById(R.id.category_spinner);
+        //THE SPINNER SEEMS TO BE PRODUCING A WINDOW ALREADY FOCUSED ERROR. FIX LATER
+        final Spinner spinner = (Spinner) view.findViewById(R.id.category_spinner);
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.categories_array, R.layout.spinner_custom_layout);
         spinnerAdapter.setDropDownViewResource(R.layout.spinner_custom_dropdown_text);
         spinner.setAdapter(spinnerAdapter);
@@ -53,6 +77,7 @@ public class CategoriesFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
                     if (selection.equals("[Choose a category:]")) {
@@ -169,6 +194,20 @@ public class CategoriesFragment extends Fragment {
 
         LegendsCursorTreeAdapter legendsCursorTreeAdapter = new LegendsCursorTreeAdapter(cursor, getContext());
         legendsExpandableView.setAdapter(legendsCursorTreeAdapter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        closeCursor();
+        Log.v ("***CATEGORY", "I am being paused!");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        closeCursor();
+        Log.v ("***CATEGORY", "I am being stopped!");
     }
 
     private void closeCursor() {
