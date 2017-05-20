@@ -23,11 +23,12 @@ public class LegendsPagerAdapter extends FragmentPagerAdapter {
                 CategoriesFragment tab1 = new CategoriesFragment();
                 return tab1;
             case 1:
-                SearchFragment tab2 = new SearchFragment();
+                AlphabeticalFragment tab2 = new AlphabeticalFragment();
                 return tab2;
-//            case 2:
-//                AlphabeticalFragment tab3 = new AlphabeticalFragment();
-//                return tab3;
+            case 2:
+                SearchFragment tab3 = new SearchFragment();
+                return tab3;
+
         }
 
         return null;

@@ -85,6 +85,12 @@ public final class LegendsContract
                 "join category\n" +
                 "on lore.CategoryID = category._id\n" +
                 "where lore._id = ?";
+
+        public static final String ALPHABETICAL = "select lore._id AS _id, lore.Title, category.CategoryName\n" +
+                "from lore\n" +
+                "join category\n" +
+                "on lore.CategoryID = category._id\n" +
+                "order by Title Asc";
     }
 
 }
