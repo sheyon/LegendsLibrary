@@ -4,17 +4,31 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!--EXPERIMENTAL | WAS A CONTAINER FOR STORING A LORE FRAGMENT-->
+    <!--<LinearLayout-->
+        <!--android:id="@+id/fragment_container"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical">-->
+    <!--</LinearLayout>-->
+
     <SearchView
         android:id="@+id/search_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:queryHint="Search the Library"/>
 
-    <ExpandableListView
-        android:id="@+id/search_expandable_view"
+    <ListView
+        android:id="@+id/search_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:groupIndicator="@android:color/transparent">
-    </ExpandableListView>
+        android:layout_height="wrap_content">
+    </ListView>
+
+    <!--<ExpandableListView-->
+        <!--android:id="@+id/search_expandable_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:groupIndicator="@android:color/transparent">-->
+    <!--</ExpandableListView>-->
 
 </LinearLayout>

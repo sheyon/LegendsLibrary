@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,14 +30,7 @@ public class CategoriesFragment extends Fragment {
 
     private int spinnerCatNumber;
     private String categoryName;
-    private String clickedText;
-    private int oldPosition = -1;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.v ("***CATEGORY", "I am being created!");
-    }
+    private String loreTitle;
 
     @Nullable
     @Override
@@ -48,8 +40,6 @@ public class CategoriesFragment extends Fragment {
         setupSpinner(view);
         setupExpandableView(view);
 
-        Log.v ("***CATEGORY", "I am creating view!");
-
         return view;
     }
 
@@ -57,13 +47,6 @@ public class CategoriesFragment extends Fragment {
     public void onStart() {
         super.onStart();
         displayCategoryScreen();
-        Log.v ("***CATEGORY", "I am starting!");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.v ("***CATEGORY", "I am resuming!");
     }
 
     private void setupSpinner(View view)
@@ -83,47 +66,41 @@ public class CategoriesFragment extends Fragment {
                     if (selection.equals("[Choose a category:]")) {
                         spinnerCatNumber = LoreLibrary.CAT_0;
                         closeCursor();
+                        return;
                     }
                     if (selection.equals("Solomon Island")) {
                         categoryName = "Solomon Island";
                         spinnerCatNumber = LoreLibrary.CAT_1_SOL;
-                        displayCategoryScreen();
                     }
                     if (selection.equals("Valley of the Sun God")) {
                         categoryName = "Valley of the Sun God";
                         spinnerCatNumber = LoreLibrary.CAT_2_EGY;
-                        displayCategoryScreen();
                     }
                     if (selection.equals("Transylvania")) {
                         categoryName = "Transylvania";
                         spinnerCatNumber = LoreLibrary.CAT_3_TRN;
-                        displayCategoryScreen();
                     }
                     if (selection.equals("Tokyo")) {
                         categoryName = "Tokyo";
                         spinnerCatNumber = LoreLibrary.CAT_4_TOK;
-                        displayCategoryScreen();
                     }
                     if (selection.equals("Global")) {
                         categoryName = "Global";
                         spinnerCatNumber = LoreLibrary.CAT_5_GBL;
-                        displayCategoryScreen();
                     }
                     if (selection.equals("The Bestiary")) {
                         categoryName = "The Bestiary";
                         spinnerCatNumber = LoreLibrary.CAT_6_BES;
-                        displayCategoryScreen();
                     }
                     if (selection.equals("Events")) {
                         categoryName = "Events";
                         spinnerCatNumber = LoreLibrary.CAT_7_EVN;
-                        displayCategoryScreen();
                     }
                     if (selection.equals("Issues")) {
                         categoryName = "Issues";
                         spinnerCatNumber = LoreLibrary.CAT_8_ISU;
-                        displayCategoryScreen();
                     }
+                displayCategoryScreen();
                 }
             }
 
@@ -151,7 +128,7 @@ public class CategoriesFragment extends Fragment {
                 }
                 //IF NOT, LAUNCH THE LORE PAGE
                 else {
-                    clickedText = tv.getText().toString();
+                    loreTitle = tv.getText().toString();
                     startLoreActivity();
                     return false;
                 }
@@ -163,7 +140,7 @@ public class CategoriesFragment extends Fragment {
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 LinearLayout ll = (LinearLayout) v;
                 TextView tv = (TextView) ll.findViewById(R.id.subcategory_text_view);
-                clickedText = tv.getText().toString();
+                loreTitle = tv.getText().toString();
 
                 startLoreActivity();
                 return false;
@@ -173,9 +150,9 @@ public class CategoriesFragment extends Fragment {
 
     private void startLoreActivity() {
         Intent intent = new Intent(getContext(), LoreActivity.class);
-        intent.putExtra("catPosition", spinnerCatNumber);
+        intent.putExtra("catNumber", spinnerCatNumber);
         intent.putExtra("catName", categoryName);
-        intent.putExtra("searchParam", clickedText);
+        intent.putExtra("loreTitle", loreTitle);
 
         closeCursor();
         startActivity(intent);
@@ -200,14 +177,12 @@ public class CategoriesFragment extends Fragment {
     public void onPause() {
         super.onPause();
         closeCursor();
-        Log.v ("***CATEGORY", "I am being paused!");
     }
 
     @Override
     public void onStop() {
         super.onStop();
         closeCursor();
-        Log.v ("***CATEGORY", "I am being stopped!");
     }
 
     private void closeCursor() {
