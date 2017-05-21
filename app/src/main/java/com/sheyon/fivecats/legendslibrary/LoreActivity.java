@@ -25,7 +25,6 @@ public class LoreActivity extends AppCompatActivity
 {
     private String searchString;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
