@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Categories"));
         tabLayout.addTab(tabLayout.newTab().setText("Alphabetical"));
         tabLayout.addTab(tabLayout.newTab().setText("Search"));
+        tabLayout.addTab(tabLayout.newTab().setText("Favorites"));
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         final LegendsPagerAdapter pagerAdapter = new LegendsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
