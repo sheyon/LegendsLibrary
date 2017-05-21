@@ -28,9 +28,10 @@ public class LegendsPagerAdapter extends FragmentPagerAdapter {
             case 2:
                 SearchFragment tab3 = new SearchFragment();
                 return tab3;
-
+            case 3:
+                FavoritesFragment tab4 = new FavoritesFragment();
+                return tab4;
         }
-
         return null;
     }
 
