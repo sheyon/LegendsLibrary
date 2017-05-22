@@ -3,9 +3,6 @@ package com.sheyon.fivecats.legendslibrary;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Debug;
-import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +17,8 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
 {
     protected static class ViewHolder
     {
-        public LinearLayout mTextLayout;
-        public LinearLayout mImageLayout;
+        private LinearLayout mTextLayout;
+        private LinearLayout mImageLayout;
     }
 
     private Context mContext;
@@ -140,5 +137,10 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
                 loreFavorite_IV.setImageResource(R.drawable.ic_star_white_48dp);
                 break;
         }
+    }
+
+    private void setFave()
+    {
+
     }
 }

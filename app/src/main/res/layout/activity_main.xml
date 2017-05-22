@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    android:id="@+id/main_layout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -31,6 +30,6 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/mainActivity_tab_layout"/>
+        android:layout_below="@id/mainActivity_tab_layout" />
 
 </RelativeLayout>

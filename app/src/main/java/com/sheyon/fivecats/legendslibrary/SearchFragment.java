@@ -1,6 +1,5 @@
 package com.sheyon.fivecats.legendslibrary;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,12 +16,11 @@ import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 public class SearchFragment extends Fragment
 {
-//    private ExpandableListView searchExpandableView;
-//    private FragmentTransaction fragmentTransaction;
-
     private ListView listView;
     private Cursor cursor;
     private String searchString;
+//    private ExpandableListView searchExpandableView;
+//    private FragmentTransaction fragmentTransaction;
 
     @Nullable
     @Override
@@ -89,16 +87,6 @@ public class SearchFragment extends Fragment
         //ExpandableSearchAdapter adapter = new ExpandableSearchAdapter(cursor, getContext(), searchString);
         //searchExpandableView.setAdapter(adapter);
     }
-
-//    private void startLoreActivity() {
-//        Intent intent = new Intent(getContext(), LoreActivity.class);
-//        intent.putExtra("catNumber", catNumber);
-//        intent.putExtra("catName", categoryName);
-//        intent.putExtra("loreTitle", loreTitle);
-//        intent.putExtra("searchString", searchString);
-//
-//        startActivity(intent);
-//    }
 
     @Override
     public void onDestroy() {
