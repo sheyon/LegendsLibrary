@@ -23,15 +23,23 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("Categories");
         setSupportActionBar(toolbar);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.mainActivity_tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_format_list_bulleted_white_48dp));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_sort_by_alpha_white_48dp));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_search_white_48dp));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_star_white_48dp));
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.mainActivity_tab_layout);
+        tabLayout.addTab(tabLayout.newTab()); //CATEGORIES
+        tabLayout.addTab(tabLayout.newTab()); //ALPHABETICAL
+        tabLayout.addTab(tabLayout.newTab()); //SEARCH
+        tabLayout.addTab(tabLayout.newTab()); //FAVORITES
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+
+        tabLayout.setupWithViewPager(viewPager);
+
         final LegendsPagerAdapter pagerAdapter = new LegendsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(pagerAdapter);
+
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_format_list_bulleted_white_48dp);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_sort_by_alpha_white_48dp);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_search_white_48dp);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_star_white_48dp);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

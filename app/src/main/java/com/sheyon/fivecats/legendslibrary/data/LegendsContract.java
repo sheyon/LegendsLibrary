@@ -43,8 +43,7 @@ public final class LegendsContract
         public static final int CAT_8_ISU = 8;
     }
 
-    public static final class Queries
-    {
+    public static final class Queries {
         //UNION 1 and UNION 2 returns Uncategorized Lore and Unique Subcats to populate the Expandable View
         public static final String UNION_1 = "select lore._id AS _id, lore.categoryId, title, subcatName, lore.subcatId AS subcatId\n" +
                 "from lore\n" +
@@ -92,6 +91,17 @@ public final class LegendsContract
                 "join category\n" +
                 "on lore.categoryId = category.categoryId\n" +
                 "order by title asc";
+
+        public static final String UPDATE_FAVE = "UPDATE lore\n" +
+                "SET faved = CASE\n" +
+                "WHEN faved = 0 THEN 1\n" +
+                "WHEN faved = 1 THEN 0\n" +
+                "ELSE 0 END\n" +
+                "WHERE title = ";
+
+        public static final String GET_FAVE = "select lore._id AS _id, title, faved\n" +
+                "from lore\n" +
+                "where title = ?";
     }
 
 }

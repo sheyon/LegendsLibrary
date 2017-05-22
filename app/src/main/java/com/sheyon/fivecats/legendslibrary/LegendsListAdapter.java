@@ -11,7 +11,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
+import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
+
+import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 public class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 {
@@ -32,6 +36,7 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
     {
         super(context, c, 0);
         mContext = context;
+        openDatabase();
     }
 
     public LegendsListAdapter(Context context, Cursor c, String searchString)
@@ -39,6 +44,13 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
         super(context, c, 0);
         mContext = context;
         mSearchString = searchString;
+        openDatabase();
+    }
+
+    private void openDatabase()
+    {
+        LegendsHelper legendsHelper = new LegendsHelper(mContext);
+        legendsDB = legendsHelper.getWritableDatabase();
     }
 
     @Override
@@ -77,7 +89,7 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
         loreCategory_TV.setText(categoryText);
 
         if (faved == 1) {
-            loreFavorite_IV.setImageResource(R.drawable.ic_star_border_white_48dp);
+            loreFavorite_IV.setImageResource(R.drawable.ic_star_white_48dp);
         }
     }
 
@@ -133,14 +145,38 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
                 break;
 
             case R.id.container_fave_clickable:
+                //GET PARENT VIEW TO CATCH THE TITLE STRING
+                View parentView = (View) v.getParent();
+                loreTitle_TV = (TextView) parentView.findViewById(R.id.lore_title_text_view);
+                String faveTitle = loreTitle_TV.getText().toString();
+                String modFaveTitle = "\"" + faveTitle + "\"";
+
+                //EXECUTE UPDATE QUERY
+                legendsDB.execSQL(Queries.UPDATE_FAVE + modFaveTitle + ";");
+
+                //GET UPDATED CURSOR
+                String[] selectionArgs = { faveTitle };
+                Cursor cursor = legendsDB.rawQuery(Queries.GET_FAVE, selectionArgs);
+                cursor.moveToFirst();
+                int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
+
                 loreFavorite_IV = (ImageView) v.findViewById(R.id.lore_favorites_image_view);
-                loreFavorite_IV.setImageResource(R.drawable.ic_star_white_48dp);
+
+                if (faved == 0){
+                    loreFavorite_IV.setImageResource(R.drawable.ic_star_border_white_48dp);
+                }
+                if (faved == 1){
+                    loreFavorite_IV.setImageResource(R.drawable.ic_star_white_48dp);
+                }
+
+                cursor.close();
                 break;
         }
     }
 
-    private void setFave()
-    {
-
+    @Override
+    protected void onContentChanged() {
+        super.onContentChanged();
+        notifyDataSetChanged();
     }
 }
