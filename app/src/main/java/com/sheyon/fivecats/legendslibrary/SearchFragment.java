@@ -67,13 +67,13 @@ public class SearchFragment extends Fragment
     }
 
     private void runQuery() {
+        //CLOSE THE PREVIOUS QUERY IF IT EXISTS
         closeCursor();
 
         modString = "%"+searchString+"%";
         String [] selectionArgs = { modString, modString, modString };
 
         cursor = legendsDB.rawQuery(Queries.SEARCH, selectionArgs);
-
         if (cursor != null) {
             cursor.moveToFirst();
         }

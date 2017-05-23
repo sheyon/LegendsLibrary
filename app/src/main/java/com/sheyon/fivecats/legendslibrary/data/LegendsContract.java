@@ -103,5 +103,4 @@ public final class LegendsContract
                 "from lore\n" +
                 "where title = ?";
     }
-
 }

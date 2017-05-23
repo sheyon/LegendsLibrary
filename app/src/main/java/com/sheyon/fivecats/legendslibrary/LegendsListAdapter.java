@@ -20,8 +20,7 @@ import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 public class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 {
-    protected static class ViewHolder
-    {
+    protected static class ViewHolder {
         private LinearLayout mTextLayout;
         private LinearLayout mImageLayout;
     }
@@ -34,23 +33,20 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
     private TextView loreTitle_TV;
     private TextView loreCategory_TV;
 
-    public LegendsListAdapter(Context context, Cursor c)
-    {
+    public LegendsListAdapter(Context context, Cursor c) {
         super(context, c, 0);
         mContext = context;
         openDatabase();
     }
 
-    public LegendsListAdapter(Context context, Cursor c, Fragment fragment)
-    {
+    public LegendsListAdapter(Context context, Cursor c, Fragment fragment) {
         super(context, c, 0);
         mContext = context;
         mFragment = fragment;
         openDatabase();
     }
 
-    public LegendsListAdapter(Context context, Cursor c, String searchString, Fragment fragment)
-    {
+    public LegendsListAdapter(Context context, Cursor c, String searchString, Fragment fragment) {
         super(context, c, 0);
         mContext = context;
         mSearchString = searchString;
@@ -58,15 +54,13 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
         openDatabase();
     }
 
-    private void openDatabase()
-    {
+    private void openDatabase() {
         LegendsHelper legendsHelper = new LegendsHelper(mContext);
         legendsDB = legendsHelper.getWritableDatabase();
     }
 
     @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent)
-    {
+    public View newView(Context context, Cursor cursor, ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.lore_list_item,parent, false);
 
         LinearLayout textLayout = (LinearLayout) view.findViewById(R.id.container_text_views);
@@ -80,7 +74,6 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
         holder.mImageLayout.setOnClickListener(this);
 
         return view;
-        //return LayoutInflater.from(context).inflate(R.layout.lore_list_item, parent, false);
     }
 
     @Override
