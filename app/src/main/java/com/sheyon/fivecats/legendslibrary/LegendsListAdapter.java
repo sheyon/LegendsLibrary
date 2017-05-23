@@ -11,6 +11,7 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
@@ -20,7 +21,7 @@ import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 public class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 {
-    protected static class ViewHolder {
+    private static class ViewHolder {
         private LinearLayout mTextLayout;
         private LinearLayout mImageLayout;
     }
@@ -169,9 +170,11 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
                 //SET FAVED OR UNFAVED
                 if (faved == 0){
                     loreFavorite_IV.setImageResource(R.drawable.ic_star_border_white_48dp);
+                    Toast.makeText(mContext, faveTitle + " removed from Favorites.", Toast.LENGTH_SHORT).show();
                 }
                 if (faved == 1){
                     loreFavorite_IV.setImageResource(R.drawable.ic_star_white_48dp);
+                    Toast.makeText(mContext, faveTitle + " set to Favorites.", Toast.LENGTH_SHORT).show();
                 }
 
                 //FIND OUT WHICH FRAGMENT CALLED THE ADAPTER AND REFRESH THE CURSOR
@@ -183,10 +186,11 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
                     SearchFragment sf = (SearchFragment) mFragment;
                     sf.refreshCursor();
                 }
-                if (mFragment.getClass() == FavoritesFragment.class) {
-                    FavoritesFragment ff = (FavoritesFragment) mFragment;
-                    ff.refreshCursor();
-                }
+//                DO NOT CALL REFRESH FOR THE FAVORITES FRAGMENT. USERS MAY MISCLICK OR RESELECT
+//                if (mFragment.getClass() == FavoritesFragment.class) {
+//                    FavoritesFragment ff = (FavoritesFragment) mFragment;
+//                    ff.refreshCursor();
+//                }
 
                 cursor.close();
                 break;
