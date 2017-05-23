@@ -4,18 +4,25 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 
+import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 public class AlphabeticalFragment extends Fragment
 {
+    private ListView listView;
     private Cursor cursor;
+    private LegendsListAdapter adapter;
 
     @Nullable
     @Override
@@ -27,15 +34,19 @@ public class AlphabeticalFragment extends Fragment
         return view;
     }
 
-    private void setupListView(View view)
-    {
-        ListView listView = (ListView) view.findViewById(R.id.alphabetical_list_view);
+    private void setupListView(View view) {
+        listView = (ListView) view.findViewById(R.id.alphabetical_list_view);
 
         cursor = legendsDB.rawQuery(Queries.ALPHABETICAL, null);
         cursor.moveToFirst();
 
-        LegendsListAdapter adapter = new LegendsListAdapter(getContext(), cursor);
+        adapter = new LegendsListAdapter(getContext(), cursor, this);
         listView.setAdapter(adapter);
+    }
+
+    public void refreshCursor() {
+        Cursor newCursor = legendsDB.rawQuery(Queries.ALPHABETICAL, null);
+        adapter.swapCursor(newCursor);
     }
 
     @Override

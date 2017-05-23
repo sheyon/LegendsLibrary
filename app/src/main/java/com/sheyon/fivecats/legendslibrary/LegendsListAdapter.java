@@ -3,6 +3,7 @@ package com.sheyon.fivecats.legendslibrary;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
 
     private Context mContext;
     private String mSearchString;
+    private Fragment mFragment;
 
     private ImageView loreFavorite_IV;
     private TextView loreTitle_TV;
@@ -39,11 +41,20 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
         openDatabase();
     }
 
-    public LegendsListAdapter(Context context, Cursor c, String searchString)
+    public LegendsListAdapter(Context context, Cursor c, Fragment fragment)
+    {
+        super(context, c, 0);
+        mContext = context;
+        mFragment = fragment;
+        openDatabase();
+    }
+
+    public LegendsListAdapter(Context context, Cursor c, String searchString, Fragment fragment)
     {
         super(context, c, 0);
         mContext = context;
         mSearchString = searchString;
+        mFragment = fragment;
         openDatabase();
     }
 
@@ -162,11 +173,22 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
 
                 loreFavorite_IV = (ImageView) v.findViewById(R.id.lore_favorites_image_view);
 
+                //SET FAVED OR UNFAVED
                 if (faved == 0){
                     loreFavorite_IV.setImageResource(R.drawable.ic_star_border_white_48dp);
                 }
                 if (faved == 1){
                     loreFavorite_IV.setImageResource(R.drawable.ic_star_white_48dp);
+                }
+
+                //FIND OUT WHICH FRAGMENT CALLED THE ADAPTER AND REFRESH THE CURSOR
+                if (mFragment.getClass() == AlphabeticalFragment.class) {
+                    AlphabeticalFragment af = (AlphabeticalFragment) mFragment;
+                    af.refreshCursor();
+                }
+                if (mFragment.getClass() == SearchFragment.class) {
+                    SearchFragment sf = (SearchFragment) mFragment;
+                    sf.refreshCursor();
                 }
 
                 cursor.close();

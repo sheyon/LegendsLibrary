@@ -39,8 +39,7 @@
         android:id="@+id/container_fave_clickable"
         android:layout_width="60dp"
         android:layout_height="match_parent"
-        android:layout_weight="0"
-        android:descendantFocusability="afterDescendants">
+        android:layout_weight="0">
 
         <ImageView
             android:id="@+id/lore_favorites_image_view"

@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,11 @@ import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 public class SearchFragment extends Fragment
 {
     private ListView listView;
+    private LegendsListAdapter adapter;
     private Cursor cursor;
+
     private String searchString;
-//    private ExpandableListView searchExpandableView;
-//    private FragmentTransaction fragmentTransaction;
+    private String modString;
 
     @Nullable
     @Override
@@ -29,7 +31,6 @@ public class SearchFragment extends Fragment
 
         setupSearchBar(view);
         setupListView(view);
-        //setupExpandableList(view);
 
         return view;
     }
@@ -61,10 +62,6 @@ public class SearchFragment extends Fragment
         });
     }
 
-//    private void setupExpandableList(View view) {
-//        searchExpandableView = (ExpandableListView) view.findViewById(R.id.search_expandable_view);
-//    }
-
     private void setupListView(View view) {
         listView = (ListView) view.findViewById(R.id.search_list_view);
     }
@@ -72,8 +69,8 @@ public class SearchFragment extends Fragment
     private void runQuery() {
         closeCursor();
 
-        String modString = "%"+searchString+"%";
-        String[] selectionArgs = { modString, modString, modString };
+        modString = "%"+searchString+"%";
+        String [] selectionArgs = { modString, modString, modString };
 
         cursor = legendsDB.rawQuery(Queries.SEARCH, selectionArgs);
 
@@ -81,11 +78,15 @@ public class SearchFragment extends Fragment
             cursor.moveToFirst();
         }
 
-        LegendsListAdapter adapter = new LegendsListAdapter(getContext(), cursor, searchString);
+        adapter = new LegendsListAdapter(getContext(), cursor, searchString, this);
         listView.setAdapter(adapter);
+    }
 
-        //ExpandableSearchAdapter adapter = new ExpandableSearchAdapter(cursor, getContext(), searchString);
-        //searchExpandableView.setAdapter(adapter);
+    public void refreshCursor() {
+        String[] selectionArgs = { modString, modString, modString };
+
+        Cursor newCursor = legendsDB.rawQuery(Queries.SEARCH, selectionArgs);
+        adapter.swapCursor(newCursor);
     }
 
     @Override
