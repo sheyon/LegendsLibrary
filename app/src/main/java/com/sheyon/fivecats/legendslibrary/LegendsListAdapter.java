@@ -183,6 +183,10 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
                     SearchFragment sf = (SearchFragment) mFragment;
                     sf.refreshCursor();
                 }
+                if (mFragment.getClass() == FavoritesFragment.class) {
+                    FavoritesFragment ff = (FavoritesFragment) mFragment;
+                    ff.refreshCursor();
+                }
 
                 cursor.close();
                 break;

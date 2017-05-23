@@ -14,7 +14,6 @@ import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 public class AlphabeticalFragment extends Fragment
 {
-    private ListView listView;
     private Cursor cursor;
     private LegendsListAdapter adapter;
 
@@ -29,7 +28,7 @@ public class AlphabeticalFragment extends Fragment
     }
 
     private void setupListView(View view) {
-        listView = (ListView) view.findViewById(R.id.alphabetical_list_view);
+        ListView listView = (ListView) view.findViewById(R.id.alphabetical_list_view);
 
         cursor = legendsDB.rawQuery(Queries.ALPHABETICAL, null);
         cursor.moveToFirst();

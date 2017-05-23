@@ -102,5 +102,12 @@ public final class LegendsContract
         public static final String GET_FAVE = "select lore._id AS _id, title, faved\n" +
                 "from lore\n" +
                 "where title = ?";
+
+        public static final String GET_ALL_FAVES = "select lore._id AS _id, title, lore.categoryId, category.categoryName, faved\n" +
+                "from lore\n" +
+                "join category\n" +
+                "on lore.categoryId = category.categoryId\n" +
+                "where faved = 1\n" +
+                "order by title asc";
     }
 }
