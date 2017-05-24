@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +21,10 @@ public class SearchFragment extends Fragment
     private SearchView searchView;
     private ListView listView;
     private LegendsListAdapter adapter;
+
     private Cursor cursor;
+    private Cursor refreshedCursor;
+    private Cursor emptyCursor;
 
     private String searchString;
     private String modString;
@@ -85,7 +87,7 @@ public class SearchFragment extends Fragment
     }
 
     private void runQuery() {
-        //CLOSE THE PREVIOUS QUERY IF IT EXISTS
+        //CLOSE ANY OF THE PREVIOUS QUERIES IF THEY EXIST
         closeCursor();
 
         modString = "%"+searchString+"%";
@@ -101,13 +103,14 @@ public class SearchFragment extends Fragment
     }
 
     public void refreshCursor() {
+        //NULL CATCH; NPE OCCURS IF THERE IS A NULL CURSOR TO SWAP
         if (cursor == null) {
             return;
         }
 
         String[] selectionArgs = { modString, modString, modString };
-        Cursor newCursor = legendsDB.rawQuery(Queries.SEARCH, selectionArgs);
-        adapter.swapCursor(newCursor);
+        refreshedCursor = legendsDB.rawQuery(Queries.SEARCH, selectionArgs);
+        adapter.swapCursor(refreshedCursor);
     }
 
     @Override
@@ -121,6 +124,12 @@ public class SearchFragment extends Fragment
         //YOU NEED THE CURSOR TO NAVIGATE BACK TO HERE FROM THE LORE ACTIVITY!
         if (cursor != null) {
             cursor.close();
+        }
+        if (refreshedCursor != null){
+            refreshedCursor.close();
+        }
+        if (emptyCursor != null) {
+            emptyCursor.close();
         }
     }
 
@@ -136,10 +145,19 @@ public class SearchFragment extends Fragment
         return super.onOptionsItemSelected(item);
     }
 
-    private void clearSearch()
-    {
+    private void clearSearch() {
+        //EMPTY THE SEARCH FIELD
         searchView.setQuery("", false);
-        //CODE HOW TO CLEAR RESULTS
+
+        //NULL CATCH; IF THERE IS A NULL, DO NOTHING
+        if (cursor == null && refreshedCursor == null){
+            return;
+        }
+        //OTHERWISE IT IS SAFE TO PROCEED
+        else {
+            emptyCursor = legendsDB.rawQuery(Queries.EMPTY_QUERY, null);
+            adapter.swapCursor(emptyCursor);
+        }
     }
 }
 

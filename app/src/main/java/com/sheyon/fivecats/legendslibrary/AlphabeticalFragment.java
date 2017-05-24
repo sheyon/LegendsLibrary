@@ -15,6 +15,7 @@ import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 public class AlphabeticalFragment extends Fragment
 {
     private Cursor cursor;
+    private Cursor refreshedCursor;
     private LegendsListAdapter adapter;
 
     @Override
@@ -44,11 +45,10 @@ public class AlphabeticalFragment extends Fragment
     }
 
     public void refreshCursor() {
-        Cursor newCursor = legendsDB.rawQuery(Queries.ALPHABETICAL, null);
+        refreshedCursor = legendsDB.rawQuery(Queries.ALPHABETICAL, null);
         if (cursor != null){
-            adapter.swapCursor(newCursor);
+            adapter.swapCursor(refreshedCursor);
         }
-
     }
 
     @Override
@@ -62,6 +62,9 @@ public class AlphabeticalFragment extends Fragment
         //YOU NEED THE CURSOR TO NAVIGATE BACK TO HERE FROM THE LORE ACTIVITY!
         if (cursor != null) {
             cursor.close();
+        }
+        if (refreshedCursor != null){
+            refreshedCursor.close();
         }
     }
 }
