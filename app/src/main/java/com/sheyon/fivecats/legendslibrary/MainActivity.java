@@ -3,6 +3,7 @@ package com.sheyon.fivecats.legendslibrary;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-                setPageTitle(tab);
+                setPageTitle(tab, pagerAdapter);
             }
 
             @Override
@@ -72,13 +73,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void openDatabase()
-    {
+    private void openDatabase() {
         LegendsHelper legendsHelper = new LegendsHelper(this);
         try {
             legendsDB = legendsHelper.getWritableDatabase();
-        }
-        catch (SQLiteException e){
+        } catch (SQLiteException e) {
             legendsDB = legendsHelper.getReadableDatabase();
             String errorCode = e.getMessage();
             Log.e("***DB ERROR", errorCode);
@@ -86,21 +85,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setPageTitle(TabLayout.Tab tab)
-    {
-        switch (tab.getPosition()) {
-            case 0:
-                toolbar.setTitle("Categories");
-                break;
-            case 1:
-                toolbar.setTitle("Alphabetical");
-                break;
-            case 2:
-                toolbar.setTitle("Search");
-                break;
-            case 3:
-                toolbar.setTitle("Favorites");
-                break;
+    private void setPageTitle(TabLayout.Tab tab, LegendsPagerAdapter pagerAdapter) {
+        Fragment f = pagerAdapter.getItem(tab.getPosition());
+
+        if (f.getClass() == CategoriesFragment.class) {
+            toolbar.setTitle("Categories");
+        }
+        if (f.getClass() == AlphabeticalFragment.class) {
+            toolbar.setTitle("Alphabetical");
+        }
+        if (f.getClass() == SearchFragment.class) {
+            toolbar.setTitle("Search");
+        }
+        if (f.getClass() == FavoritesFragment.class) {
+            toolbar.setTitle("Favorites");
+        } else {
+            toolbar.setTitle("Legends Library");
         }
     }
 
