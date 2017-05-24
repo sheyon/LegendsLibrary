@@ -24,7 +24,6 @@ public class SearchFragment extends Fragment
 
     private Cursor cursor;
     private Cursor refreshedCursor;
-    private Cursor emptyCursor;
 
     private String searchString;
     private String modString;
@@ -128,9 +127,6 @@ public class SearchFragment extends Fragment
         if (refreshedCursor != null){
             refreshedCursor.close();
         }
-        if (emptyCursor != null) {
-            emptyCursor.close();
-        }
     }
 
     @Override
@@ -155,9 +151,7 @@ public class SearchFragment extends Fragment
         }
         //OTHERWISE IT IS SAFE TO PROCEED
         else {
-            emptyCursor = legendsDB.rawQuery(Queries.EMPTY_QUERY, null);
-            adapter.swapCursor(emptyCursor);
+            adapter.swapCursor(null);
         }
     }
 }
-

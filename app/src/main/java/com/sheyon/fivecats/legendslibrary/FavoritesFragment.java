@@ -1,15 +1,19 @@
 package com.sheyon.fivecats.legendslibrary;
 
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 
@@ -18,6 +22,7 @@ import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 public class FavoritesFragment extends Fragment
 {
     private Cursor cursor;
+    private Cursor refreshedCursor;
     private LegendsListAdapter adapter;
 
     @Override
@@ -57,8 +62,8 @@ public class FavoritesFragment extends Fragment
     }
 
     public void refreshCursor() {
-        Cursor newCursor = legendsDB.rawQuery(Queries.GET_ALL_FAVES, null);
-        adapter.swapCursor(newCursor);
+        refreshedCursor = legendsDB.rawQuery(Queries.GET_ALL_FAVES, null);
+        adapter.swapCursor(refreshedCursor);
     }
 
     @Override
@@ -73,5 +78,52 @@ public class FavoritesFragment extends Fragment
         if (cursor != null) {
             cursor.close();
         }
+        if (refreshedCursor != null) {
+            refreshedCursor.close();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.menu_favorites_remove:
+                removeAllConfirm();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void removeAllConfirm() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Are you sure you want to remove all favorites?");
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                removeAllFavorites();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void removeAllFavorites() {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("faved", "0");
+        String [] whereArgs = { "1" };
+        legendsDB.update("lore", contentValues, "faved = ?", whereArgs);
+
+        Toast.makeText(getContext(), "All favorites removed.", Toast.LENGTH_SHORT).show();
+        refreshCursor();
     }
 }
