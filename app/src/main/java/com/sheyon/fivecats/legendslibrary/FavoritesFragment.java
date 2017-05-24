@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
@@ -89,13 +90,26 @@ public class FavoritesFragment extends Fragment
         switch (item.getItemId())
         {
             case R.id.menu_favorites_remove:
-                removeAllConfirm();
+                checkForFavorites();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void removeAllConfirm() {
+    private void checkForFavorites() {
+        Cursor check = legendsDB.rawQuery(Queries.CHECK_FOR_FAVED_LORE, null);
+        check.moveToFirst();
+        int i = check.getCount();
+        check.close();
+        if (i == 0) {
+            Toast.makeText(getContext(), "This list is already empty.", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            confirmRemoveAll();
+        }
+    }
+
+    private void confirmRemoveAll() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage("Are you sure you want to remove all favorites?");
 
@@ -119,9 +133,9 @@ public class FavoritesFragment extends Fragment
 
     private void removeAllFavorites() {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("faved", "0");
+        contentValues.put(LoreLibrary.COLUMN_FAVED, "0");
         String [] whereArgs = { "1" };
-        legendsDB.update("lore", contentValues, "faved = ?", whereArgs);
+        legendsDB.update(LoreLibrary.LORE_TABLE_NAME, contentValues, LoreLibrary.COLUMN_FAVED + " = ?", whereArgs);
 
         Toast.makeText(getContext(), "All favorites removed.", Toast.LENGTH_SHORT).show();
         refreshCursor();

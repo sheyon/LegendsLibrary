@@ -109,5 +109,8 @@ public final class LegendsContract
                 "on lore.categoryId = category.categoryId\n" +
                 "where faved = 1\n" +
                 "order by title asc";
+
+        public static final String CHECK_FOR_FAVED_LORE = "select title from lore\n" +
+                "where faved = 1";
     }
 }
