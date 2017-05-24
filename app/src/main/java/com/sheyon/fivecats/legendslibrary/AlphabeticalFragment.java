@@ -39,7 +39,10 @@ public class AlphabeticalFragment extends Fragment
 
     public void refreshCursor() {
         Cursor newCursor = legendsDB.rawQuery(Queries.ALPHABETICAL, null);
-        adapter.swapCursor(newCursor);
+        if (cursor != null){
+            adapter.swapCursor(newCursor);
+        }
+
     }
 
     @Override

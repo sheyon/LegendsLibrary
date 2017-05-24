@@ -83,8 +83,11 @@ public class SearchFragment extends Fragment
     }
 
     public void refreshCursor() {
-        String[] selectionArgs = { modString, modString, modString };
+        if (cursor == null) {
+            return;
+        }
 
+        String[] selectionArgs = { modString, modString, modString };
         Cursor newCursor = legendsDB.rawQuery(Queries.SEARCH, selectionArgs);
         adapter.swapCursor(newCursor);
     }
