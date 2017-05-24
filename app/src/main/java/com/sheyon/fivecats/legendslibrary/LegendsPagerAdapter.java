@@ -1,14 +1,16 @@
 package com.sheyon.fivecats.legendslibrary;
 
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
-public class LegendsPagerAdapter extends FragmentPagerAdapter {
+public class LegendsPagerAdapter extends FragmentStatePagerAdapter {
 
     private int mNumOftabs;
+
+    public LegendsPagerAdapter(FragmentManager fm) {
+        super(fm);
+    }
 
     public LegendsPagerAdapter(FragmentManager fm, int NumOfTabs)
     {
@@ -34,6 +36,11 @@ public class LegendsPagerAdapter extends FragmentPagerAdapter {
                 return tab4;
         }
         return null;
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 
     @Override

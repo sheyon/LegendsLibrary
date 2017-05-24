@@ -1,11 +1,14 @@
 package com.sheyon.fivecats.legendslibrary;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 
@@ -61,7 +64,15 @@ public class MainActivity extends AppCompatActivity {
 
         //OPEN DATABASE
         LegendsHelper legendsHelper = new LegendsHelper(this);
-        legendsDB = legendsHelper.getReadableDatabase();
+        try {
+            legendsDB = legendsHelper.getWritableDatabase();
+        }
+        catch (SQLiteException e){
+            legendsDB = legendsHelper.getReadableDatabase();
+            String errorCode = e.getMessage();
+            Log.e("***DB ERROR", errorCode);
+            Toast.makeText(this, "Database failed to open. You may not fave items.", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void setPageTitle(TabLayout.Tab tab)

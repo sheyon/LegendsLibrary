@@ -37,14 +37,12 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
     public LegendsListAdapter(Context context, Cursor c) {
         super(context, c, 0);
         mContext = context;
-        openDatabase();
     }
 
     public LegendsListAdapter(Context context, Cursor c, Fragment fragment) {
         super(context, c, 0);
         mContext = context;
         mFragment = fragment;
-        openDatabase();
     }
 
     public LegendsListAdapter(Context context, Cursor c, String searchString, Fragment fragment) {
@@ -52,12 +50,6 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
         mContext = context;
         mSearchString = searchString;
         mFragment = fragment;
-        openDatabase();
-    }
-
-    private void openDatabase() {
-        LegendsHelper legendsHelper = new LegendsHelper(mContext);
-        legendsDB = legendsHelper.getWritableDatabase();
     }
 
     @Override
