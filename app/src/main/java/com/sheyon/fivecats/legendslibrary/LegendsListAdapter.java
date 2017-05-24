@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
-import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 

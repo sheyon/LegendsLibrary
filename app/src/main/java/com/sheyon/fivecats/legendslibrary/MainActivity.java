@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.widget.Toast;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
@@ -18,9 +19,17 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_overflows, menu);
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        openDatabase();
 
         toolbar = (Toolbar) findViewById(R.id.mainActivity_toolbar);
         toolbar.setTitle("Categories");
@@ -61,8 +70,10 @@ public class MainActivity extends AppCompatActivity {
                 //DO NOTHING
             }
         });
+    }
 
-        //OPEN DATABASE
+    private void openDatabase()
+    {
         LegendsHelper legendsHelper = new LegendsHelper(this);
         try {
             legendsDB = legendsHelper.getWritableDatabase();

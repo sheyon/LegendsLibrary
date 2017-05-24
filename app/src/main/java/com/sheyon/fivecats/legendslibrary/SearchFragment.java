@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -17,12 +19,28 @@ import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 public class SearchFragment extends Fragment
 {
+    private SearchView searchView;
     private ListView listView;
     private LegendsListAdapter adapter;
     private Cursor cursor;
 
     private String searchString;
     private String modString;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem clearSearch = menu.findItem(R.id.menu_search_clear);
+        clearSearch.setVisible(true);
+
+        MenuItem clearFavorites = menu.findItem(R.id.menu_favorites_remove);
+        clearFavorites.setVisible(false);
+    }
 
     @Nullable
     @Override
@@ -39,7 +57,7 @@ public class SearchFragment extends Fragment
     {
         // Get the SearchView and set the searchable configuration
         //  SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        final SearchView searchView = (SearchView) view.findViewById(R.id.search_view);
+        searchView = (SearchView) view.findViewById(R.id.search_view);
         // Assumes current activity is the searchable activity
         //  searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false);
@@ -104,6 +122,24 @@ public class SearchFragment extends Fragment
         if (cursor != null) {
             cursor.close();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.menu_search_clear:
+                clearSearch();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void clearSearch()
+    {
+        searchView.setQuery("", false);
+        //CODE HOW TO CLEAR RESULTS
     }
 }
 
