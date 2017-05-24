@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
@@ -141,16 +140,18 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setStar(int faved) {
+        String convertedTitle = new TitleRenamer().convertTitle(titleString);
+
         if (faved == 0) {
             favedImageView.setImageResource(R.drawable.ic_star_border_white_48dp);
             if (startupComplete) {
-                Toast.makeText(this, titleString + " removed from Favorites.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, convertedTitle + " removed from Favorites.", Toast.LENGTH_SHORT).show();
             }
         }
         if (faved == 1) {
             favedImageView.setImageResource(R.drawable.ic_star_white_48dp);
             if (startupComplete) {
-                Toast.makeText(this, titleString + " added to Favorites.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, convertedTitle + " added to Favorites.", Toast.LENGTH_SHORT).show();
             }
         }
     }

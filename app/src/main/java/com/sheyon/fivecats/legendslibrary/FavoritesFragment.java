@@ -112,7 +112,7 @@ public class FavoritesFragment extends Fragment
                 }
             }
         });
-        
+
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

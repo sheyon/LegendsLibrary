@@ -159,13 +159,14 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
                 loreFavorite_IV = (ImageView) v.findViewById(R.id.lore_favorites_image_view);
 
                 //SET FAVED OR UNFAVED
+                String convertedTitle = new TitleRenamer().convertTitle(faveTitle);
                 if (faved == 0){
                     loreFavorite_IV.setImageResource(R.drawable.ic_star_border_white_48dp);
-                    Toast.makeText(mContext, faveTitle + " removed from Favorites.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, convertedTitle + " removed from Favorites.", Toast.LENGTH_SHORT).show();
                 }
                 if (faved == 1){
                     loreFavorite_IV.setImageResource(R.drawable.ic_star_white_48dp);
-                    Toast.makeText(mContext, faveTitle + " set to Favorites.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, convertedTitle + " set to Favorites.", Toast.LENGTH_SHORT).show();
                 }
 
                 //FIND OUT WHICH FRAGMENT CALLED THE ADAPTER AND REFRESH THE CURSOR
