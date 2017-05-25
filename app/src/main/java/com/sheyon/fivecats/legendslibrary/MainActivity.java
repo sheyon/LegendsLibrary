@@ -1,201 +1,112 @@
 package com.sheyon.fivecats.legendslibrary;
 
-import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
+import android.database.sqlite.SQLiteException;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.widget.Toast;
 
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 
 public class MainActivity extends AppCompatActivity {
 
     public static SQLiteDatabase legendsDB;
-    private ExpandableListView legendsExpandableView;
-    private Cursor cursor;
-
-    private int spinnerCatNumber;
-    private String categoryName;
-    private String clickedText;
+    private Toolbar toolbar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_overflows, menu);
+        return true;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setupSpinner();
+        openDatabase();
 
-        //OPEN DATABASE
+        toolbar = (Toolbar) findViewById(R.id.mainActivity_toolbar);
+        toolbar.setTitle("Categories");
+        setSupportActionBar(toolbar);
+
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.mainActivity_tab_layout);
+        tabLayout.addTab(tabLayout.newTab()); //CATEGORIES
+        tabLayout.addTab(tabLayout.newTab()); //ALPHABETICAL
+        tabLayout.addTab(tabLayout.newTab()); //SEARCH
+        tabLayout.addTab(tabLayout.newTab()); //FAVORITES
+
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+
+        tabLayout.setupWithViewPager(viewPager);
+
+        final LegendsPagerAdapter pagerAdapter = new LegendsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(pagerAdapter);
+
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_format_list_bulleted_white_48dp);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_sort_by_alpha_white_48dp);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_search_white_48dp);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_star_white_48dp);
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+                setPageTitle(tab, pagerAdapter);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                //DO NOTHING
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                //DO NOTHING
+            }
+        });
+    }
+
+    private void openDatabase() {
         LegendsHelper legendsHelper = new LegendsHelper(this);
-        legendsDB = legendsHelper.getReadableDatabase();
-
-        legendsExpandableView = (ExpandableListView) findViewById(R.id.legends_expandable_list);
-
-        legendsExpandableView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                LinearLayout ll = (LinearLayout) v;
-                TextView tv = (TextView) ll.findViewById(R.id.category_text_view);
-                int style = tv.getTypeface().getStyle();
-
-                //IF THE TEXT STYLE IS BOLDED, EXPAND THE CATEGORY
-                if ( style == 1 ) {
-                    return false;
-                }
-                //IF NOT, LAUNCH THE LORE PAGE
-                else {
-                    clickedText = tv.getText().toString();
-                    startLoreActivity();
-                    return false;
-                }
-            }
-        });
-
-        legendsExpandableView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                LinearLayout ll = (LinearLayout) v;
-                TextView tv = (TextView) ll.findViewById(R.id.subcategory_text_view);
-                clickedText = tv.getText().toString();
-
-                startLoreActivity();
-                return false;
-            }
-        });
+        try {
+            legendsDB = legendsHelper.getWritableDatabase();
+        } catch (SQLiteException e) {
+            legendsDB = legendsHelper.getReadableDatabase();
+            String errorCode = e.getMessage();
+            Log.e("***DB ERROR", errorCode);
+            Toast.makeText(this, "Database failed to open. You may not fave items.", Toast.LENGTH_LONG).show();
+        }
     }
 
-    private void startLoreActivity() {
-        Intent intent = new Intent(MainActivity.this, LoreActivity.class);
-        intent.putExtra("catPosition", spinnerCatNumber);
-        intent.putExtra("catName", categoryName);
-        intent.putExtra("searchParam", clickedText);
+    private void setPageTitle(TabLayout.Tab tab, LegendsPagerAdapter pagerAdapter) {
+        Fragment f = pagerAdapter.getItem(tab.getPosition());
 
-        closeCursor();
-        startActivity(intent);
-    }
-
-    private void setupSpinner()
-    {
-        Spinner spinner = (Spinner) findViewById(R.id.category_spinner);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.categories_array, R.layout.spinner_custom_layout);
-        spinnerAdapter.setDropDownViewResource(R.layout.spinner_custom_dropdown_text);
-        spinner.setAdapter(spinnerAdapter);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selection = (String) parent.getItemAtPosition(position);
-                if (!TextUtils.isEmpty(selection)) {
-                    if (selection.equals("[Choose a category:]")) {
-                        spinnerCatNumber = LoreLibrary.CAT_0;
-                        cursor.close();
-                    }
-                    if (selection.equals("Solomon Island")) {
-                        categoryName = "Solomon Island";
-                        spinnerCatNumber = LoreLibrary.CAT_1_SOL;
-                        displayCategoryScreen();
-                    }
-                    if (selection.equals("Valley of the Sun God")) {
-                        categoryName = "Valley of the Sun God";
-                        spinnerCatNumber = LoreLibrary.CAT_2_EGY;
-                        displayCategoryScreen();
-                    }
-                    if (selection.equals("Transylvania")) {
-                        categoryName = "Transylvania";
-                        spinnerCatNumber = LoreLibrary.CAT_3_TRN;
-                        displayCategoryScreen();
-                    }
-                    if (selection.equals("Tokyo")) {
-                        categoryName = "Tokyo";
-                        spinnerCatNumber = LoreLibrary.CAT_4_TOK;
-                        displayCategoryScreen();
-                    }
-                    if (selection.equals("Global")) {
-                        categoryName = "Global";
-                        spinnerCatNumber = LoreLibrary.CAT_5_GBL;
-                        displayCategoryScreen();
-                    }
-                    if (selection.equals("The Bestiary")) {
-                        categoryName = "The Bestiary";
-                        spinnerCatNumber = LoreLibrary.CAT_6_BES;
-                        displayCategoryScreen();
-                    }
-                    if (selection.equals("Events")) {
-                        categoryName = "Events";
-                        spinnerCatNumber = LoreLibrary.CAT_7_EVN;
-                        displayCategoryScreen();
-                    }
-                    if (selection.equals("Issues")) {
-                        categoryName = "Issues";
-                        spinnerCatNumber = LoreLibrary.CAT_8_ISU;
-                        displayCategoryScreen();
-                    }
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                //Do nothing
-            }
-        });
-    }
-
-    private void displayCategoryScreen() {
-        closeCursor();
-
-        String[] selectionArgs = { Integer.toString(spinnerCatNumber), Integer.toString(spinnerCatNumber) };
-        String[] mergedQuery = { Queries.UNION_1, Queries.UNION_2};
-
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        String unionQuery = qb.buildUnionQuery(mergedQuery, null, null);
-
-        cursor = legendsDB.rawQuery(unionQuery, selectionArgs);
-
-        LegendsCursorTreeAdapter legendsCursorTreeAdapter = new LegendsCursorTreeAdapter(cursor, this);
-        legendsExpandableView.setAdapter(legendsCursorTreeAdapter);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        displayCategoryScreen();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        closeCursor();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        closeCursor();
+        if (f.getClass() == CategoriesFragment.class) {
+            toolbar.setTitle("Categories");
+        }
+        if (f.getClass() == AlphabeticalFragment.class) {
+            toolbar.setTitle("Alphabetical");
+        }
+        if (f.getClass() == SearchFragment.class) {
+            toolbar.setTitle("Search");
+        }
+        if (f.getClass() == FavoritesFragment.class) {
+            toolbar.setTitle("Favorites");
+        } else {
+            toolbar.setTitle("Legends Library");
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        closeCursor();
         legendsDB.close();
-    }
-
-    private void closeCursor() {
-        if (cursor != null) {
-            cursor.close();
-        }
     }
 }

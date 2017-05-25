@@ -21,4 +21,9 @@ public class LegendsHelper extends SQLiteAssetHelper
         super.onOpen(db);
         db.execSQL("PRAGMA foreign_keys=ON;");
     }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
 }
