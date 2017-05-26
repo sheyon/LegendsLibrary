@@ -37,18 +37,13 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.mainActivity_tab_layout);
-        tabLayout.addTab(tabLayout.newTab()); //CATEGORIES
-        tabLayout.addTab(tabLayout.newTab()); //ALPHABETICAL
-        tabLayout.addTab(tabLayout.newTab()); //SEARCH
-        tabLayout.addTab(tabLayout.newTab()); //FAVORITES
-
         final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-
-        tabLayout.setupWithViewPager(viewPager);
-
         final LegendsPagerAdapter pagerAdapter = new LegendsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+
         viewPager.setAdapter(pagerAdapter);
 
+        //ICONS MUST BE SET PROGRAMATICALLY, EVEN IF THEY ARE IN THE XML
+        tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_format_list_bulleted_white_48dp);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_sort_by_alpha_white_48dp);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_search_white_48dp);
@@ -81,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             legendsDB = legendsHelper.getReadableDatabase();
             String errorCode = e.getMessage();
             Log.e("***DB ERROR", errorCode);
-            Toast.makeText(this, "Database failed to open. You may not fave items.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Database failed to open. Please clear some disk space.", Toast.LENGTH_LONG).show();
         }
     }
 
