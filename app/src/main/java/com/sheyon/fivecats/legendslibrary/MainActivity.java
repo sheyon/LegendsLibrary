@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         final LegendsPagerAdapter pagerAdapter = new LegendsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
 
         viewPager.setAdapter(pagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
 
         setupIcons(tabLayout, viewPager);
 
@@ -79,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupIcons(TabLayout tabLayout, ViewPager viewPager){
         //ICONS MUST BE SET PROGRAMATICALLY, EVEN IF THEY ARE IN THE XML
-        tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_format_list_bulleted_white_48dp);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_sort_by_alpha_white_48dp);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_search_white_48dp);
