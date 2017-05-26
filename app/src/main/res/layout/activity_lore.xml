@@ -90,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@drawable/lore" />
 
                 <TextView
                     android:id="@+id/loreActivity_buzzing_text_view"
@@ -116,7 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:src="@mipmap/ic_launcher"
+                    android:src="@drawable/blacklore"
                     android:visibility="gone" />
 
                 <TextView

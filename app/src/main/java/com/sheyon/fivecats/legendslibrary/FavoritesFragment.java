@@ -54,12 +54,14 @@ public class FavoritesFragment extends Fragment
 
     private void setupListView(View view) {
         ListView listView = (ListView) view.findViewById(R.id.alphabetical_list_view);
+        View emptyView = view.findViewById(R.id.empty_view);
 
         cursor = legendsDB.rawQuery(Queries.GET_ALL_FAVES, null);
         cursor.moveToFirst();
 
         adapter = new LegendsListAdapter(getContext(), cursor, this);
         listView.setAdapter(adapter);
+        listView.setEmptyView(emptyView);
     }
 
     public void refreshCursor() {

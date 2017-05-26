@@ -99,8 +99,6 @@ public class MainActivity extends AppCompatActivity {
         }
         if (f.getClass() == FavoritesFragment.class) {
             toolbar.setTitle("Favorites");
-        } else {
-            toolbar.setTitle("Legends Library");
         }
     }
 

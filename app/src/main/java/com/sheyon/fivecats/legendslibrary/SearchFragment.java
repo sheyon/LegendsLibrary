@@ -20,6 +20,7 @@ public class SearchFragment extends Fragment
 {
     private SearchView searchView;
     private ListView listView;
+    private View emptyView;
     private LegendsListAdapter adapter;
 
     private Cursor cursor;
@@ -83,6 +84,7 @@ public class SearchFragment extends Fragment
 
     private void setupListView(View view) {
         listView = (ListView) view.findViewById(R.id.search_list_view);
+        emptyView = view.findViewById(R.id.empty_view);
     }
 
     private void runQuery() {
@@ -99,6 +101,7 @@ public class SearchFragment extends Fragment
 
         adapter = new LegendsListAdapter(getContext(), cursor, searchString, this);
         listView.setAdapter(adapter);
+        listView.setEmptyView(emptyView);
     }
 
     public void refreshCursor() {
