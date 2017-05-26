@@ -29,6 +29,10 @@ public class AlphabeticalFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_alphabetical, container, false);
 
+        cursor = legendsDB.rawQuery(Queries.ALPHABETICAL, null);
+        cursor.moveToFirst();
+        adapter = new LegendsListAdapter(getContext(), cursor, this);
+
         setupListView(view);
 
         return view;
@@ -37,10 +41,6 @@ public class AlphabeticalFragment extends Fragment
     private void setupListView(View view) {
         ListView listView = (ListView) view.findViewById(R.id.alphabetical_list_view);
 
-        cursor = legendsDB.rawQuery(Queries.ALPHABETICAL, null);
-        cursor.moveToFirst();
-
-        adapter = new LegendsListAdapter(getContext(), cursor, this);
         listView.setAdapter(adapter);
     }
 
