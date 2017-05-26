@@ -1,5 +1,6 @@
 package com.sheyon.fivecats.legendslibrary;
 
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.support.design.widget.TabLayout;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Toast;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
@@ -42,12 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager.setAdapter(pagerAdapter);
 
-        //ICONS MUST BE SET PROGRAMATICALLY, EVEN IF THEY ARE IN THE XML
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_format_list_bulleted_white_48dp);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_sort_by_alpha_white_48dp);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_search_white_48dp);
-        tabLayout.getTabAt(3).setIcon(R.drawable.ic_star_white_48dp);
+        setupIcons(tabLayout, viewPager);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -77,6 +74,25 @@ public class MainActivity extends AppCompatActivity {
             String errorCode = e.getMessage();
             Log.e("***DB ERROR", errorCode);
             Toast.makeText(this, "Database failed to open. Please clear some disk space.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void setupIcons(TabLayout tabLayout, ViewPager viewPager){
+        //ICONS MUST BE SET PROGRAMATICALLY, EVEN IF THEY ARE IN THE XML
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_format_list_bulleted_white_48dp);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_sort_by_alpha_white_48dp);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_search_white_48dp);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_star_white_48dp);
+
+        //FOR SPREADING OUT TAB ICONS ON TABLET SCREENS
+        int w = (int)((Resources.getSystem().getDisplayMetrics().widthPixels)/Resources.getSystem().getDisplayMetrics().density);
+        if ( w > 370 ) {
+            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+            tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        }
+        else {
+            tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         }
     }
 
