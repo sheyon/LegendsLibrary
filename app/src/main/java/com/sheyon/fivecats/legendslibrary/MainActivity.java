@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         final LegendsPagerAdapter pagerAdapter = new LegendsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
 
         viewPager.setAdapter(pagerAdapter);
+        viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
 
         setupIcons(tabLayout, viewPager);
