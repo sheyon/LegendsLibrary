@@ -14,12 +14,15 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
+import com.sbrukhanda.fragmentviewpager.FragmentViewPager;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 
 public class MainActivity extends AppCompatActivity {
 
     public static SQLiteDatabase legendsDB;
+
     private Toolbar toolbar;
+    private FragmentViewPager viewPager;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.mainActivity_tab_layout);
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager = (FragmentViewPager) findViewById(R.id.view_pager);
         final LegendsPagerAdapter pagerAdapter = new LegendsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
 
         viewPager.setAdapter(pagerAdapter);
@@ -111,6 +114,18 @@ public class MainActivity extends AppCompatActivity {
         if (f.getClass() == FavoritesFragment.class) {
             toolbar.setTitle("Favorites");
         }
+    }
+
+    @Override
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        viewPager.notifyPagerVisible();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        viewPager.notifyPagerInvisible();
     }
 
     @Override

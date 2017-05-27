@@ -2,25 +2,29 @@ package com.sheyon.fivecats.legendslibrary;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 
+import com.sbrukhanda.fragmentviewpager.FragmentVisibilityListener;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
-public class SearchFragment extends Fragment
+public class SearchFragment extends Fragment implements FragmentVisibilityListener
 {
+    private LinearLayout searchLayout;
     private SearchView searchView;
     private ListView listView;
-    private View emptyView;
+    //private View emptyView;
     private LegendsListAdapter adapter;
 
     private Cursor cursor;
@@ -35,14 +39,14 @@ public class SearchFragment extends Fragment
         setHasOptionsMenu(true);
     }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        MenuItem clearSearch = menu.findItem(R.id.menu_search_clear);
-        clearSearch.setVisible(true);
-
-        MenuItem clearFavorites = menu.findItem(R.id.menu_favorites_remove);
-        clearFavorites.setVisible(false);
-    }
+//    @Override
+//    public void onPrepareOptionsMenu(Menu menu) {
+//        MenuItem clearSearch = menu.findItem(R.id.menu_search_clear);
+//        clearSearch.setVisible(true);
+//
+//        MenuItem clearFavorites = menu.findItem(R.id.menu_favorites_remove);
+//        clearFavorites.setVisible(false);
+//    }
 
     @Nullable
     @Override
@@ -83,8 +87,9 @@ public class SearchFragment extends Fragment
     }
 
     private void setupListView(View view) {
+        searchLayout = (LinearLayout) view.findViewById(R.id.search_layout);
         listView = (ListView) view.findViewById(R.id.search_list_view);
-        emptyView = view.findViewById(R.id.empty_view);
+        //emptyView = view.findViewById(R.id.empty_view);
     }
 
     private void runQuery() {
@@ -101,7 +106,7 @@ public class SearchFragment extends Fragment
 
         adapter = new LegendsListAdapter(getContext(), cursor, searchString, this);
         listView.setAdapter(adapter);
-        listView.setEmptyView(emptyView);
+        //listView.setEmptyView(emptyView);
     }
 
     public void refreshCursor() {
@@ -110,6 +115,12 @@ public class SearchFragment extends Fragment
             return;
         }
 
+        //IF USER HAS NOT SEARCHED YET, DO NOT REFRESH
+        if (modString == null) {
+            return;
+        }
+
+        closeCursor();
         String[] selectionArgs = { modString, modString, modString };
         refreshedCursor = legendsDB.rawQuery(Queries.SEARCH, selectionArgs);
         adapter.swapCursor(refreshedCursor);
@@ -132,29 +143,50 @@ public class SearchFragment extends Fragment
         }
     }
 
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item)
+//    {
+//        switch (item.getItemId())
+//        {
+//            case R.id.menu_search_clear:
+//                clearSearch();
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+
+//    private void clearSearch() {
+//        //EMPTY THE SEARCH FIELD
+//        searchView.setQuery("", false);
+//
+//        //NULL CATCH; IF THERE IS A NULL, DO NOTHING
+//        if (cursor == null && refreshedCursor == null){
+//            return;
+//        }
+//        //OTHERWISE IT IS SAFE TO PROCEED
+//        else {
+//            adapter.swapCursor(null);
+//        }
+//    }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
-            case R.id.menu_search_clear:
-                clearSearch();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+    public void onFragmentInvisible() {
+        searchLayout.setVisibility(View.GONE);
+        //emptyView.setVisibility(View.GONE);
     }
 
-    private void clearSearch() {
-        //EMPTY THE SEARCH FIELD
-        searchView.setQuery("", false);
+    @Override
+    public void onFragmentVisible() {
+        refreshCursor();
 
-        //NULL CATCH; IF THERE IS A NULL, DO NOTHING
-        if (cursor == null && refreshedCursor == null){
-            return;
-        }
-        //OTHERWISE IT IS SAFE TO PROCEED
-        else {
-            adapter.swapCursor(null);
-        }
+        // ACTION TO RUN AFTER 1/5TH OF A SECOND
+        // THIS IS NECESSARY TO ENSURE A SMOOTH TRANSITION WHEN FAVING A LORE FROM ANOTHER TAB AND THEN NAVIGATING BACK
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                searchLayout.setVisibility(View.VISIBLE);
+                //emptyView.setVisibility(View.VISIBLE);
+            }
+        }, 50);
     }
 }
