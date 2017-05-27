@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -39,14 +41,14 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
         setHasOptionsMenu(true);
     }
 
-//    @Override
-//    public void onPrepareOptionsMenu(Menu menu) {
-//        MenuItem clearSearch = menu.findItem(R.id.menu_search_clear);
-//        clearSearch.setVisible(true);
-//
-//        MenuItem clearFavorites = menu.findItem(R.id.menu_favorites_remove);
-//        clearFavorites.setVisible(false);
-//    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem clearSearch = menu.findItem(R.id.menu_search_clear);
+        clearSearch.setVisible(true);
+
+        MenuItem clearFavorites = menu.findItem(R.id.menu_favorites_remove);
+        clearFavorites.setVisible(false);
+    }
 
     @Nullable
     @Override
@@ -143,31 +145,32 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
         }
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item)
-//    {
-//        switch (item.getItemId())
-//        {
-//            case R.id.menu_search_clear:
-//                clearSearch();
-//                return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.menu_search_clear:
+                clearSearch();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-//    private void clearSearch() {
-//        //EMPTY THE SEARCH FIELD
-//        searchView.setQuery("", false);
-//
-//        //NULL CATCH; IF THERE IS A NULL, DO NOTHING
-//        if (cursor == null && refreshedCursor == null){
-//            return;
-//        }
-//        //OTHERWISE IT IS SAFE TO PROCEED
-//        else {
-//            adapter.swapCursor(null);
-//        }
-//    }
+    private void clearSearch() {
+        //EMPTY THE SEARCH FIELD
+        searchView.setQuery("", false);
+
+        //NULL CATCH; IF THERE IS A NULL, DO NOTHING
+        if (cursor == null && refreshedCursor == null){
+            return;
+        }
+        //OTHERWISE IT IS SAFE TO PROCEED
+        else {
+            adapter.swapCursor(null);
+            modString = null;
+        }
+    }
 
     @Override
     public void onFragmentInvisible() {
