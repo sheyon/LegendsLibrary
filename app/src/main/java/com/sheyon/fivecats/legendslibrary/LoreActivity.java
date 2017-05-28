@@ -110,7 +110,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         if (searchString.endsWith("*")) {
             searchString = searchString.replace("*", " ").trim();
         }
-        //MORE SANITATION
+        //SINGLE-QUOTES WILL NOT CRASH THE SEARCH BUT IT WILL KEEP THE HIGHIGHTER FROM WORKING
         if (searchString.startsWith("'") || searchString.endsWith("'")) {
             searchString = searchString.replace("'", " ").trim();
         }
