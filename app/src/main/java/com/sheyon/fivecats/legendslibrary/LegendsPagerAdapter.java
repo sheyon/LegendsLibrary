@@ -12,10 +12,14 @@ public class LegendsPagerAdapter extends com.sbrukhanda.fragmentviewpager.adapte
         super(fm);
     }
 
+    public LegendsPagerAdapter(FragmentManager fm, int NumOfTabs) {
+        super(fm);
+        this.mNumOftabs = NumOfTabs;
+    }
+
     @Override
     public Fragment instantiateFragment(int position) {
-        switch (position)
-        {
+        switch (position) {
             case 0:
                 CategoriesFragment tab1 = new CategoriesFragment();
                 return tab1;
@@ -23,25 +27,19 @@ public class LegendsPagerAdapter extends com.sbrukhanda.fragmentviewpager.adapte
                 AlphabeticalFragment tab2 = new AlphabeticalFragment();
                 return tab2;
             case 2:
-                SearchFragment tab3 = new SearchFragment();
+                FavoritesFragment tab3 = new FavoritesFragment();
                 return tab3;
             case 3:
-                FavoritesFragment tab4 = new FavoritesFragment();
+                SearchFragment tab4 = new SearchFragment();
                 return tab4;
         }
         return null;
     }
 
-    public LegendsPagerAdapter(FragmentManager fm, int NumOfTabs)
-    {
-        super(fm);
-        this.mNumOftabs = NumOfTabs;
-    }
-
     //@Override
+    //NOT NEEDED?
     public Fragment getItem(int position) {
-        switch (position)
-        {
+        switch (position) {
             case 0:
                 CategoriesFragment tab1 = new CategoriesFragment();
                 return tab1;
@@ -49,10 +47,10 @@ public class LegendsPagerAdapter extends com.sbrukhanda.fragmentviewpager.adapte
                 AlphabeticalFragment tab2 = new AlphabeticalFragment();
                 return tab2;
             case 2:
-                SearchFragment tab3 = new SearchFragment();
+                FavoritesFragment tab3 = new FavoritesFragment();
                 return tab3;
             case 3:
-                FavoritesFragment tab4 = new FavoritesFragment();
+                SearchFragment tab4 = new SearchFragment();
                 return tab4;
         }
         return null;

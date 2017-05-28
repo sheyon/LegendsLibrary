@@ -72,12 +72,12 @@ public final class LegendsContract
                 "from lore\n" +
                 "where lore.categoryId = ? and title LIKE ? ";
 
-        //Returns results from the SearchView
-        public static final String SEARCH = "select lore._id AS _id, lore.categoryId, category.categoryName, lore.title, lore.legend, lore.blackLore, lore.faved\n" +
-                "from lore\n" +
-                "join category\n" +
-                "on lore.categoryId = category.categoryId\n" +
-                "where (lore.title like ?) or (lore.legend like ?) or (lore.blackLore like ?)";
+//        Returns results from the SearchView 
+//        public static final String SEARCH = "select lore._id AS _id, lore.categoryId, category.categoryName, lore.title, lore.legend, lore.blackLore, lore.faved\n" +
+//                "from lore\n" +
+//                "join category\n" +
+//                "on lore.categoryId = category.categoryId\n" +
+//                "where (lore.title like ?) or (lore.legend like ?) or (lore.blackLore like ?)";
 
         //Returns dropdown results for the Search ExpandableViewList
         public static final String SEARCH_CHILD_TABLE = "select lore._id AS _id, category.categoryName, lore.Title, lore.legend, lore.blackLore\n" +
@@ -112,5 +112,20 @@ public final class LegendsContract
 
         public static final String CHECK_FOR_FAVED_LORE = "select title from lore\n" +
                 "where faved = 1";
+
+        public static final String POPULATE_VIRTUAL_TABLE = "INSERT INTO LoreSearch\n" +
+                "SELECT _id, title, legend, blackLore, category.categoryName, faved\n" +
+                "FROM lore\n" +
+                "JOIN category\n" +
+                "on lore.categoryId = category.CategoryID;";
+
+        public static final String QUERY_FTS = "SELECT * FROM LoreSearch\n" +
+                "WHERE title MATCH ?\n" +
+                "UNION\n" +
+                "SELECT * FROM LoreSearch\n" +
+                "WHERE legend MATCH ?\n" +
+                "UNION\n" +
+                "SELECT * FROM LoreSearch\n" +
+                "WHERE blackLore MATCH ?";
     }
 }

@@ -86,8 +86,9 @@ public class MainActivity extends AppCompatActivity {
         //ICONS MUST BE SET PROGRAMATICALLY, EVEN IF THEY ARE IN THE XML
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_format_list_bulleted_white_48dp);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_sort_by_alpha_white_48dp);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_search_white_48dp);
-        tabLayout.getTabAt(3).setIcon(R.drawable.ic_star_white_48dp);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_star_white_48dp);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_search_white_48dp);
+
 
         //FOR SPREADING OUT TAB ICONS ON TABLET SCREENS
         int w = (int)((Resources.getSystem().getDisplayMetrics().widthPixels)/Resources.getSystem().getDisplayMetrics().density);
@@ -109,11 +110,11 @@ public class MainActivity extends AppCompatActivity {
         if (f.getClass() == AlphabeticalFragment.class) {
             toolbar.setTitle("Alphabetical");
         }
-        if (f.getClass() == SearchFragment.class) {
-            toolbar.setTitle("Search");
-        }
         if (f.getClass() == FavoritesFragment.class) {
             toolbar.setTitle("Favorites");
+        }
+        if (f.getClass() == SearchFragment.class) {
+            toolbar.setTitle("Search");
         }
     }
 

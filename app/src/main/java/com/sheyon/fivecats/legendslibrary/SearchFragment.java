@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.sbrukhanda.fragmentviewpager.FragmentVisibilityListener;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
@@ -32,8 +33,8 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     private Cursor cursor;
     private Cursor refreshedCursor;
 
-    private String searchString;
     private String modString;
+    private String searchString;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,7 +78,13 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
                 searchString = searchView.getQuery().toString().toLowerCase().trim();
                 searchView.clearFocus();
 
-                runQuery();
+                if (searchString.length() < 3) {
+                    Toast.makeText(getContext(), "Searches must have a length of at least 3 characters.", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+                else  {
+                    runQuery();
+                }
                 return false;
             }
 
@@ -98,10 +105,10 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
         //CLOSE ANY OF THE PREVIOUS QUERIES IF THEY EXIST
         closeCursor();
 
-        modString = "%"+searchString+"%";
+        modString = "'"+searchString+"'";
         String [] selectionArgs = { modString, modString, modString };
 
-        cursor = legendsDB.rawQuery(Queries.SEARCH, selectionArgs);
+        cursor = legendsDB.rawQuery(Queries.QUERY_FTS, selectionArgs);
         if (cursor != null) {
             cursor.moveToFirst();
         }
@@ -124,7 +131,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
 
         closeCursor();
         String[] selectionArgs = { modString, modString, modString };
-        refreshedCursor = legendsDB.rawQuery(Queries.SEARCH, selectionArgs);
+        refreshedCursor = legendsDB.rawQuery(Queries.QUERY_FTS, selectionArgs);
         adapter.swapCursor(refreshedCursor);
     }
 

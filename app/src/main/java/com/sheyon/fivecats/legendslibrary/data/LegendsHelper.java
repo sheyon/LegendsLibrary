@@ -16,10 +16,13 @@ public class LegendsHelper extends SQLiteAssetHelper
     }
 
     @Override
-    public void onOpen(SQLiteDatabase db)
-    {
+    public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
         db.execSQL("PRAGMA foreign_keys=ON;");
+        //CREATE TABLE FOR FULL-TEXT-SEARCH
+        db.execSQL("DROP TABLE IF EXISTS LoreSearch;");
+        db.execSQL("CREATE VIRTUAL TABLE LoreSearch USING fts4 (_id, title, legend, blackLore, categoryName, faved);");
+        db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE);
     }
 
     @Override
