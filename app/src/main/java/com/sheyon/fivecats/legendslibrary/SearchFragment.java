@@ -86,8 +86,12 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
                 searchString = searchView.getQuery().toString().toLowerCase().trim();
                 searchView.clearFocus();
 
+                if (searchString.contains("\"")) {
+                    Toast.makeText(getContext(), "Do not include quotation marks in your queries.", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
                 if (searchString.length() < 3) {
-                    Toast.makeText(getContext(), "Searches must have a length of at least 3 characters.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Queries must have a length of at least 3 characters.", Toast.LENGTH_SHORT).show();
                     return false;
                 }
                 else  {

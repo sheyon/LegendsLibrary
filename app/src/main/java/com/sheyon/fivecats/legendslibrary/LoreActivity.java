@@ -103,12 +103,16 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
 
         String normalizedText = originalText.toLowerCase(Locale.US);
 
-        ColorStateList blueColor = new ColorStateList(new int[][]{new int[]{}}, new int[]{Color.BLUE});
+        ColorStateList blueColor = new ColorStateList(new int[][]{new int[]{}}, new int[]{Color.CYAN});
         //TextAppearanceSpan highlightSpan = new TextAppearanceSpan(null, Typeface.BOLD, -1, blueColor, null);
 
         //SO THE HIGHLIGHTER WILL RETURN WILDCARD SEARCHES
         if (searchString.endsWith("*")) {
             searchString = searchString.replace("*", " ").trim();
+        }
+        //MORE SANITATION
+        if (searchString.startsWith("'") || searchString.endsWith("'")) {
+            searchString = searchString.replace("'", " ").trim();
         }
 
         int start = normalizedText.indexOf(searchString);
