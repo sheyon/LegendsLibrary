@@ -161,7 +161,7 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
     public void onFragmentVisible() {
         refreshCursor();
 
-        // ACTION TO RUN AFTER 1/5TH OF A SECOND
+        // ACTION TO RUN AFTER 1/10TH OF A SECOND
         // THIS IS NECESSARY TO ENSURE A SMOOTH TRANSITION WHEN FAVING A LORE FROM ANOTHER TAB AND THEN NAVIGATING BACK
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -170,6 +170,6 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
                 emptyView.setVisibility(View.VISIBLE);
                 listView.setEmptyView(emptyView);
             }
-        }, 50);
+        }, 100);
     }
 }

@@ -106,6 +106,11 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         ColorStateList blueColor = new ColorStateList(new int[][]{new int[]{}}, new int[]{Color.BLUE});
         //TextAppearanceSpan highlightSpan = new TextAppearanceSpan(null, Typeface.BOLD, -1, blueColor, null);
 
+        //SO THE HIGHLIGHTER WILL RETURN WILDCARD SEARCHES
+        if (searchString.endsWith("*")) {
+            searchString = searchString.replace("*", " ").trim();
+        }
+
         int start = normalizedText.indexOf(searchString);
 
         if (start < 0) {

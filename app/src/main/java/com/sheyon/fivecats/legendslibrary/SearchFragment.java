@@ -1,33 +1,37 @@
 package com.sheyon.fivecats.legendslibrary;
 
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
+import android.widget.PopupWindow;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.sbrukhanda.fragmentviewpager.FragmentVisibilityListener;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
-public class SearchFragment extends Fragment implements FragmentVisibilityListener
+public class SearchFragment extends Fragment implements FragmentVisibilityListener, View.OnClickListener
 {
     private LinearLayout searchLayout;
     private SearchView searchView;
     private ListView listView;
-    //private View emptyView;
     private LegendsListAdapter adapter;
 
     private Cursor cursor;
@@ -35,6 +39,10 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
 
     private String modString;
     private String searchString;
+
+    private static class ViewHolder {
+        private LinearLayout mClickableLayout;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,7 +106,11 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     private void setupListView(View view) {
         searchLayout = (LinearLayout) view.findViewById(R.id.search_layout);
         listView = (ListView) view.findViewById(R.id.search_list_view);
-        //emptyView = view.findViewById(R.id.empty_view);
+
+        LinearLayout infoClickable = (LinearLayout) view.findViewById(R.id.search_info_clickable);
+        ViewHolder holder = new ViewHolder();
+        holder.mClickableLayout = infoClickable;
+        holder.mClickableLayout.setOnClickListener(this);
     }
 
     private void runQuery() {
@@ -115,7 +127,6 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
 
         adapter = new LegendsListAdapter(getContext(), cursor, searchString, this);
         listView.setAdapter(adapter);
-        //listView.setEmptyView(emptyView);
     }
 
     public void refreshCursor() {
@@ -182,21 +193,55 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     @Override
     public void onFragmentInvisible() {
         searchLayout.setVisibility(View.GONE);
-        //emptyView.setVisibility(View.GONE);
     }
 
     @Override
     public void onFragmentVisible() {
         refreshCursor();
 
-        // ACTION TO RUN AFTER 1/5TH OF A SECOND
+        // ACTION TO RUN AFTER 1/10TH OF A SECOND
         // THIS IS NECESSARY TO ENSURE A SMOOTH TRANSITION WHEN FAVING A LORE FROM ANOTHER TAB AND THEN NAVIGATING BACK
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
                 searchLayout.setVisibility(View.VISIBLE);
-                //emptyView.setVisibility(View.VISIBLE);
             }
-        }, 50);
+        }, 100);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.search_info_clickable) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+            View popupView = inflater.inflate(R.layout.popup_search_info_layout, null);
+
+            //DUMMY VIEW TO DARKEN AND LOCK THE BACKGROUND
+            View dummyView = new View(getContext());
+            dummyView.setBackgroundColor(ContextCompat.getColor(getContext(), android.R.color.black));
+            dummyView.setAlpha(.6f);
+
+            final PopupWindow mDummyPopupWindow = new PopupWindow(dummyView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            mDummyPopupWindow.showAtLocation(listView, Gravity.CENTER, 0, 0);
+
+            final PopupWindow mPopupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            mPopupWindow.showAtLocation(listView, Gravity.CENTER, 0, 0);
+            if( Build.VERSION.SDK_INT >= 21){
+                mPopupWindow.setElevation(5);
+            }
+            mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    mDummyPopupWindow.dismiss();
+                }
+            });
+
+            Button closeButton = (Button) popupView.findViewById(R.id.popup_button_dismiss);
+            closeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mPopupWindow.dismiss();
+                }
+            });
+        }
     }
 }

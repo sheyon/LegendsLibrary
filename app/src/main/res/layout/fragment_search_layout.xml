@@ -18,11 +18,35 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <SearchView
-            android:id="@+id/search_view"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:queryHint="Search the Library"/>
+            android:orientation="horizontal"
+            android:baselineAligned="false">
+
+            <SearchView
+                android:id="@+id/search_view"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:queryHint="Search the Library"/>
+
+            <LinearLayout
+                android:id="@+id/search_info_clickable"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_help_outline_white_24dp"
+                    android:alpha=".5"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <ListView
             android:id="@+id/search_list_view"
