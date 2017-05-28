@@ -72,7 +72,7 @@ public final class LegendsContract
                 "from lore\n" +
                 "where lore.categoryId = ? and title LIKE ? ";
 
-//        Returns results from the SearchView 
+//        Returns results from the SearchView
 //        public static final String SEARCH = "select lore._id AS _id, lore.categoryId, category.categoryName, lore.title, lore.legend, lore.blackLore, lore.faved\n" +
 //                "from lore\n" +
 //                "join category\n" +
