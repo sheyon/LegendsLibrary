@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:textColor="@android:color/white"
-        android:text="You may add * to the end of a word to create a wildcard search. (Example: demon* returns 'demons', 'demonic', ect.)" />
+        android:text="You may add * to the end of a word to activate wildcard results. (Example: demon* returns 'demons', 'demonic', ect.)" />
 
     <TextView
         android:layout_width="wrap_content"
