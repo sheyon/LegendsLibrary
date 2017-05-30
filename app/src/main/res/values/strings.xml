@@ -13,4 +13,17 @@
         <item>Issues</item>
     </string-array>
 
+    <string-array name="drawer_items">
+        <item>Settings - Soon(TM)</item>
+        <item>About</item>
+    </string-array>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="title_categories">Categories</string>
+    <string name="title_alphabetical">Alphabetical</string>
+    <string name="title_favorites">Favorites</string>
+    <string name="title_search">Search</string>
+
 </resources>
