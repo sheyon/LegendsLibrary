@@ -1,17 +1,23 @@
 package com.sheyon.fivecats.legendslibrary;
 
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.sbrukhanda.fragmentviewpager.FragmentViewPager;
@@ -23,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private FragmentViewPager viewPager;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -36,9 +43,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         openDatabase();
+        setupDrawer();
 
         toolbar = (Toolbar) findViewById(R.id.mainActivity_toolbar);
-        toolbar.setTitle("Categories");
+        toolbar.setTitle(R.string.title_categories);
+        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
         setSupportActionBar(toolbar);
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.mainActivity_tab_layout);
@@ -68,6 +77,57 @@ public class MainActivity extends AppCompatActivity {
                 //DO NOTHING
             }
         });
+    }
+
+    private void setupDrawer() {
+        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ListView mDrawerList = (ListView) mDrawerLayout.findViewById(R.id.left_drawer);
+        String[] mDrawerItems = getResources().getStringArray(R.array.drawer_items);
+
+        // Set the adapter for the list view
+        final ArrayAdapter<String> drawerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mDrawerItems);
+        mDrawerList.setAdapter(drawerAdapter);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close){
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+        };
+
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
+
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle your other action bar items...
+        return super.onOptionsItemSelected(item);
     }
 
     private void openDatabase() {
@@ -105,17 +165,18 @@ public class MainActivity extends AppCompatActivity {
         Fragment f = pagerAdapter.getItem(tab.getPosition());
 
         if (f.getClass() == CategoriesFragment.class) {
-            toolbar.setTitle("Categories");
+            toolbar.setTitle(R.string.title_categories);
         }
         if (f.getClass() == AlphabeticalFragment.class) {
-            toolbar.setTitle("Alphabetical");
+            toolbar.setTitle(R.string.title_alphabetical);
         }
         if (f.getClass() == FavoritesFragment.class) {
-            toolbar.setTitle("Favorites");
+            toolbar.setTitle(R.string.title_favorites);
         }
         if (f.getClass() == SearchFragment.class) {
-            toolbar.setTitle("Search");
+            toolbar.setTitle(R.string.title_search);
         }
+        mDrawerToggle.syncState();
     }
 
     @Override
