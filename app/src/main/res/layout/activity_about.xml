@@ -7,10 +7,9 @@
     tools:context=".AboutActivity">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-        <!-- The main content view -->
         <android.support.v7.widget.Toolbar
             android:id="@+id/aboutActivity_toolbar"
             android:layout_width="match_parent"
@@ -20,15 +19,118 @@
             android:elevation="4dp"
             android:minHeight="?attr/actionBarSize" />
 
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="24dp"
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_below="@id/aboutActivity_toolbar"
-            android:layout_centerInParent="true"
-            android:src="@drawable/logo512"/>
+            android:layout_marginBottom="24dp">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- The main content view -->
+
+                <ImageView
+                    android:id="@+id/logo"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="24dp"
+                    android:src="@drawable/logo512" />
+
+                <TextView
+                    android:id="@+id/header_about"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:padding="8dp"
+                    android:text="ABOUT"
+                    android:textAppearance="@style/AboutHeaderStyles" />
+
+                <TextView
+                    android:id="@+id/textView_about"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@color/backgroundAccent"
+                    android:padding="8dp"
+                    android:text="@string/about_aboutText"
+                    android:textColor="@android:color/white"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/header_privacy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:padding="8dp"
+                    android:text="PRIVACY POLICY"
+                    android:textAppearance="@style/AboutHeaderStyles" />
+
+                <TextView
+                    android:id="@+id/textView_privacy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@color/backgroundAccent"
+                    android:padding="8dp"
+                    android:text="@string/about_privacyText"
+                    android:textColor="@android:color/white"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/header_legal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:padding="8dp"
+                    android:text="LEGAL"
+                    android:textAppearance="@style/AboutHeaderStyles" />
+
+                <TextView
+                    android:id="@+id/textView_legal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@color/backgroundAccent"
+                    android:padding="8dp"
+                    android:text="@string/about_legalText"
+                    android:textColor="@android:color/white"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+        </ScrollView>
     </RelativeLayout>
+
 
     <ListView
         android:id="@+id/left_drawer"

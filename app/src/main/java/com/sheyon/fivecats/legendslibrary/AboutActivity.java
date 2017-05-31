@@ -5,10 +5,19 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 public class AboutActivity extends AppCompatActivity {
 
     private UniversalDrawer universalDrawer;
+
+    private TextView aboutHeader;
+    private TextView privacyHeader;
+    private TextView legalHeader;
+    private TextView aboutBlurb;
+    private TextView privacyBlurb;
+    private TextView legalBlurb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +29,50 @@ public class AboutActivity extends AppCompatActivity {
 
         universalDrawer = new UniversalDrawer();
         universalDrawer.setupDrawer(this, toolbar);
+
+        aboutHeader = (TextView) findViewById(R.id.header_about);
+        privacyHeader = (TextView) findViewById(R.id.header_privacy);
+        legalHeader = (TextView) findViewById(R.id.header_legal);
+
+        aboutBlurb = (TextView) findViewById(R.id.textView_about);
+        privacyBlurb = (TextView) findViewById(R.id.textView_privacy);
+        legalBlurb = (TextView) findViewById(R.id.textView_legal);
+
+        aboutHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (aboutBlurb.getVisibility() == View.VISIBLE){
+                    aboutBlurb.setVisibility(View.GONE);
+                }
+                else {
+                    aboutBlurb.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        privacyHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (privacyBlurb.getVisibility() == View.VISIBLE){
+                    privacyBlurb.setVisibility(View.GONE);
+                }
+                else {
+                    privacyBlurb.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        legalHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (legalBlurb.getVisibility() == View.VISIBLE){
+                    legalBlurb.setVisibility(View.GONE);
+                }
+                else {
+                    legalBlurb.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     @Override
