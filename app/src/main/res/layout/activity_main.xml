@@ -59,12 +59,12 @@
 
             </android.support.design.widget.TabLayout>
 
-            <!--</android.support.v4.view.ViewPager>-->
         </com.sbrukhanda.fragmentviewpager.FragmentViewPager>
 
     </RelativeLayout>
 
     <!-- The navigation drawer -->
+
     <ListView
         android:id="@+id/left_drawer"
         android:layout_width="240dp"

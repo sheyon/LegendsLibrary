@@ -20,10 +20,10 @@ public class LegendsPagerAdapter extends com.sbrukhanda.fragmentviewpager.adapte
     public Fragment instantiateFragment(int position) {
         switch (position) {
             case 0:
-                CategoriesFragment tab1 = new CategoriesFragment();
+                AlphabeticalFragment tab1 = new AlphabeticalFragment();
                 return tab1;
             case 1:
-                AlphabeticalFragment tab2 = new AlphabeticalFragment();
+                CategoriesFragment tab2 = new CategoriesFragment();
                 return tab2;
             case 2:
                 FavoritesFragment tab3 = new FavoritesFragment();
@@ -40,10 +40,10 @@ public class LegendsPagerAdapter extends com.sbrukhanda.fragmentviewpager.adapte
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                CategoriesFragment tab1 = new CategoriesFragment();
+                AlphabeticalFragment tab1 = new AlphabeticalFragment();
                 return tab1;
             case 1:
-                AlphabeticalFragment tab2 = new AlphabeticalFragment();
+                CategoriesFragment tab2 = new CategoriesFragment();
                 return tab2;
             case 2:
                 FavoritesFragment tab3 = new FavoritesFragment();
