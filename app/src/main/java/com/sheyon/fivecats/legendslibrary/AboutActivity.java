@@ -12,12 +12,13 @@ public class AboutActivity extends AppCompatActivity {
 
     private UniversalDrawer universalDrawer;
 
-    private TextView aboutHeader;
-    private TextView privacyHeader;
-    private TextView legalHeader;
     private TextView aboutBlurb;
     private TextView privacyBlurb;
     private TextView legalBlurb;
+
+    private TextView aboutExpander;
+    private TextView privacyExpander;
+    private TextView legalExpander;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,22 +31,28 @@ public class AboutActivity extends AppCompatActivity {
         universalDrawer = new UniversalDrawer();
         universalDrawer.setupDrawer(this, toolbar);
 
-        aboutHeader = (TextView) findViewById(R.id.header_about);
-        privacyHeader = (TextView) findViewById(R.id.header_privacy);
-        legalHeader = (TextView) findViewById(R.id.header_legal);
+        TextView aboutHeader = (TextView) findViewById(R.id.header_about);
+        TextView privacyHeader = (TextView) findViewById(R.id.header_privacy);
+        TextView legalHeader = (TextView) findViewById(R.id.header_legal);
 
         aboutBlurb = (TextView) findViewById(R.id.textView_about);
         privacyBlurb = (TextView) findViewById(R.id.textView_privacy);
         legalBlurb = (TextView) findViewById(R.id.textView_legal);
+
+        aboutExpander = (TextView) findViewById(R.id.about_expand_collapse);
+        privacyExpander = (TextView) findViewById(R.id.privacy_expand_collapse);
+        legalExpander = (TextView) findViewById(R.id.legal_expand_collapse);
 
         aboutHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (aboutBlurb.getVisibility() == View.VISIBLE){
                     aboutBlurb.setVisibility(View.GONE);
+                    aboutExpander.setText("+");
                 }
                 else {
                     aboutBlurb.setVisibility(View.VISIBLE);
+                    aboutExpander.setText("-");
                 }
             }
         });
@@ -55,9 +62,11 @@ public class AboutActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (privacyBlurb.getVisibility() == View.VISIBLE){
                     privacyBlurb.setVisibility(View.GONE);
+                    privacyExpander.setText("+");
                 }
                 else {
                     privacyBlurb.setVisibility(View.VISIBLE);
+                    privacyExpander.setText("-");
                 }
             }
         });
@@ -67,9 +76,11 @@ public class AboutActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (legalBlurb.getVisibility() == View.VISIBLE){
                     legalBlurb.setVisibility(View.GONE);
+                    legalExpander.setText("+");
                 }
                 else {
                     legalBlurb.setVisibility(View.VISIBLE);
+                    legalExpander.setText("-");
                 }
             }
         });
