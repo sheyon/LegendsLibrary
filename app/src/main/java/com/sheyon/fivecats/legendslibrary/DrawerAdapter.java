@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class DrawerAdapter extends ArrayAdapter<String> {
+class DrawerAdapter extends ArrayAdapter<String> {
 
-    public DrawerAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull String[] list) {
+    DrawerAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull String[] list) {
         super(context, resource, list);
     }
 

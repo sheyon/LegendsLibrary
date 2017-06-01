@@ -113,7 +113,7 @@ public final class LegendsContract
         public static final String CHECK_FOR_FAVED_LORE = "select title from lore\n" +
                 "where faved = 1";
 
-        public static final String POPULATE_VIRTUAL_TABLE = "INSERT INTO LoreSearch\n" +
+        static final String POPULATE_VIRTUAL_TABLE = "INSERT INTO LoreSearch\n" +
                 "SELECT _id, title, legend, blackLore, category.categoryName, faved\n" +
                 "FROM lore\n" +
                 "JOIN category\n" +

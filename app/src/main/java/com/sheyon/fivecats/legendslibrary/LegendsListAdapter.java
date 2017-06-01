@@ -18,7 +18,7 @@ import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
-public class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
+class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 {
     private static class ViewHolder {
         private LinearLayout mTextLayout;
@@ -38,13 +38,13 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
         mContext = context;
     }
 
-    public LegendsListAdapter(Context context, Cursor c, Fragment fragment) {
+    LegendsListAdapter(Context context, Cursor c, Fragment fragment) {
         super(context, c, 0);
         mContext = context;
         mFragment = fragment;
     }
 
-    public LegendsListAdapter(Context context, Cursor c, String searchString, Fragment fragment) {
+    LegendsListAdapter(Context context, Cursor c, String searchString, Fragment fragment) {
         super(context, c, 0);
         mContext = context;
         mSearchString = searchString;

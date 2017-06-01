@@ -1,9 +1,9 @@
 package com.sheyon.fivecats.legendslibrary;
 
-public class TitleRenamer
+class TitleRenamer
 {
     //THIS CUSTOM CLASS IS FOR NORMALIZING LORE TITLES FOR TOAST MESSAGES
-    public String convertTitle (String title) {
+    String convertTitle(String title) {
         String mRenamed;
 
         if (title.equals("Draculeşti, The")){

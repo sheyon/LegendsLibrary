@@ -3,7 +3,7 @@ package com.sheyon.fivecats.legendslibrary;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.Fragment;
 
-public class LegendsPagerAdapter extends com.sbrukhanda.fragmentviewpager.adapters.FragmentStatePagerAdapter {
+class LegendsPagerAdapter extends com.sbrukhanda.fragmentviewpager.adapters.FragmentStatePagerAdapter {
 
     private int mNumOftabs;
 
@@ -11,7 +11,7 @@ public class LegendsPagerAdapter extends com.sbrukhanda.fragmentviewpager.adapte
         super(fm);
     }
 
-    public LegendsPagerAdapter(FragmentManager fm, int NumOfTabs) {
+    LegendsPagerAdapter(FragmentManager fm, int NumOfTabs) {
         super(fm);
         this.mNumOftabs = NumOfTabs;
     }
@@ -36,8 +36,7 @@ public class LegendsPagerAdapter extends com.sbrukhanda.fragmentviewpager.adapte
     }
 
     //@Override
-    //NOT NEEDED?
-    public Fragment getItem(int position) {
+    Fragment getItem(int position) {
         switch (position) {
             case 0:
                 AlphabeticalFragment tab1 = new AlphabeticalFragment();

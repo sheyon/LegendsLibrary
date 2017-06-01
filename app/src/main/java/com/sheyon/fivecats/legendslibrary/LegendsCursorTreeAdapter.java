@@ -13,11 +13,11 @@ import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 
 
-public class LegendsCursorTreeAdapter extends CursorTreeAdapter
+class LegendsCursorTreeAdapter extends CursorTreeAdapter
 {
     private Cursor mCursor;
 
-    public LegendsCursorTreeAdapter(Cursor cursor, Context context) {
+    LegendsCursorTreeAdapter(Cursor cursor, Context context) {
         super(cursor, context, false);
         mCursor = cursor;
     }
