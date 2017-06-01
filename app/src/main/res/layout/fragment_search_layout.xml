@@ -12,17 +12,49 @@
         <!--android:orientation="vertical">-->
     <!--</LinearLayout>-->
 
-    <SearchView
-        android:id="@+id/search_view"
+    <LinearLayout
+        android:id="@+id/search_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:queryHint="Search the Library"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/search_list_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ListView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:baselineAligned="false">
+
+            <SearchView
+                android:id="@+id/search_view"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:queryHint="Search the Library"/>
+
+            <LinearLayout
+                android:id="@+id/search_info_clickable"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_help_outline_white_24dp"
+                    android:alpha=".5"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/search_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </ListView>
+
+    </LinearLayout>
 
     <!--<ExpandableListView-->
         <!--android:id="@+id/search_expandable_view"-->
@@ -30,5 +62,31 @@
         <!--android:layout_height="match_parent"-->
         <!--android:groupIndicator="@android:color/transparent">-->
     <!--</ExpandableListView>-->
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:gravity="center_vertical">
+
+        <android.support.v4.widget.ContentLoadingProgressBar
+            android:id="@+id/progress_circle_search"
+            android:animationResolution="5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            style="@android:style/Widget.ProgressBar"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progress_circle_search"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="sans-serif-medium"
+            android:paddingTop="16dp"
+            android:text="Retrieving..."
+            android:textAppearance="?android:textAppearanceMedium" />
+
+    </RelativeLayout>
 
 </LinearLayout>

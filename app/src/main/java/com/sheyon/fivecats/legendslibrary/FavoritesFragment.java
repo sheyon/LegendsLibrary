@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -15,16 +16,20 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.sbrukhanda.fragmentviewpager.FragmentVisibilityListener;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
-public class FavoritesFragment extends Fragment
+public class FavoritesFragment extends Fragment implements FragmentVisibilityListener
 {
     private Cursor cursor;
     private Cursor refreshedCursor;
     private LegendsListAdapter adapter;
+
+    private ListView listView;
+    private View emptyView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,22 +52,26 @@ public class FavoritesFragment extends Fragment
         //THIS FRAGMENT REUSES THE ALPHABETICAL LAYOUT; THIS IS FINE
         View view = inflater.inflate(R.layout.fragment_alphabetical, container, false);
 
+        cursor = legendsDB.rawQuery(Queries.GET_ALL_FAVES, null);
+        cursor.moveToFirst();
+        adapter = new LegendsListAdapter(getContext(), cursor, this);
+
         setupListView(view);
 
         return view;
 }
 
     private void setupListView(View view) {
-        ListView listView = (ListView) view.findViewById(R.id.alphabetical_list_view);
+        //THIS FRAGMENT REUSES THE ALPHABETICAL LAYOUT; THIS IS FINE
+        listView = (ListView) view.findViewById(R.id.alphabetical_list_view);
+        emptyView = view.findViewById(R.id.empty_view);
 
-        cursor = legendsDB.rawQuery(Queries.GET_ALL_FAVES, null);
-        cursor.moveToFirst();
-
-        adapter = new LegendsListAdapter(getContext(), cursor, this);
         listView.setAdapter(adapter);
+        listView.setEmptyView(emptyView);
     }
 
     public void refreshCursor() {
+        closeCursor();
         refreshedCursor = legendsDB.rawQuery(Queries.GET_ALL_FAVES, null);
         adapter.swapCursor(refreshedCursor);
     }
@@ -101,6 +110,7 @@ public class FavoritesFragment extends Fragment
         check.moveToFirst();
         int i = check.getCount();
         check.close();
+
         if (i == 0) {
             Toast.makeText(getContext(), "This list is already empty.", Toast.LENGTH_SHORT).show();
         }
@@ -139,5 +149,27 @@ public class FavoritesFragment extends Fragment
 
         Toast.makeText(getContext(), "All favorites removed.", Toast.LENGTH_SHORT).show();
         refreshCursor();
+    }
+
+    @Override
+    public void onFragmentInvisible() {
+        listView.setVisibility(View.GONE);
+        emptyView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onFragmentVisible() {
+        refreshCursor();
+
+        // ACTION TO RUN AFTER 1/10TH OF A SECOND
+        // THIS IS NECESSARY TO ENSURE A SMOOTH TRANSITION WHEN FAVING A LORE FROM ANOTHER TAB AND THEN NAVIGATING BACK
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                listView.setVisibility(View.VISIBLE);
+                emptyView.setVisibility(View.VISIBLE);
+                listView.setEmptyView(emptyView);
+            }
+        }, 100);
     }
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:padding="8dp"
+    android:orientation="vertical"
+    android:background="@color/backgroundAccent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:text="Phrases are permitted."
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:textColor="@android:color/white"
+        android:text="Queries are not case-sensitive." />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:textColor="@android:color/white"
+        android:text="You may add * to the end of a word to activate wildcard results. (Example: demon* returns 'demons', 'demonic', ect.)" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:textColor="@android:color/white"
+        android:text="Due to technical limitations, you cannot fave entries directly from the Search tab. You can still mark entries from its Lore page however." />
+
+    <Button
+        android:id="@+id/popup_button_dismiss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Close"/>
+
+</LinearLayout>

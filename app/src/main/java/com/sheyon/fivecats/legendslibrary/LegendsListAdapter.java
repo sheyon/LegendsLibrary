@@ -77,6 +77,12 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
         loreFavorite_IV = (ImageView) view.findViewById(R.id.lore_favorites_image_view);
         loreFavorite_IV.setImageResource(R.drawable.ic_star_border_white_48dp);
 
+        //IF COMING FROM THE SEARCH PAGE, HIDE THE STAR
+        //WITH FTS, IMPLEMENTING FAVES WILL BE A MESS
+        if (mFragment.getClass() == SearchFragment.class) {
+            loreFavorite_IV.setVisibility(View.INVISIBLE);
+        }
+
         String titleText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
         String categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_NAME));
         int faved = cursor.getInt(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_FAVED));
@@ -174,14 +180,15 @@ public class LegendsListAdapter extends CursorAdapter implements View.OnClickLis
                     AlphabeticalFragment af = (AlphabeticalFragment) mFragment;
                     af.refreshCursor();
                 }
-                if (mFragment.getClass() == SearchFragment.class) {
-                    SearchFragment sf = (SearchFragment) mFragment;
-                    sf.refreshCursor();
-                }
 //                DO NOT CALL REFRESH FOR THE FAVORITES FRAGMENT. USERS MAY MISCLICK OR RESELECT
 //                if (mFragment.getClass() == FavoritesFragment.class) {
 //                    FavoritesFragment ff = (FavoritesFragment) mFragment;
 //                    ff.refreshCursor();
+//                }
+//                WITH FTS, IT IS NOW IMPOSSIBLE TO FAVE A LORE FROM THE SEARCH TAB
+//                if (mFragment.getClass() == SearchFragment.class) {
+//                    SearchFragment sf = (SearchFragment) mFragment;
+//                    sf.refreshCursor();
 //                }
 
                 cursor.close();

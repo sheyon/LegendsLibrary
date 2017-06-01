@@ -1,23 +1,29 @@
 package com.sheyon.fivecats.legendslibrary;
 
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.sbrukhanda.fragmentviewpager.FragmentViewPager;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 
 public class MainActivity extends AppCompatActivity {
 
     public static SQLiteDatabase legendsDB;
+
     private Toolbar toolbar;
+    private FragmentViewPager viewPager;
+    private UniversalDrawer universalDrawer;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -33,26 +39,22 @@ public class MainActivity extends AppCompatActivity {
         openDatabase();
 
         toolbar = (Toolbar) findViewById(R.id.mainActivity_toolbar);
-        toolbar.setTitle("Categories");
+        toolbar.setTitle(R.string.title_alphabetical);
+        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
         setSupportActionBar(toolbar);
 
+        universalDrawer = new UniversalDrawer();
+        universalDrawer.setupDrawer(this, toolbar);
+
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.mainActivity_tab_layout);
-        tabLayout.addTab(tabLayout.newTab()); //CATEGORIES
-        tabLayout.addTab(tabLayout.newTab()); //ALPHABETICAL
-        tabLayout.addTab(tabLayout.newTab()); //SEARCH
-        tabLayout.addTab(tabLayout.newTab()); //FAVORITES
+        viewPager = (FragmentViewPager) findViewById(R.id.view_pager);
+        final LegendsPagerAdapter pagerAdapter = new LegendsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
 
-        final LegendsPagerAdapter pagerAdapter = new LegendsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-        viewPager.setAdapter(pagerAdapter);
-
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_format_list_bulleted_white_48dp);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_sort_by_alpha_white_48dp);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_search_white_48dp);
-        tabLayout.getTabAt(3).setIcon(R.drawable.ic_star_white_48dp);
+        setupIcons(tabLayout);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -73,6 +75,30 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        universalDrawer.mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        universalDrawer.mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (universalDrawer.mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle your other action bar items...
+        return super.onOptionsItemSelected(item);
+    }
+
     private void openDatabase() {
         LegendsHelper legendsHelper = new LegendsHelper(this);
         try {
@@ -81,7 +107,25 @@ public class MainActivity extends AppCompatActivity {
             legendsDB = legendsHelper.getReadableDatabase();
             String errorCode = e.getMessage();
             Log.e("***DB ERROR", errorCode);
-            Toast.makeText(this, "Database failed to open. You may not fave items.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Database failed to open. Please clear some disk space.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void setupIcons(TabLayout tabLayout){
+        //ICONS MUST BE SET PROGRAMATICALLY, EVEN IF THEY ARE IN THE XML
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_sort_by_alpha_white_48dp);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_format_list_bulleted_white_48dp);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_star_white_48dp);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_search_white_48dp);
+
+        //FOR SPREADING OUT TAB ICONS ON TABLET SCREENS
+        int w = (int)((Resources.getSystem().getDisplayMetrics().widthPixels)/Resources.getSystem().getDisplayMetrics().density);
+        if ( w > 370 ) {
+            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+            tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        }
+        else {
+            tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         }
     }
 
@@ -89,24 +133,29 @@ public class MainActivity extends AppCompatActivity {
         Fragment f = pagerAdapter.getItem(tab.getPosition());
 
         if (f.getClass() == CategoriesFragment.class) {
-            toolbar.setTitle("Categories");
+            toolbar.setTitle(R.string.title_categories);
         }
         if (f.getClass() == AlphabeticalFragment.class) {
-            toolbar.setTitle("Alphabetical");
-        }
-        if (f.getClass() == SearchFragment.class) {
-            toolbar.setTitle("Search");
+            toolbar.setTitle(R.string.title_alphabetical);
         }
         if (f.getClass() == FavoritesFragment.class) {
-            toolbar.setTitle("Favorites");
-        } else {
-            toolbar.setTitle("Legends Library");
+            toolbar.setTitle(R.string.title_favorites);
         }
+        if (f.getClass() == SearchFragment.class) {
+            toolbar.setTitle(R.string.title_search);
+        }
+        universalDrawer.mDrawerToggle.syncState();
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        legendsDB.close();
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        viewPager.notifyPagerVisible();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        viewPager.notifyPagerInvisible();
     }
 }

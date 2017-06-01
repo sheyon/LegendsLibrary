@@ -100,11 +100,21 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private CharSequence highlight(String originalText, TextView textView) {
-
+        Boolean wildcardFlag = false;
         String normalizedText = originalText.toLowerCase(Locale.US);
 
-        ColorStateList blueColor = new ColorStateList(new int[][]{new int[]{}}, new int[]{Color.BLUE});
+        ColorStateList blueColor = new ColorStateList(new int[][]{new int[]{}}, new int[]{Color.CYAN});
         //TextAppearanceSpan highlightSpan = new TextAppearanceSpan(null, Typeface.BOLD, -1, blueColor, null);
+
+        //SO THE HIGHLIGHTER WILL RETURN WILDCARD SEARCHES
+        if (searchString.startsWith("*") || searchString.endsWith("*")) {
+            searchString = searchString.replace("*", " ").trim();
+            wildcardFlag = true;
+        }
+        //SINGLE-QUOTES WILL NOT CRASH THE SEARCH BUT IT WILL KEEP THE HIGHIGHTER FROM WORKING
+        if (searchString.startsWith("'") || searchString.endsWith("'")) {
+            searchString = searchString.replace("'", " ").trim();
+        }
 
         int start = normalizedText.indexOf(searchString);
 
@@ -112,7 +122,8 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
             textView.setText(originalText);
             textView.setVisibility(View.VISIBLE);
             return null;
-        } else {
+        }
+        else {
             Spannable highlighted = new SpannableString(originalText);
 
             while (start >= 0) {
@@ -121,12 +132,32 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
                 int spanEnd = Math.min(start + searchString.length(), originalText.length());
 
                 //HIGHLIGHTS THE WORD
-                highlighted.setSpan(new TextAppearanceSpan(null, Typeface.BOLD, -1, blueColor, null),
-                        spanStart, spanEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                textView.setText(highlighted);
-                textView.setVisibility(View.VISIBLE);
+                TextAppearanceSpan span = new TextAppearanceSpan(null, Typeface.BOLD, -1, blueColor, null);
+                highlighted.setSpan(span, spanStart, spanEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                //SETS THE NEW START POINT
+                //THIS PREVENTS THE HIGHLIGHTER FROM MARKING RESULTS IN THE MIDDLE OF A WORD
+                if (!wildcardFlag){
+                    //WILDCARD-OFF WILL RETURN WHOLE WORDS ONLY
+                    if ( highlighted.charAt(spanStart - 1) == ' ' &&
+                            (highlighted.charAt(spanEnd) == ' ' || highlighted.charAt(spanEnd) == '.' || highlighted.charAt(spanEnd) == ',' || highlighted.charAt(spanEnd) == '\'') ) {
+                        textView.setText(highlighted);
+                        textView.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        highlighted.removeSpan(span);
+                    }
+                }
+                else {
+                    //WILDCARD-ON WILL RETURN RESULT* (BUT NOT *RESULT)
+                    if ( highlighted.charAt(spanStart - 1) == ' ' ) {
+                        textView.setText(highlighted);
+                        textView.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        highlighted.removeSpan(span);
+                    }
+                }
+                //SETS THE NEW START POINT AND THEN LOOP
                 start = normalizedText.indexOf(searchString, spanEnd);
             }
             return null;

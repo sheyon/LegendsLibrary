@@ -158,6 +158,38 @@ public class TitleRenamer
             mRenamed = "The Manna of Saint Nicholas";
             return mRenamed;
         }
+        if (title.equals("Breach, The")){
+            mRenamed = "The Breach";
+            return mRenamed;
+        }
+        if (title.equals("Facility, The")){
+            mRenamed = "The Facility";
+            return mRenamed;
+        }
+        if (title.equals("Slaughterhouse, The")){
+            mRenamed = "The Slaughterhouse";
+            return mRenamed;
+        }
+        if (title.equals("Hell Dimensions, The")){
+            mRenamed = "The Hell Dimensions";
+            return mRenamed;
+        }
+        if (title.equals("Breaks in Time, The")){
+            mRenamed = "The Breaks in Time";
+            return mRenamed;
+        }
+        if (title.equals("Sleepless Lullaby, The")){
+            mRenamed = "The Sleepless Lullaby";
+            return mRenamed;
+        }
+        if (title.equals("Sinking City, The")){
+            mRenamed = "The Sinking City";
+            return mRenamed;
+        }
+        if (title.equals("Collective Unconscious, The")){
+            mRenamed = "The Collective Unconscious";
+            return mRenamed;
+        }
         else {
             mRenamed = title;
         }
