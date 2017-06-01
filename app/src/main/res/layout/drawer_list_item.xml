@@ -5,9 +5,12 @@
     android:orientation="vertical">
 
     <TextView
-        android:padding="16dp"
-        android:layout_width="wrap_content"
+        android:id="@+id/drawer_selection"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Drawer Selection"/>
+        android:background="@color/colorPrimary"
+        android:padding="16dp"
+        android:text="Drawer Selection"
+        android:textAppearance="@style/AboutHeaderStyles" />
 
 </LinearLayout>
