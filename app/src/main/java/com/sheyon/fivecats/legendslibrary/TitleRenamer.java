@@ -186,6 +186,10 @@ public class TitleRenamer
             mRenamed = "The Sinking City";
             return mRenamed;
         }
+        if (title.equals("Collective Unconscious, The")){
+            mRenamed = "The Collective Unconscious";
+            return mRenamed;
+        }
         else {
             mRenamed = title;
         }
