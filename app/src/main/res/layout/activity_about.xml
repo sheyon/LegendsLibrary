@@ -58,14 +58,16 @@
                         android:text="ABOUT"
                         android:textAppearance="@style/AboutHeaderStyles" />
 
-                    <TextView
+                    <ImageView
                         android:id="@+id/about_expand_collapse"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:padding="8dp"
-                        android:text="+"
-                        android:textAppearance="@style/AboutHeaderStyles" />
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:src="@drawable/ic_keyboard_arrow_down_white_18dp" />
 
                 </RelativeLayout>
 
@@ -102,14 +104,16 @@
                         android:text="PRIVACY POLICY"
                         android:textAppearance="@style/AboutHeaderStyles" />
 
-                    <TextView
+                    <ImageView
                         android:id="@+id/privacy_expand_collapse"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:padding="8dp"
-                        android:text="+"
-                        android:textAppearance="@style/AboutHeaderStyles" />
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:src="@drawable/ic_keyboard_arrow_down_white_18dp" />
 
                 </RelativeLayout>
 
@@ -146,14 +150,16 @@
                         android:text="LEGAL"
                         android:textAppearance="@style/AboutHeaderStyles" />
 
-                    <TextView
+                    <ImageView
                         android:id="@+id/legal_expand_collapse"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:padding="8dp"
-                        android:text="+"
-                        android:textAppearance="@style/AboutHeaderStyles" />
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:src="@drawable/ic_keyboard_arrow_down_white_18dp" />
 
                 </RelativeLayout>
 

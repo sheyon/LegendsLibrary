@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class AboutActivity extends AppCompatActivity {
@@ -16,9 +17,9 @@ public class AboutActivity extends AppCompatActivity {
     private TextView privacyBlurb;
     private TextView legalBlurb;
 
-    private TextView aboutExpander;
-    private TextView privacyExpander;
-    private TextView legalExpander;
+    private ImageView aboutExpander;
+    private ImageView privacyExpander;
+    private ImageView legalExpander;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,20 +40,20 @@ public class AboutActivity extends AppCompatActivity {
         privacyBlurb = (TextView) findViewById(R.id.textView_privacy);
         legalBlurb = (TextView) findViewById(R.id.textView_legal);
 
-        aboutExpander = (TextView) findViewById(R.id.about_expand_collapse);
-        privacyExpander = (TextView) findViewById(R.id.privacy_expand_collapse);
-        legalExpander = (TextView) findViewById(R.id.legal_expand_collapse);
+        aboutExpander = (ImageView) findViewById(R.id.about_expand_collapse);
+        privacyExpander = (ImageView) findViewById(R.id.privacy_expand_collapse);
+        legalExpander = (ImageView) findViewById(R.id.legal_expand_collapse);
 
         aboutHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (aboutBlurb.getVisibility() == View.VISIBLE){
                     aboutBlurb.setVisibility(View.GONE);
-                    aboutExpander.setText("+");
+                    aboutExpander.setImageResource(R.drawable.ic_keyboard_arrow_down_white_18dp);
                 }
                 else {
                     aboutBlurb.setVisibility(View.VISIBLE);
-                    aboutExpander.setText("-");
+                    aboutExpander.setImageResource(R.drawable.ic_keyboard_arrow_up_white_18dp);
                 }
             }
         });
@@ -62,11 +63,11 @@ public class AboutActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (privacyBlurb.getVisibility() == View.VISIBLE){
                     privacyBlurb.setVisibility(View.GONE);
-                    privacyExpander.setText("+");
+                    privacyExpander.setImageResource(R.drawable.ic_keyboard_arrow_down_white_18dp);
                 }
                 else {
                     privacyBlurb.setVisibility(View.VISIBLE);
-                    privacyExpander.setText("-");
+                    privacyExpander.setImageResource(R.drawable.ic_keyboard_arrow_up_white_18dp);
                 }
             }
         });
@@ -76,11 +77,11 @@ public class AboutActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (legalBlurb.getVisibility() == View.VISIBLE){
                     legalBlurb.setVisibility(View.GONE);
-                    legalExpander.setText("+");
+                    legalExpander.setImageResource(R.drawable.ic_keyboard_arrow_down_white_18dp);
                 }
                 else {
                     legalBlurb.setVisibility(View.VISIBLE);
-                    legalExpander.setText("-");
+                    legalExpander.setImageResource(R.drawable.ic_keyboard_arrow_up_white_18dp);
                 }
             }
         });
