@@ -234,7 +234,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorPrimaryDark"
                         android:padding="8dp"
-                        android:text="LEGAL"
+                        android:text="DISCLAIMER"
                         android:textAppearance="@style/AboutHeaderStyles" />
 
                     <ImageView
