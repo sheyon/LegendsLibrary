@@ -141,7 +141,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
                     if ( highlighted.charAt(spanStart - 1) == ' ' &&
                             (highlighted.charAt(spanEnd) == ' ' || highlighted.charAt(spanEnd) == '.' || highlighted.charAt(spanEnd) == ',' ||
                                     highlighted.charAt(spanEnd) == '\'' || highlighted.charAt(spanEnd) == '-' || highlighted.charAt(spanEnd) == '?' ||
-                                    highlighted.charAt(spanEnd) == '!') ) {
+                                    highlighted.charAt(spanEnd) == '!' || highlighted.charAt(spanEnd) == ';' || highlighted.charAt(spanEnd) == ':') ) {
                         textView.setText(highlighted);
                         textView.setVisibility(View.VISIBLE);
                     }
