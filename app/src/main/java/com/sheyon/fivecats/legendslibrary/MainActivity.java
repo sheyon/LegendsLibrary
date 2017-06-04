@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -105,9 +104,7 @@ public class MainActivity extends AppCompatActivity {
             legendsDB = legendsHelper.getWritableDatabase();
         } catch (SQLiteException e) {
             legendsDB = legendsHelper.getReadableDatabase();
-            String errorCode = e.getMessage();
-            Log.e("***DB ERROR", errorCode);
-            Toast.makeText(this, "Database failed to open. Please clear some disk space.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Database failed to open. You may need to clear some disk space.", Toast.LENGTH_LONG).show();
         }
     }
 
