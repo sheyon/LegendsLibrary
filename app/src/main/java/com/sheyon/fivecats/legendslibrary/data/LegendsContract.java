@@ -67,6 +67,13 @@ public final class LegendsContract
                 "where lore.subcatId = ?\n" +
                 "order by lore.subcatId";
 
+        //Returns CatID given a Title and a Category Name
+        public static final String GET_CAT_ID = "select lore._id AS _id, title, lore.categoryId, category.categoryName\n" +
+                "from lore\n" +
+                "join category\n" +
+                "on lore.categoryId = category.categoryId\n" +
+                "where title like ? and category.categoryName like ?";
+
         //Returns info for the LoreActivity
         public static final String SINGLE_LORE = "select lore._id AS _id, title, lore.categoryId, legend, blackLore, faved\n" +
                 "from lore\n" +

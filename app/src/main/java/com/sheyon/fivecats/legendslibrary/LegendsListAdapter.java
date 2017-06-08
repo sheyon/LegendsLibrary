@@ -95,36 +95,6 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
         }
     }
 
-    private int getCategoryId(String categoryText) {
-        int catNumber = 0;
-
-        if (categoryText.equals("Solomon Island")) {
-            catNumber = LoreLibrary.CAT_1_SOL;
-        }
-        if (categoryText.equals("Valley of the Sun God")) {
-            catNumber = LoreLibrary.CAT_2_EGY;
-        }
-        if (categoryText.equals("Transylvania")) {
-            catNumber = LoreLibrary.CAT_3_TRN;
-        }
-        if (categoryText.equals("Tokyo")) {
-            catNumber = LoreLibrary.CAT_4_TOK;
-        }
-        if (categoryText.equals("Global")) {
-            catNumber = LoreLibrary.CAT_5_GBL;
-        }
-        if (categoryText.equals("The Bestiary")) {
-            catNumber = LoreLibrary.CAT_6_BES;
-        }
-        if (categoryText.equals("Events")) {
-            catNumber = LoreLibrary.CAT_7_EVN;
-        }
-        if (categoryText.equals("Issues")) {
-            catNumber = LoreLibrary.CAT_8_ISU;
-        }
-        return catNumber;
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId())
@@ -135,7 +105,12 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 
                 String clickedTitle = loreTitle_TV.getText().toString();
                 String clickedCategory = loreCategory_TV.getText().toString();
-                int clickedCatId = getCategoryId(clickedCategory);
+
+                String[] catIdArgs = { clickedTitle, clickedCategory };
+                Cursor catIdCursor = legendsDB.rawQuery(Queries.GET_CAT_ID, catIdArgs);
+                catIdCursor.moveToFirst();
+                int clickedCatId = catIdCursor.getInt(catIdCursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_ID));
+                catIdCursor.close();
 
                 Intent intent = new Intent(mContext, LoreActivity.class);
                 intent.putExtra("catNumber", clickedCatId);
