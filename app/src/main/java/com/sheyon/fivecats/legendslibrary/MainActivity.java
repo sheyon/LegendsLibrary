@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.preference.Preference;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -99,6 +100,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openDatabase() {
+
+        Preference settings = (Preference) getPreferences(0);
+
         LegendsHelper legendsHelper = new LegendsHelper(this);
         try {
             legendsDB = legendsHelper.getWritableDatabase();

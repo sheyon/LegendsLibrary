@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -138,10 +139,11 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
                 //THIS PREVENTS THE HIGHLIGHTER FROM MARKING RESULTS IN THE MIDDLE OF A WORD
                 if (!wildcardFlag){
                     //WILDCARD-OFF WILL RETURN WHOLE WORDS ONLY
-                    if ( highlighted.charAt(spanStart - 1) == ' ' &&
+                    if ( (highlighted.charAt(spanStart - 1) == ' ' || highlighted.charAt(spanStart - 1) == '\n' || highlighted.charAt(spanStart - 1) == '\"') &&
                             (highlighted.charAt(spanEnd) == ' ' || highlighted.charAt(spanEnd) == '.' || highlighted.charAt(spanEnd) == ',' ||
                                     highlighted.charAt(spanEnd) == '\'' || highlighted.charAt(spanEnd) == '-' || highlighted.charAt(spanEnd) == '?' ||
-                                    highlighted.charAt(spanEnd) == '!' || highlighted.charAt(spanEnd) == ';' || highlighted.charAt(spanEnd) == ':') ) {
+                                    highlighted.charAt(spanEnd) == '!' || highlighted.charAt(spanEnd) == ';' || highlighted.charAt(spanEnd) == ':' ||
+                                    highlighted.charAt(spanEnd) == '\"') ) {
                         textView.setText(highlighted);
                         textView.setVisibility(View.VISIBLE);
                     }
@@ -151,7 +153,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 else {
                     //WILDCARD-ON WILL RETURN RESULT* (BUT NOT *RESULT)
-                    if ( highlighted.charAt(spanStart - 1) == ' ' ) {
+                    if ( highlighted.charAt(spanStart - 1) == ' ' || highlighted.charAt(spanStart - 1) == '\n' || highlighted.charAt(spanStart - 1) == '\"') {
                         textView.setText(highlighted);
                         textView.setVisibility(View.VISIBLE);
                     }
