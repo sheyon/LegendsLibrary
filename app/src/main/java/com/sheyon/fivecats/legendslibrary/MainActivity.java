@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -110,21 +111,23 @@ public class MainActivity extends AppCompatActivity {
 
         //IF LANG PREFS DO NOT EXIST, CREATE THEM
         if (!settings.contains(getString(R.string.prefs_lang))) {
-            String lang = Locale.getDefault().getDisplayLanguage();
+            String lang = Locale.getDefault().getLanguage();
+            int i;
             switch (lang) {
                 case "en":
-                    editor.putInt(getString(R.string.prefs_lang), 0);
+                    i = 0;
                     break;
                 case "de":
-                    editor.putInt(getString(R.string.prefs_lang), 1);
+                    i = 1;
                     break;
                 case "fr":
-                    editor.putInt(getString(R.string.prefs_lang), 2);
+                    i = 2;
                     break;
                 default:
-                    editor.putInt(getString(R.string.prefs_lang), 0);
+                    i = 0;
                     break;
             }
+            editor.putInt(getString(R.string.prefs_lang), i);
             editor.apply();
         }
 
