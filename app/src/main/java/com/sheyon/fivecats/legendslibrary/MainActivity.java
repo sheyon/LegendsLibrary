@@ -1,10 +1,11 @@
 package com.sheyon.fivecats.legendslibrary;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.preference.Preference;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,10 @@ import android.widget.Toast;
 
 import com.sbrukhanda.fragmentviewpager.FragmentViewPager;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
+import com.sheyon.fivecats.legendslibrary.data.LegendsHelperDE;
+import com.sheyon.fivecats.legendslibrary.data.LegendsHelperFR;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -100,15 +105,62 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openDatabase() {
+        SharedPreferences settings = getSharedPreferences(getString(R.string.prefs_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
 
-        Preference settings = (Preference) getPreferences(0);
+        //IF LANG PREFS DO NOT EXIST, CREATE THEM
+        if (!settings.contains(getString(R.string.prefs_lang))) {
+            String lang = Locale.getDefault().getDisplayLanguage();
+            switch (lang) {
+                case "en":
+                    editor.putInt(getString(R.string.prefs_lang), 0);
+                    break;
+                case "de":
+                    editor.putInt(getString(R.string.prefs_lang), 1);
+                    break;
+                case "fr":
+                    editor.putInt(getString(R.string.prefs_lang), 2);
+                    break;
+                default:
+                    editor.putInt(getString(R.string.prefs_lang), 0);
+                    break;
+            }
+            editor.apply();
+        }
 
-        LegendsHelper legendsHelper = new LegendsHelper(this);
-        try {
-            legendsDB = legendsHelper.getWritableDatabase();
-        } catch (SQLiteException e) {
-            legendsDB = legendsHelper.getReadableDatabase();
-            Toast.makeText(this, "Database failed to open. You may need to clear some disk space.", Toast.LENGTH_LONG).show();
+        int langPref = settings.getInt(getString(R.string.prefs_lang), 0);
+
+        //OPEN DATABASE BASED ON PREFERED LANGUAGE SETTING
+        switch (langPref) {
+            case 0:
+                LegendsHelper legendsHelper = new LegendsHelper(this);
+                try {
+                    legendsDB = legendsHelper.getWritableDatabase();
+                } catch (SQLiteException e) {
+                    legendsDB = legendsHelper.getReadableDatabase();
+                    Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
+                }
+                break;
+
+            case 1:
+                LegendsHelperDE legendsHelperDE = new LegendsHelperDE(this);
+                try {
+                    legendsDB = legendsHelperDE.getWritableDatabase();
+                } catch (SQLiteException e) {
+                    legendsDB = legendsHelperDE.getReadableDatabase();
+                    Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
+                }
+                break;
+
+            case 2:
+                LegendsHelperFR legendsHelperFR = new LegendsHelperFR(this);
+                try {
+                    legendsDB = legendsHelperFR.getWritableDatabase();
+                } catch (SQLiteException e) {
+                    legendsDB = legendsHelperFR.getReadableDatabase();
+                    Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
+                }
+                break;
         }
     }
 

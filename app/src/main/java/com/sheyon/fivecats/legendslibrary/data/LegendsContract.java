@@ -41,6 +41,11 @@ public final class LegendsContract
         public static final int CAT_6_BES = 6;
         public static final int CAT_7_EVN = 7;
         public static final int CAT_8_ISU = 8;
+
+        //VALUES FOR LANGUAGE SPINNER
+        public static final int LANG_ENG = 0;
+        public static final int LANG_GMN = 1;
+        public static final int LANG_FRN = 2;
     }
 
     public static final class Queries {
@@ -97,7 +102,8 @@ public final class LegendsContract
                 "from lore\n" +
                 "join category\n" +
                 "on lore.categoryId = category.categoryId\n" +
-                "order by title asc";
+                "order by title\n" +
+                "COLLATE NOCASE";
 
         public static final String UPDATE_FAVE = "UPDATE lore\n" +
                 "SET faved = CASE\n" +
@@ -120,12 +126,27 @@ public final class LegendsContract
         public static final String CHECK_FOR_FAVED_LORE = "select title from lore\n" +
                 "where faved = 1";
 
-        static final String POPULATE_VIRTUAL_TABLE = "INSERT INTO LoreSearch\n" +
+        static final String POPULATE_VIRTUAL_TABLE_ENGLISH = "INSERT INTO LoreSearch\n" +
                 "SELECT _id, title, legend, blackLore, category.categoryName, faved\n" +
                 "FROM lore\n" +
                 "JOIN category\n" +
                 "on lore.categoryId = category.CategoryID;";
 
+        //FOR BUILDING THE FTS IN THE PRIMARY LANGUAGE OF THE USER
+        static final String POPULATE_VIRTUAL_TABLE_FR_DE_NATIVE = "INSERT INTO LoreSearch\n" +
+                "SELECT _id, prefix, title, legend, blackLore, category.categoryName, faved\n" +
+                "FROM lore\n" +
+                "JOIN category\n" +
+                "on lore.categoryId = category.CategoryID;";
+
+        //FOR BUILDING THE FTS IN THE NON-PRIMARY LANGUAGE OF THE USER (OMITS DIACRITICS)
+        static final String POPULATE_VIRTUAL_TABLE_FR_DE_NORMALIZED = "INSERT INTO LoreSearch\n" +
+                "SELECT _id, prefix, title, ASCII_title, legend, ASCII_legend, blackLore, ASCII_blacklore, category.categoryName, faved\n" +
+                "FROM lore\n" +
+                "JOIN category\n" +
+                "on lore.categoryId = category.CategoryID;";
+
+        //FOR QUERYING THE DATABASE IN THE LANGUAGE OF THE USER
         public static final String QUERY_FTS = "SELECT * FROM LoreSearch\n" +
                 "WHERE title MATCH ?\n" +
                 "UNION\n" +
@@ -134,5 +155,15 @@ public final class LegendsContract
                 "UNION\n" +
                 "SELECT * FROM LoreSearch\n" +
                 "WHERE blackLore MATCH ?";
+
+        //FOR QUERYING THE DATABASE WITHOUT DIACRITICS
+        public static final String QUERY_FTS_NORMALIZED = "SELECT * FROM LoreSearch\n" +
+                "WHERE ASCII_title MATCH ?\n" +
+                "UNION\n" +
+                "SELECT * FROM LoreSearch\n" +
+                "WHERE ASCII_legend MATCH ?\n" +
+                "UNION\n" +
+                "SELECT * FROM LoreSearch\n" +
+                "WHERE ASCII_blacklore MATCH ?";
     }
 }

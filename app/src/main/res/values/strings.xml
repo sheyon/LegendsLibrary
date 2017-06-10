@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Legends Library</string>
 
+    <string name="prefs_file_key">com.sheyon.fivecats.legendslibrary.PREFS_FILE_KEY</string>
+    <string name="prefs_lang">LANG_PREFS</string>
+
     <string-array name="categories_array">
         <item>[Choose a category:]</item>
         <item>Solomon Island</item>
@@ -13,8 +16,15 @@
         <item>Issues</item>
     </string-array>
 
+    <string-array name="languages_array">
+        <item>English</item>
+        <item>German</item>
+        <item>French</item>
+    </string-array>
+
     <string-array name="drawer_items">
         <item>Legends Library</item>
+        <item>Settings</item>
         <item>About</item>
     </string-array>
 
@@ -25,6 +35,8 @@
     <string name="title_alphabetical">Alphabetical</string>
     <string name="title_favorites">Favorites</string>
     <string name="title_search">Search</string>
+
+    <string name="toast_write_db_fail">Database failed to open. You may need to clear some disk space.</string>
 
     <string name="about_aboutText">The Legends Library is a resource for players of the modern horror MMORPG the <b>Secret World</b> and <b>Secret World: Legends</b> by Funcom. All in-game Legends (or Lore, as some players might know them) are complied into a searchable database for reading or research. The author hopes that you enjoy this resource, made completely free and ad-free to you, as you peer into the intricate world of secret societies, magic, and twisting horrors.
     \n\nBut don\'t look too deeply, sweetling&#8230;</string>

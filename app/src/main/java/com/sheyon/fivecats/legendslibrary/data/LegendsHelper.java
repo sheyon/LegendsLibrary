@@ -8,11 +8,12 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 public class LegendsHelper extends SQLiteAssetHelper
 {
     private static final String DATABASE_NAME = "lore_library.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public LegendsHelper(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        setForcedUpgrade(DATABASE_VERSION);
     }
 
     @Override
@@ -22,7 +23,7 @@ public class LegendsHelper extends SQLiteAssetHelper
         //CREATE TABLE FOR FULL-TEXT-SEARCH
         db.execSQL("DROP TABLE IF EXISTS LoreSearch;");
         db.execSQL("CREATE VIRTUAL TABLE LoreSearch USING fts4 (_id, title, legend, blackLore, categoryName, faved);");
-        db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE);
+        db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE_ENGLISH);
     }
 
     @Override

@@ -47,6 +47,13 @@ public class UniversalDrawer extends AppCompatActivity {
                         mDrawerLayout.closeDrawer(mDrawerList);
                     }
                 }
+                if (mDrawerItems[position].equals("Settings")) {
+                    Intent intent = new Intent(mActivity, SettingsActivity.class);
+                    if (mActivity.getClass() != SettingsActivity.class) {
+                        mActivity.startActivity(intent);
+                        mDrawerLayout.closeDrawer(mDrawerList);
+                    }
+                }
                 if (mDrawerItems[position].equals("About")) {
                     Intent intent = new Intent(mActivity, AboutActivity.class);
                     if (mActivity.getClass() != AboutActivity.class) {

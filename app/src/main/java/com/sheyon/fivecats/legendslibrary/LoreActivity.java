@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 
+import java.text.Normalizer;
 import java.util.Locale;
 
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
@@ -101,7 +103,10 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
 
     private CharSequence highlight(String originalText, TextView textView) {
         Boolean wildcardFlag = false;
-        String normalizedText = originalText.toLowerCase(Locale.US);
+
+        String normalizedText = Normalizer.normalize(originalText, Normalizer.Form.NFD);
+        normalizedText = normalizedText.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        normalizedText = normalizedText.toLowerCase(Locale.getDefault());
 
         ColorStateList blueColor = new ColorStateList(new int[][]{new int[]{}}, new int[]{Color.CYAN});
         //TextAppearanceSpan highlightSpan = new TextAppearanceSpan(null, Typeface.BOLD, -1, blueColor, null);
@@ -135,14 +140,18 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
                 TextAppearanceSpan span = new TextAppearanceSpan(null, Typeface.BOLD, -1, blueColor, null);
                 highlighted.setSpan(span, spanStart, spanEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
+                Log.v ("***DEBUG", "a" + highlighted.charAt(spanStart-1) + "b");
+                Log.v ("***DEBUG", "c" + highlighted.charAt(spanEnd) + "d");
+
                 //THIS PREVENTS THE HIGHLIGHTER FROM MARKING RESULTS IN THE MIDDLE OF A WORD
                 if (!wildcardFlag){
                     //WILDCARD-OFF WILL RETURN WHOLE WORDS ONLY
-                    if ( (highlighted.charAt(spanStart - 1) == ' ' || highlighted.charAt(spanStart - 1) == '\n' || highlighted.charAt(spanStart - 1) == '\"') &&
+                    if ( (highlighted.charAt(spanStart - 1) == ' ' || highlighted.charAt(spanStart - 1) == '\n' ||
+                            highlighted.charAt(spanStart - 1) == '\"' || highlighted.charAt(spanStart - 1) == '\'') &&
                             (highlighted.charAt(spanEnd) == ' ' || highlighted.charAt(spanEnd) == '.' || highlighted.charAt(spanEnd) == ',' ||
                                     highlighted.charAt(spanEnd) == '\'' || highlighted.charAt(spanEnd) == '-' || highlighted.charAt(spanEnd) == '?' ||
                                     highlighted.charAt(spanEnd) == '!' || highlighted.charAt(spanEnd) == ';' || highlighted.charAt(spanEnd) == ':' ||
-                                    highlighted.charAt(spanEnd) == '\"') ) {
+                                    highlighted.charAt(spanEnd) == '\"' ) ) {
                         textView.setText(highlighted);
                         textView.setVisibility(View.VISIBLE);
                     }
@@ -152,7 +161,8 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 else {
                     //WILDCARD-ON WILL RETURN RESULT* (BUT NOT *RESULT)
-                    if ( highlighted.charAt(spanStart - 1) == ' ' || highlighted.charAt(spanStart - 1) == '\n' || highlighted.charAt(spanStart - 1) == '\"') {
+                    if ( highlighted.charAt(spanStart - 1) == ' ' || highlighted.charAt(spanStart - 1) == '\n' ||
+                            highlighted.charAt(spanStart - 1) == '\"' || highlighted.charAt(spanStart - 1) == '\'') {
                         textView.setText(highlighted);
                         textView.setVisibility(View.VISIBLE);
                     }
