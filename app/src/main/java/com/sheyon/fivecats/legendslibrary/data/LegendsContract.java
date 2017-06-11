@@ -4,8 +4,7 @@ import android.provider.BaseColumns;
 
 public final class LegendsContract
 {
-    private LegendsContract()
-    {
+    private LegendsContract() {
         //do nothing
     }
 
