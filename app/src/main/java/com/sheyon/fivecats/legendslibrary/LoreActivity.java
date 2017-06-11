@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -139,9 +138,6 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
                 //HIGHLIGHTS THE WORD
                 TextAppearanceSpan span = new TextAppearanceSpan(null, Typeface.BOLD, -1, blueColor, null);
                 highlighted.setSpan(span, spanStart, spanEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                Log.v ("***DEBUG", "a" + highlighted.charAt(spanStart-1) + "b");
-                Log.v ("***DEBUG", "c" + highlighted.charAt(spanEnd) + "d");
 
                 //THIS PREVENTS THE HIGHLIGHTER FROM MARKING RESULTS IN THE MIDDLE OF A WORD
                 if (!wildcardFlag){

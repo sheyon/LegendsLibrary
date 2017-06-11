@@ -55,7 +55,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorPrimaryDark"
                         android:padding="8dp"
-                        android:text="ABOUT"
+                        android:text="@string/header_about"
                         android:textAppearance="@style/AboutHeaderStyles" />
 
                     <ImageView
@@ -101,7 +101,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorPrimaryDark"
                         android:padding="8dp"
-                        android:text="CONTACT"
+                        android:text="@string/header_contact"
                         android:textAppearance="@style/AboutHeaderStyles" />
 
                     <ImageView
@@ -188,7 +188,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorPrimaryDark"
                         android:padding="8dp"
-                        android:text="PRIVACY POLICY"
+                        android:text="@string/header_privacy"
                         android:textAppearance="@style/AboutHeaderStyles" />
 
                     <ImageView
@@ -234,7 +234,7 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorPrimaryDark"
                         android:padding="8dp"
-                        android:text="DISCLAIMER"
+                        android:text="@string/header_disclaimer"
                         android:textAppearance="@style/AboutHeaderStyles" />
 
                     <ImageView

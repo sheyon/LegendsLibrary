@@ -24,6 +24,8 @@ import com.sbrukhanda.fragmentviewpager.FragmentVisibilityListener;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
+import java.text.Normalizer;
+
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
@@ -69,7 +71,6 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
 
         setupSearchBar(view);
         setupListView(view);
-        getPrefs();
 
         return view;
     }
@@ -80,13 +81,8 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
         prefsNormalization = legendsPrefs.getNormalizationPref();
     }
 
-    private void setupSearchBar(View view)
-    {
-        // Get the SearchView and set the searchable configuration
-        //  SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+    private void setupSearchBar(View view) {
         searchView = (SearchView) view.findViewById(R.id.search_view);
-        // Assumes current activity is the searchable activity
-        //  searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -98,18 +94,18 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
 
                 //QUOTATION MARKS CRASH THE SEARCH
                 if (searchString.contains("\"")) {
-                    Toast.makeText(getContext(), "Do not include quotation marks in your queries.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.toast_no_quotes, Toast.LENGTH_SHORT).show();
                     return false;
                 }
                 //PEOPLE CAN STILL SEARCH FOR 'UTA' OR 'BEE'; ANYTHING LESS WILL RETURN NOTHING USEFUL
                 if (searchString.length() < 3) {
-                    Toast.makeText(getContext(), "Queries must have a length of at least 3 characters.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.toast_three_chars, Toast.LENGTH_SHORT).show();
                     return false;
                 }
                 //ARTICLES CAN RETURN FALSE SEARCH RESULTS
                 if (searchString.startsWith("les ") || searchString.startsWith("la ") || searchString.startsWith("le ") || searchString.startsWith("l' ") ||
                         searchString.startsWith("des ") || searchString.startsWith("de ") || searchString.startsWith("du ") || searchString.startsWith("d' ") ) {
-                    Toast.makeText(getContext(), "Please omit articles from your query.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.toast_no_articles, Toast.LENGTH_SHORT).show();
                 }
                 else  {
                     runQuery();
@@ -137,15 +133,21 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     private void runQuery() {
         //CLOSE ANY OF THE PREVIOUS QUERIES IF THEY EXIST
         closeCursor();
-
-        modString = "'"+searchString+"'";
-        String [] selectionArgs = { modString, modString, modString };
+        getPrefs();
 
         //ENGLISH DOES NOT SUPPORT A NORMALIZATION QUERY
-        if (prefsNormalization && prefsLang != 0){
+        if (prefsNormalization && prefsLang != 0) {
+            searchString = normalizeSearchString(searchString);
+
+            modString = "'"+searchString+"'";
+            String [] selectionArgs = { modString, modString, modString };
+
             cursor = legendsDB.rawQuery(Queries.QUERY_FTS_NORMALIZED, selectionArgs);
         }
         else {
+            modString = "'"+searchString+"'";
+            String [] selectionArgs = { modString, modString, modString };
+
             cursor = legendsDB.rawQuery(Queries.QUERY_FTS, selectionArgs);
         }
 
@@ -155,6 +157,13 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
 
         adapter = new LegendsListAdapter(getContext(), cursor, searchString, this);
         listView.setAdapter(adapter);
+    }
+
+    //THIS FUNCTION EXISTS IN CASE A USER PUTS DIACRITICS INTO A DIACRITIC-INSENSITIVE QUERY
+    String normalizeSearchString(String query){
+        String normalizedQuery = Normalizer.normalize(query, Normalizer.Form.NFD);
+        normalizedQuery = normalizedQuery.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        return normalizedQuery;
     }
 
     public void refreshCursor() {
@@ -169,6 +178,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
         }
 
         closeCursor();
+        getPrefs();
         String[] selectionArgs = { modString, modString, modString };
 
         //ENGLISH DOES NOT SUPPORT A NORMALIZATION QUERY

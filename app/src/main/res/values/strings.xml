@@ -33,7 +33,25 @@
     <string name="title_favorites">Favorites</string>
     <string name="title_search">Search</string>
 
+    <string name="header_about">About</string>
+    <string name="header_contact">Contact</string>
+    <string name="header_privacy">Privacy Policy</string>
+    <string name="header_disclaimer">Disclaimer</string>
+
+    <string name="settings_lang_header">Language</string>
+    <string name="settings_checkbox_diacritics">Ignore diacritics (recommended)</string>
+    <string name="settings_button_apply">Apply</string>
+
     <string name="toast_write_db_fail">Database failed to open. You may need to clear some disk space.</string>
+    <string name="toast_no_quotes">Please omit quotation marks from your queries.</string>
+    <string name="toast_three_chars">Queries must have a length of at least 3 characters.</string>
+    <string name="toast_no_articles">Please omit articles from the beginning of your query.</string>
+
+    <string name="popup_phrases_permitted">Phrases are permitted.</string>
+    <string name="popup_no_case">Queries are not case-sensitive.</string>
+    <string name="popup_wildcard">You may add * to the end of a word to activate wildcard results. (Example: demon* returns \"demons\", \"demonic\", etc.</string>
+    <string name="popup_ligatures">Ligatures (œ and ß) are not normalized! Do not decompose into oe or sz when searching!</string>
+    <string name="popup_close">Close</string>
 
     <string name="about_aboutText">The Legends Library is a resource for players of the modern horror MMORPG the <b>Secret World</b> and <b>Secret World: Legends</b> by Funcom. All in-game Legends (or Lore, as some players might know them) are complied into a searchable database for reading or research. The author hopes that you enjoy this resource, made completely free and ad-free to you, as you peer into the intricate world of secret societies, magic, and twisting horrors.
     \n\nBut don\'t look too deeply, sweetling&#8230;</string>

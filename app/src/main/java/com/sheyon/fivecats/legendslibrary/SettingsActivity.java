@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 public class SettingsActivity extends AppCompatActivity {
 
     private UniversalDrawer universalDrawer;
+    private CheckBox langCheckbox;
     private int langSelection;
     private LegendsPreferences legendsPrefs;
     private boolean normalizationSelection = true;
@@ -39,14 +41,15 @@ public class SettingsActivity extends AppCompatActivity {
         universalDrawer = new UniversalDrawer();
         universalDrawer.setupDrawer(this, toolbar);
 
-        setupLangSpinner();
-        setupLangButton();
-
         legendsPrefs = LegendsPreferences.getInstance(getApplicationContext());
+
+        setupLangSpinner();
+        setupLangCheckbox();
+        setupLangButton();
     }
 
     private void setupLangSpinner() {
-        final Spinner langSpinner = (Spinner) findViewById(R.id.settings_lang_spinner);
+        Spinner langSpinner = (Spinner) findViewById(R.id.settings_lang_spinner);
 
         ArrayAdapter langSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.languages_array, android.R.layout.simple_spinner_item);
         langSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -71,6 +74,13 @@ public class SettingsActivity extends AppCompatActivity {
                 langSelection = LoreLibrary.LANG_ENG;
             }
         });
+
+        langSpinner.setSelection(legendsPrefs.getLangPref());
+    }
+
+    private void setupLangCheckbox() {
+        langCheckbox = (CheckBox) findViewById(R.id.settings_lang_checkbox);
+        langCheckbox.setChecked(legendsPrefs.getNormalizationPref());
     }
 
     private void setupLangButton() {
@@ -79,6 +89,13 @@ public class SettingsActivity extends AppCompatActivity {
         langButtonApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (langCheckbox.isChecked()) {
+                    normalizationSelection = true;
+                }
+                else {
+                    normalizationSelection = false;
+                }
+
                 legendsPrefs.setLangPref(langSelection);
                 legendsPrefs.setNormalizationPref(normalizationSelection);
                 restartDatabase();
