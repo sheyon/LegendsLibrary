@@ -23,6 +23,7 @@ public final class LegendsContract
         public static final String BASE_SUBCAT_ID = "subcat.subcatId";
 
         public static final String COLUMN_TITLE = "title";
+        public static final String COLUMN_PREFIX = "prefix";
         public static final String COLUMN_CATEGORY_NAME = "categoryName";
         public static final String COLUMN_SUBCAT_NAME = "subcatName";
         public static final String COLUMN_CATEGORY_ID = "categoryId";
@@ -72,15 +73,22 @@ public final class LegendsContract
                 "where lore.subcatId = ?\n" +
                 "order by lore.subcatId";
 
-        //Returns CatID given a Title and a Category Name
-        public static final String GET_CAT_ID = "select lore._id AS _id, title, lore.categoryId, category.categoryName\n" +
+        //Returns CatID given a Title and a Category Name Part 1
+        public static final String GET_CAT_ID_UNION_1 = "select lore._id AS _id, title, lore.categoryId, category.categoryName\n" +
                 "from lore\n" +
                 "join category\n" +
                 "on lore.categoryId = category.categoryId\n" +
-                "where title like ? and category.categoryName like ?";
+                "where lore.prefix || lore.title like ? and category.categoryName like ?";
+
+        //Returns CatID given a Title and a Category Name Part 2
+        public static final String GET_CAT_ID_UNION_2 = "select lore._id AS _id, title, lore.categoryId, category.categoryName\n" +
+                "from lore\n" +
+                "join category\n" +
+                "on lore.categoryId = category.categoryId\n" +
+                "where lore.title like ? and category.categoryName like ?";
 
         //Returns info for the LoreActivity
-        public static final String SINGLE_LORE = "select lore._id AS _id, title, lore.categoryId, legend, blackLore, faved\n" +
+        public static final String SINGLE_LORE = "select lore._id AS _id, title, prefix, lore.categoryId, legend, blackLore, faved\n" +
                 "from lore\n" +
                 "where lore.categoryId = ? and title LIKE ? ";
 
@@ -98,7 +106,7 @@ public final class LegendsContract
                 "on lore.categoryId = category.categoryId\n" +
                 "where lore._id = ?";
 
-        public static final String ALPHABETICAL = "select lore._id AS _id, lore.title, lore.categoryId, category.categoryName, lore.faved\n" +
+        public static final String ALPHABETICAL = "select lore._id AS _id, lore.title, lore.prefix, lore.categoryId, category.categoryName, lore.faved\n" +
                 "from lore\n" +
                 "join category\n" +
                 "on lore.categoryId = category.categoryId\n" +

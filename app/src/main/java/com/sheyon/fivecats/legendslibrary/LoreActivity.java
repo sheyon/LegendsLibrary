@@ -60,6 +60,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         Cursor cursor = legendsDB.rawQuery(Queries.SINGLE_LORE, selectionArgs);
         cursor.moveToFirst();
 
+        String prefixText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_PREFIX));
         String buzzingText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BUZZING));
         String blackSignalText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BLACK_SIGNAL));
         int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
@@ -77,7 +78,12 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         TextView blackSignalTextview = (TextView) findViewById(R.id.loreActivity_signal_text_view);
         ImageView blackSignalImageview = (ImageView) findViewById(R.id.loreActivity_signal_image_view);
 
-        titleTextview.setText(titleString);
+        if (prefixText != null) {
+            titleTextview.setText("" + prefixText + titleString);
+        }
+        else {
+            titleTextview.setText(titleString);
+        }
         categoryTextview.setText(categoryString);
 
         setStar(faved);

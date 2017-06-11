@@ -3,7 +3,9 @@ package com.sheyon.fivecats.legendslibrary;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,8 @@ import android.widget.Toast;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
+
+import java.util.Arrays;
 
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
@@ -83,11 +87,17 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
             loreFavorite_IV.setVisibility(View.INVISIBLE);
         }
 
+        String prefixText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_PREFIX));
         String titleText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
         String categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_NAME));
         int faved = cursor.getInt(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_FAVED));
 
-        loreTitle_TV.setText(titleText);
+        if (prefixText != null) {
+            loreTitle_TV.setText(prefixText + titleText);
+        }
+        else {
+            loreTitle_TV.setText(titleText);
+        }
         loreCategory_TV.setText(categoryText);
 
         if (faved == 1) {
@@ -106,10 +116,16 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                 String clickedTitle = loreTitle_TV.getText().toString();
                 String clickedCategory = loreCategory_TV.getText().toString();
 
-                String[] catIdArgs = { clickedTitle, clickedCategory };
-                Cursor catIdCursor = legendsDB.rawQuery(Queries.GET_CAT_ID, catIdArgs);
+                SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+                String [] union = { Queries.GET_CAT_ID_UNION_1, Queries.GET_CAT_ID_UNION_2 };
+                String joinedQuery = qb.buildUnionQuery(union, null, null);
+
+                String[] catIdArgs = { clickedTitle, clickedCategory, clickedTitle, clickedCategory };
+                Cursor catIdCursor = legendsDB.rawQuery(joinedQuery, catIdArgs);
+
                 catIdCursor.moveToFirst();
                 int clickedCatId = catIdCursor.getInt(catIdCursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_ID));
+                clickedTitle = catIdCursor.getString(catIdCursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
                 catIdCursor.close();
 
                 Intent intent = new Intent(mContext, LoreActivity.class);
@@ -155,6 +171,7 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                     AlphabeticalFragment af = (AlphabeticalFragment) mFragment;
                     af.refreshCursor();
                 }
+
 //                DO NOT CALL REFRESH FOR THE FAVORITES FRAGMENT. USERS MAY MISCLICK OR RESELECT
 //                if (mFragment.getClass() == FavoritesFragment.class) {
 //                    FavoritesFragment ff = (FavoritesFragment) mFragment;
