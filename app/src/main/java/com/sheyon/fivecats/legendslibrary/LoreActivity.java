@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -113,6 +112,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         String normalizedText = originalText.toLowerCase(Locale.getDefault());
 
         if (normalize) {
+            //REMOVE ALL DIACRITICS
             normalizedText = Normalizer.normalize(normalizedText, Normalizer.Form.NFD);
             normalizedText = normalizedText.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
         }
