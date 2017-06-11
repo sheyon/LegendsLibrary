@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
+import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
 import java.text.Normalizer;
 import java.util.Locale;
@@ -30,6 +32,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     private String searchString;
     private String titleString;
     private ImageView favedImageView;
+    private LegendsPreferences legendsPrefs;
 
     private static class ViewHolder {
         private LinearLayout mImageLayout;
@@ -40,6 +43,8 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lore);
+
+        legendsPrefs = LegendsPreferences.getInstance(getApplicationContext());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.loreActivity_toolbar);
         setSupportActionBar(toolbar);
@@ -102,10 +107,15 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
 
     private CharSequence highlight(String originalText, TextView textView) {
         Boolean wildcardFlag = false;
+        Boolean normalize = legendsPrefs.getNormalizationPref();
 
-        String normalizedText = Normalizer.normalize(originalText, Normalizer.Form.NFD);
-        normalizedText = normalizedText.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
-        normalizedText = normalizedText.toLowerCase(Locale.getDefault());
+        //BOTH NORMAL AND UN-NORMALIZED MODES MUST BE IN LOWER-CASE!
+        String normalizedText = originalText.toLowerCase(Locale.getDefault());
+
+        if (normalize) {
+            normalizedText = Normalizer.normalize(normalizedText, Normalizer.Form.NFD);
+            normalizedText = normalizedText.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        }
 
         ColorStateList blueColor = new ColorStateList(new int[][]{new int[]{}}, new int[]{Color.CYAN});
         //TextAppearanceSpan highlightSpan = new TextAppearanceSpan(null, Typeface.BOLD, -1, blueColor, null);
