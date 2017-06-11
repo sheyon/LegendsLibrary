@@ -125,7 +125,6 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 
                 catIdCursor.moveToFirst();
                 int clickedCatId = catIdCursor.getInt(catIdCursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_ID));
-                clickedTitle = catIdCursor.getString(catIdCursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
                 catIdCursor.close();
 
                 Intent intent = new Intent(mContext, LoreActivity.class);

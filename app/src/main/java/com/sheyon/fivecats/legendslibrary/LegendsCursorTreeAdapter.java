@@ -55,6 +55,7 @@ class LegendsCursorTreeAdapter extends CursorTreeAdapter
     protected void bindGroupView(View view, Context context, Cursor cursor, boolean isExpanded) {
         TextView categoryHeader = (TextView) view.findViewById(R.id.category_text_view);
         String categoryText;
+        String prefixText;
 
         //RESET STYLES
         categoryHeader.setAllCaps(true);
@@ -68,8 +69,14 @@ class LegendsCursorTreeAdapter extends CursorTreeAdapter
         if (categoryText == null) {
 
             //TAKE THE HEADER FROM THE LORE TITLE INSTEAD AND STYLE IT
+            prefixText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_PREFIX));
             categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
-            categoryHeader.setText(categoryText);
+            if (prefixText != null) {
+                categoryHeader.setText("" + prefixText + categoryText);;
+            }
+            else {
+                categoryHeader.setText(categoryText);
+            }
             categoryHeader.setAllCaps(false);
             categoryHeader.setTypeface(Typeface.defaultFromStyle(0), 0);
             categoryHeader.setTextSize(2, 16);
@@ -87,12 +94,20 @@ class LegendsCursorTreeAdapter extends CursorTreeAdapter
     @Override
     protected void bindChildView(View view, Context context, Cursor cursor, boolean isLastChild) {
         String subcategoryText;
+        String prefixText;
+
         TextView subcategoryHeader = (TextView) view.findViewById(R.id.subcategory_text_view);
 
         subcategoryText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_TITLE));
+        prefixText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_PREFIX));
 
         //LORES WILL APPEAR REGULAR SIZED AND UNBOLDED
-        subcategoryHeader.setText(subcategoryText);
+        if (prefixText != null) {
+            subcategoryHeader.setText("" + prefixText + subcategoryText);
+        }
+        else {
+            subcategoryHeader.setText(subcategoryText);
+        }
         subcategoryHeader.setAllCaps(false);
         subcategoryHeader.setTypeface(Typeface.defaultFromStyle(0), 0);
         subcategoryHeader.setTextSize(2, 16);

@@ -2,6 +2,7 @@ package com.sheyon.fivecats.legendslibrary;
 
 import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -56,11 +57,14 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         titleString = getIntent().getStringExtra("loreTitle");
         searchString = getIntent().getStringExtra("searchString");
 
-        String[] selectionArgs = { Integer.toString(categoryNumber), titleString };
-        Cursor cursor = legendsDB.rawQuery(Queries.SINGLE_LORE, selectionArgs);
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        String [] union = { Queries.SINGLE_LORE_UNION_1, Queries.SINGLE_LORE_UNION_2 };
+        String joinedQuery = qb.buildUnionQuery(union, null, null);
+
+        String[] selectionArgs = { Integer.toString(categoryNumber), titleString, Integer.toString(categoryNumber), titleString };
+        Cursor cursor = legendsDB.rawQuery(joinedQuery, selectionArgs);
         cursor.moveToFirst();
 
-        String prefixText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_PREFIX));
         String buzzingText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BUZZING));
         String blackSignalText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BLACK_SIGNAL));
         int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
@@ -78,12 +82,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         TextView blackSignalTextview = (TextView) findViewById(R.id.loreActivity_signal_text_view);
         ImageView blackSignalImageview = (ImageView) findViewById(R.id.loreActivity_signal_image_view);
 
-        if (prefixText != null) {
-            titleTextview.setText("" + prefixText + titleString);
-        }
-        else {
-            titleTextview.setText(titleString);
-        }
+        titleTextview.setText(titleString);
         categoryTextview.setText(categoryString);
 
         setStar(faved);

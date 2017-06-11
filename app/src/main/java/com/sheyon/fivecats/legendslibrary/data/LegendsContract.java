@@ -51,14 +51,14 @@ public final class LegendsContract
 
     public static final class Queries {
         //UNION 1 and UNION 2 returns Uncategorized Lore and Unique Subcats to populate the Expandable View
-        public static final String UNION_1 = "select lore._id AS _id, lore.categoryId, title, subcatName, lore.subcatId AS subcatId\n" +
+        public static final String UNION_1 = "select lore._id AS _id, lore.categoryId, title, prefix, subcatName, lore.subcatId AS subcatId\n" +
                 "from lore\n" +
                 "left outer join subcat\n" +
                 "on lore.subcatId = subcat.subcatId\n" +
                 "where lore.subcatId IS NOT NULL and lore.categoryId = ?\n" +
                 "group by lore.subcatId";
 
-        public static final String UNION_2 = "select lore._id AS _id, lore.categoryId, title, subcatName, lore.subcatId AS subcatId\n" +
+        public static final String UNION_2 = "select lore._id AS _id, lore.categoryId, title, prefix, subcatName, lore.subcatId AS subcatId\n" +
                 "from lore\n" +
                 "left outer join subcat\n" +
                 "on lore.subcatId = subcat.subcatId\n" +
@@ -66,7 +66,7 @@ public final class LegendsContract
                 "order by lore.categoryId;";
 
         //Returns all other lore
-        public static final String LORES = "select lore._id as _id, title, lore.categoryId, subcatName, lore.subcatId\n" +
+        public static final String LORES = "select lore._id as _id, title, prefix, lore.categoryId, subcatName, lore.subcatId\n" +
                 "from lore\n" +
                 "join subcat\n" +
                 "on lore.subcatId = subcat.subcatId\n" +
@@ -87,10 +87,15 @@ public final class LegendsContract
                 "on lore.categoryId = category.categoryId\n" +
                 "where lore.title like ? and category.categoryName like ?";
 
-        //Returns info for the LoreActivity
-        public static final String SINGLE_LORE = "select lore._id AS _id, title, prefix, lore.categoryId, legend, blackLore, faved\n" +
+        //Returns info for the LoreActivity Part 1
+        public static final String SINGLE_LORE_UNION_1 = "select lore._id AS _id, title, prefix, lore.categoryId, legend, blackLore, faved\n" +
                 "from lore\n" +
-                "where lore.categoryId = ? and title LIKE ? ";
+                "where lore.categoryId = ? and title LIKE ?";
+
+        //Returns info for the LoreActivity Part 2
+        public static final String SINGLE_LORE_UNION_2 = "select lore._id AS _id, title, prefix, lore.categoryId, legend, blackLore, faved\n" +
+                "from lore\n" +
+                "where lore.categoryId = ? and prefix || title LIKE ?";
 
 //        Returns results from the SearchView
 //        public static final String SEARCH = "select lore._id AS _id, lore.categoryId, category.categoryName, lore.title, lore.legend, lore.blackLore, lore.faved\n" +
