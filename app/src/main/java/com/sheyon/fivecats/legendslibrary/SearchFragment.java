@@ -22,8 +22,7 @@ import android.widget.Toast;
 
 import com.sbrukhanda.fragmentviewpager.FragmentVisibilityListener;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
-import com.sheyon.fivecats.legendslibrary.data.LegendsHelperDE;
-import com.sheyon.fivecats.legendslibrary.data.LegendsHelperFR;
+import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
@@ -34,6 +33,9 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     private SearchView searchView;
     private ListView listView;
     private LegendsListAdapter adapter;
+
+    private int prefsLang;
+    private boolean prefsNormalization;
 
     private Cursor cursor;
     private Cursor refreshedCursor;
@@ -67,8 +69,15 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
 
         setupSearchBar(view);
         setupListView(view);
+        getPrefs();
 
         return view;
+    }
+
+    private void getPrefs(){
+        LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(getContext());
+        prefsLang = legendsPrefs.getLangPref();
+        prefsNormalization = legendsPrefs.getNormalizationPref();
     }
 
     private void setupSearchBar(View view)
@@ -132,7 +141,8 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
         modString = "'"+searchString+"'";
         String [] selectionArgs = { modString, modString, modString };
 
-        if (LegendsHelperFR.normalized || LegendsHelperDE.normalized){
+        //ENGLISH DOES NOT SUPPORT A NORMALIZATION QUERY
+        if (prefsNormalization && prefsLang != 0){
             cursor = legendsDB.rawQuery(Queries.QUERY_FTS_NORMALIZED, selectionArgs);
         }
         else {
@@ -161,7 +171,8 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
         closeCursor();
         String[] selectionArgs = { modString, modString, modString };
 
-        if (LegendsHelperFR.normalized || LegendsHelperDE.normalized) {
+        //ENGLISH DOES NOT SUPPORT A NORMALIZATION QUERY
+        if (prefsNormalization && prefsLang != 0) {
             refreshedCursor = legendsDB.rawQuery(Queries.QUERY_FTS_NORMALIZED, selectionArgs);
         }
         else {

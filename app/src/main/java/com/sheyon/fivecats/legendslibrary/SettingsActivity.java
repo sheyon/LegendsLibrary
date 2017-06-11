@@ -1,14 +1,10 @@
 package com.sheyon.fivecats.legendslibrary;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,11 +13,11 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelperDE;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelperFR;
+import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
@@ -29,6 +25,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     private UniversalDrawer universalDrawer;
     private int langSelection;
+    private LegendsPreferences legendsPrefs;
+    private boolean normalizationSelection = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +41,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         setupLangSpinner();
         setupLangButton();
+
+        legendsPrefs = LegendsPreferences.getInstance(getApplicationContext());
     }
 
     private void setupLangSpinner() {
@@ -79,24 +79,15 @@ public class SettingsActivity extends AppCompatActivity {
         langButtonApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences settings = getSharedPreferences(getString(R.string.prefs_file_key), Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = settings.edit();
-
-                editor.putInt(getString(R.string.prefs_lang), langSelection);
-                editor.apply();
-                closeDatabase();
+                legendsPrefs.setLangPref(langSelection);
+                legendsPrefs.setNormalizationPref(normalizationSelection);
+                restartDatabase();
             }
         });
     }
 
-    private void closeDatabase() {
+    private void restartDatabase() {
         legendsDB.close();
-        if (LegendsHelperFR.normalized){
-            LegendsHelperFR.normalized = false;
-        }
-        if (LegendsHelperDE.normalized){
-            LegendsHelperDE.normalized = false;
-        }
 
         switch (langSelection) {
             case 0:

@@ -5,19 +5,18 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
-import java.util.Locale;
-
 public class LegendsHelperDE extends SQLiteAssetHelper
 {
     private static final String DATABASE_NAME = "lore_library_DE.db";
     private static final int DATABASE_VERSION = 2;
 
-    public static boolean normalized = false;
+    private Context mContext;
 
     public LegendsHelperDE (Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         setForcedUpgrade(DATABASE_VERSION);
+        mContext = context;
     }
 
     @Override
@@ -26,17 +25,17 @@ public class LegendsHelperDE extends SQLiteAssetHelper
         db.execSQL("PRAGMA foreign_keys=ON;");
         db.execSQL("DROP TABLE IF EXISTS LoreSearch;");
 
-        String language = Locale.getDefault().getLanguage();
+        LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(mContext);
+        boolean normalizationOn = legendsPrefs.getNormalizationPref();
 
-        if (language.equals("de")){
-            db.execSQL("CREATE VIRTUAL TABLE LoreSearch USING fts4 (_id, prefix, title, legend, blackLore, categoryName, faved);");
-            db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE_FR_DE_NATIVE);
+        if (normalizationOn) {
+            db.execSQL("CREATE VIRTUAL TABLE LoreSearch USING fts4 (_id, prefix, title, ASCII_title, legend, ASCII_legend, blackLore, ASCII_blackLore, categoryName, faved);");
+            db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE_FR_DE_NORMALIZED);
         }
 
         else {
-            normalized = true;
-            db.execSQL("CREATE VIRTUAL TABLE LoreSearch USING fts4 (_id, prefix, title, ASCII_title, legend, ASCII_legend, blackLore, ASCII_blackLore, categoryName, faved);");
-            db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE_FR_DE_NORMALIZED);
+            db.execSQL("CREATE VIRTUAL TABLE LoreSearch USING fts4 (_id, prefix, title, legend, blackLore, categoryName, faved);");
+            db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE_FR_DE_NATIVE);
         }
     }
 

@@ -20,6 +20,7 @@ import com.sbrukhanda.fragmentviewpager.FragmentViewPager;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelperDE;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelperFR;
+import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
 import java.util.Locale;
 
@@ -106,34 +107,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openDatabase() {
-        SharedPreferences settings = getSharedPreferences(getString(R.string.prefs_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = settings.edit();
+        LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(this);
 
-        //IF LANG PREFS DO NOT EXIST, CREATE THEM
-        if (!settings.contains(getString(R.string.prefs_lang))) {
+        //IF LANG PREFS DO NOT EXIST, CREATE THEM (DEFAULT: ENGLISH)
+        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_LANG)) {
             String lang = Locale.getDefault().getLanguage();
-            int i;
             switch (lang) {
                 case "en":
-                    i = 0;
+                    legendsPrefs.setLangPref(0);
                     break;
                 case "de":
-                    i = 1;
+                    legendsPrefs.setLangPref(1);
                     break;
                 case "fr":
-                    i = 2;
+                    legendsPrefs.setLangPref(2);
                     break;
                 default:
-                    i = 0;
+                    legendsPrefs.setLangPref(0);
                     break;
             }
-            editor.putInt(getString(R.string.prefs_lang), i);
-            editor.apply();
         }
 
-        int langPref = settings.getInt(getString(R.string.prefs_lang), 0);
+        //IF NORMALIZATION PREFS DO NOT EXIST, CREATE THEM (DEFAULT: NORMALIZED)
+        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_NORMALIZATION)) {
+            legendsPrefs.setNormalizationPref(true);
+        }
 
-        //OPEN DATABASE BASED ON PREFERED LANGUAGE SETTING
+        //GET DATABASE PREFERENCES
+        int langPref = legendsPrefs.getLangPref();
+
+        //OPEN DATABASE
         switch (langPref) {
             case 0:
                 LegendsHelper legendsHelper = new LegendsHelper(this);
