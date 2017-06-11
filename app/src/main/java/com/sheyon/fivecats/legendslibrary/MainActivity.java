@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.sbrukhanda.fragmentviewpager.FragmentViewPager;
+import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelperDE;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelperFR;
@@ -111,16 +112,16 @@ public class MainActivity extends AppCompatActivity {
             String lang = Locale.getDefault().getLanguage();
             switch (lang) {
                 case "en":
-                    legendsPrefs.setLangPref(0);
+                    legendsPrefs.setLangPref(LoreLibrary.LANG_EN);
                     break;
                 case "de":
-                    legendsPrefs.setLangPref(1);
+                    legendsPrefs.setLangPref(LoreLibrary.LANG_DE);
                     break;
                 case "fr":
-                    legendsPrefs.setLangPref(2);
+                    legendsPrefs.setLangPref(LoreLibrary.LANG_FR);
                     break;
                 default:
-                    legendsPrefs.setLangPref(0);
+                    legendsPrefs.setLangPref(LoreLibrary.LANG_EN);
                     break;
             }
         }

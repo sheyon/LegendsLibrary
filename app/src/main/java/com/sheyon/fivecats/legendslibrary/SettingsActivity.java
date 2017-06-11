@@ -59,19 +59,19 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getItemAtPosition(position).equals("English")) {
-                    langSelection = LoreLibrary.LANG_ENG;
+                    langSelection = LoreLibrary.LANG_EN;
                 }
                 if (parent.getItemAtPosition(position).equals("German")) {
-                    langSelection = LoreLibrary.LANG_GMN;
+                    langSelection = LoreLibrary.LANG_DE;
                 }
                 if (parent.getItemAtPosition(position).equals("French")) {
-                    langSelection = LoreLibrary.LANG_FRN;
+                    langSelection = LoreLibrary.LANG_FR;
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                langSelection = LoreLibrary.LANG_ENG;
+                langSelection = LoreLibrary.LANG_EN;
             }
         });
 

@@ -43,9 +43,9 @@ public final class LegendsContract
         public static final int CAT_8_ISU = 8;
 
         //VALUES FOR LANGUAGE SPINNER
-        public static final int LANG_ENG = 0;
-        public static final int LANG_GMN = 1;
-        public static final int LANG_FRN = 2;
+        public static final int LANG_EN = 0;
+        public static final int LANG_DE = 1;
+        public static final int LANG_FR = 2;
     }
 
     public static final class Queries {
@@ -132,21 +132,21 @@ public final class LegendsContract
                 "JOIN category\n" +
                 "on lore.categoryId = category.CategoryID;";
 
-        //FOR BUILDING THE FTS IN THE PRIMARY LANGUAGE OF THE USER
+        //FOR BUILDING THE FTS IN FR AND DE
         static final String POPULATE_VIRTUAL_TABLE_FR_DE_NATIVE = "INSERT INTO LoreSearch\n" +
                 "SELECT _id, prefix, title, legend, blackLore, category.categoryName, faved\n" +
                 "FROM lore\n" +
                 "JOIN category\n" +
                 "on lore.categoryId = category.CategoryID;";
 
-        //FOR BUILDING THE FTS IN THE NON-PRIMARY LANGUAGE OF THE USER (OMITS DIACRITICS)
+        //FOR BUILDING THE FTS IN FR AND DE (OMITS DIACRITICS)
         static final String POPULATE_VIRTUAL_TABLE_FR_DE_NORMALIZED = "INSERT INTO LoreSearch\n" +
                 "SELECT _id, prefix, title, ASCII_title, legend, ASCII_legend, blackLore, ASCII_blacklore, category.categoryName, faved\n" +
                 "FROM lore\n" +
                 "JOIN category\n" +
                 "on lore.categoryId = category.CategoryID;";
 
-        //FOR QUERYING THE DATABASE IN THE LANGUAGE OF THE USER
+        //FOR QUERYING THE DATABASE
         public static final String QUERY_FTS = "SELECT * FROM LoreSearch\n" +
                 "WHERE title MATCH ?\n" +
                 "UNION\n" +
