@@ -185,13 +185,13 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         if (faved == 0) {
             favedImageView.setImageResource(R.drawable.ic_star_border_white_48dp);
             if (startupComplete) {
-                Toast.makeText(this, convertedTitle + " removed from Favorites.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, convertedTitle + " " + R.string.fave_removed, Toast.LENGTH_SHORT).show();
             }
         }
         if (faved == 1) {
             favedImageView.setImageResource(R.drawable.ic_star_white_48dp);
             if (startupComplete) {
-                Toast.makeText(this, convertedTitle + " added to Favorites.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, convertedTitle + " " + R.string.fave_added, Toast.LENGTH_SHORT).show();
             }
         }
     }

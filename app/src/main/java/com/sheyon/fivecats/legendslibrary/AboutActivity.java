@@ -134,7 +134,7 @@ public class AboutActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else {
-                    Toast.makeText(context, "Sorry, there was an error in locating an email program.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.toast_no_email, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -161,12 +161,12 @@ public class AboutActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = null;
                 try {
-                    // get the Twitter app if possible
+                    // get the Tumblr app if possible
                     getPackageManager().getPackageInfo("com.tumblr", 0);
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tumblr://x-callback-url/blog?blogName=swl-library-app"));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 } catch (Exception e) {
-                    // no Twitter app, revert to browser
+                    // no Tumblr app, revert to browser
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://swl-library-app.tumblr.com/"));
                 }
                 startActivity(intent);

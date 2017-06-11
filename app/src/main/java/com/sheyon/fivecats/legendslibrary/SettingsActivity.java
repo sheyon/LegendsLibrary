@@ -112,7 +112,7 @@ public class SettingsActivity extends AppCompatActivity {
                 LegendsHelper legendsHelper = new LegendsHelper(this);
                 try {
                     legendsDB = legendsHelper.getWritableDatabase();
-                    Toast.makeText(this, "Language changes applied.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
                 } catch (SQLiteException e) {
                     legendsDB = legendsHelper.getReadableDatabase();
                     Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
@@ -124,7 +124,7 @@ public class SettingsActivity extends AppCompatActivity {
                 LegendsHelperDE legendsHelperDE = new LegendsHelperDE(this);
                 try {
                     legendsDB = legendsHelperDE.getWritableDatabase();
-                    Toast.makeText(this, "Language changes applied.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
                 } catch (SQLiteException e) {
                     legendsDB = legendsHelperDE.getReadableDatabase();
                     Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
@@ -136,7 +136,7 @@ public class SettingsActivity extends AppCompatActivity {
                 LegendsHelperFR legendsHelperFR = new LegendsHelperFR(this);
                 try {
                     legendsDB = legendsHelperFR.getWritableDatabase();
-                    Toast.makeText(this, "Language changes applied.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
                 } catch (SQLiteException e) {
                     legendsDB = legendsHelperFR.getReadableDatabase();
                     Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();

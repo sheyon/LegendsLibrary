@@ -46,6 +46,17 @@
     <string name="toast_no_quotes">Please omit quotation marks from your queries.</string>
     <string name="toast_three_chars">Queries must have a length of at least 3 characters.</string>
     <string name="toast_no_articles">Please omit articles from the beginning of your query.</string>
+    <string name="toast_no_email">There was an error in locating an email program.</string>
+    <string name="toast_faves_removed">All favorites removed.</string>
+    <string name="toast_already_empty">This list is already empty.</string>
+    <string name="toast_lang_changes">Language changes applied.</string>
+
+    <string name="fave_added">added to Favorites.</string>
+    <string name="fave_removed">removed from Favorites.</string>
+
+    <string name="dialog_confirm_text">Are you sure you want to remove all favorites?</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_cancel">Cancel</string>
 
     <string name="popup_phrases_permitted">Phrases are permitted.</string>
     <string name="popup_no_case">Queries are not case-sensitive.</string>
