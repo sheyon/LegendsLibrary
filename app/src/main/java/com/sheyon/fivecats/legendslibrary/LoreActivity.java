@@ -29,6 +29,7 @@ import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 public class LoreActivity extends AppCompatActivity implements View.OnClickListener
 {
     private Boolean startupComplete = false;
+    private Boolean wildcardFlag = false;
     private String searchString;
     private String titleString;
     private String fullTitleString;
@@ -98,14 +99,23 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
             buzzingTextview.setText(buzzingText);
             blackSignalTextview.setText(blackSignalText);
         }
+        //IF YOU WERE LOOKING FOR SOMETHING...
         else {
-            //IF YOU WERE LOOKING FOR SOMETHING, HIGHLIGHT IT
+            //SANITIZE THE SEARCH STRING
+            if (searchString.startsWith("*") || searchString.endsWith("*")) {
+                searchString = searchString.replace("*", " ").trim();
+                wildcardFlag = true;
+            }
+            //SINGLE-QUOTES WILL NOT CRASH THE SEARCH BUT IT WILL KEEP THE HIGHIGHTER FROM WORKING
+            if (searchString.startsWith("'") || searchString.endsWith("'")) {
+                searchString = searchString.replace("'", " ").trim();
+            }
+            //THEN HIGHLIGHT YOUR RESULTS
             highlight(buzzingText, buzzingTextview);
             if (blackSignalText != null) {
                 highlight(blackSignalText, blackSignalTextview);
             }
         }
-
         //A LORE MAY OR MAY NOT HAVE A BLACK SIGNAL TO DISPLAY
         if (blackSignalText != null) {
             blackSignalTextview.setVisibility(View.VISIBLE);
@@ -116,7 +126,6 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private CharSequence highlight(String originalText, TextView textView) {
-        Boolean wildcardFlag = false;
         Boolean normalize = legendsPrefs.getNormalizationPref();
 
         //BOTH NORMAL AND UN-NORMALIZED MODES MUST BE IN LOWER-CASE!
@@ -130,16 +139,6 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
 
         ColorStateList blueColor = new ColorStateList(new int[][]{new int[]{}}, new int[]{Color.CYAN});
         //TextAppearanceSpan highlightSpan = new TextAppearanceSpan(null, Typeface.BOLD, -1, blueColor, null);
-
-        //SO THE HIGHLIGHTER WILL RETURN WILDCARD SEARCHES
-        if (searchString.startsWith("*") || searchString.endsWith("*")) {
-            searchString = searchString.replace("*", " ").trim();
-            wildcardFlag = true;
-        }
-        //SINGLE-QUOTES WILL NOT CRASH THE SEARCH BUT IT WILL KEEP THE HIGHIGHTER FROM WORKING
-        if (searchString.startsWith("'") || searchString.endsWith("'")) {
-            searchString = searchString.replace("'", " ").trim();
-        }
 
         int start = normalizedText.indexOf(searchString);
 
@@ -160,11 +159,14 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
                 TextAppearanceSpan span = new TextAppearanceSpan(null, Typeface.BOLD, -1, blueColor, null);
                 highlighted.setSpan(span, spanStart, spanEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
+                //Log.v ("***DEBUG", "a" + highlighted.charAt(spanStart-1) + "b");
+                //Log.v ("***DEBUG", "c" + highlighted.charAt(spanEnd) + "d");
+
                 //THIS PREVENTS THE HIGHLIGHTER FROM MARKING RESULTS IN THE MIDDLE OF A WORD
                 if (!wildcardFlag){
                     //WILDCARD-OFF WILL RETURN WHOLE WORDS ONLY
-                    if ( (highlighted.charAt(spanStart - 1) == ' ' || highlighted.charAt(spanStart - 1) == '\n' ||
-                            highlighted.charAt(spanStart - 1) == '\"' || highlighted.charAt(spanStart - 1) == '\'') &&
+                    if ( (highlighted.charAt(spanStart - 1) == ' ' || highlighted.charAt(spanStart - 1) == '\n' || highlighted.charAt(spanStart - 1) == '-' ||
+                    highlighted.charAt(spanStart - 1) == '\"' || highlighted.charAt(spanStart - 1) == '\'') &&
                             (highlighted.charAt(spanEnd) == ' ' || highlighted.charAt(spanEnd) == '.' || highlighted.charAt(spanEnd) == ',' ||
                                     highlighted.charAt(spanEnd) == '\'' || highlighted.charAt(spanEnd) == '-' || highlighted.charAt(spanEnd) == '?' ||
                                     highlighted.charAt(spanEnd) == '!' || highlighted.charAt(spanEnd) == ';' || highlighted.charAt(spanEnd) == ':' ||
@@ -178,12 +180,17 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 else {
                     //WILDCARD-ON WILL RETURN RESULT* (BUT NOT *RESULT)
-                    if ( highlighted.charAt(spanStart - 1) == ' ' || highlighted.charAt(spanStart - 1) == '\n' ||
-                            highlighted.charAt(spanStart - 1) == '\"' || highlighted.charAt(spanStart - 1) == '\'') {
+                    if ( highlighted.charAt(spanStart - 1) == ' ' || highlighted.charAt(spanStart - 1) == '\n' || highlighted.charAt(spanStart - 1) == '-' ||
+                                highlighted.charAt(spanStart - 1) == '\"' || highlighted.charAt(spanStart - 1) == '\'') {
+                            textView.setText(highlighted);
+                            textView.setVisibility(View.VISIBLE);
+                    }
+                    //GERMAN MIGHT BENEFIT FROM TRUE WILDCARD...
+                    if (legendsPrefs.getLangPref() == 1 ) {
                         textView.setText(highlighted);
                         textView.setVisibility(View.VISIBLE);
                     }
-                    else{
+                    else {
                         highlighted.removeSpan(span);
                     }
                 }
