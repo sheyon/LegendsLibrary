@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 
+import static android.media.CamcorderProfile.get;
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
@@ -172,11 +173,11 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                 //SET FAVED OR UNFAVED
                 if (faved == 0){
                     loreFavorite_IV.setImageResource(R.drawable.ic_star_border_white_48dp);
-                    Toast.makeText(mContext, fullTitleString + " removed from Favorites.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, fullTitleString + " " + mContext.getString(R.string.fave_removed), Toast.LENGTH_SHORT).show();
                 }
                 if (faved == 1){
                     loreFavorite_IV.setImageResource(R.drawable.ic_star_white_48dp);
-                    Toast.makeText(mContext, fullTitleString + " set to Favorites.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, fullTitleString + " " + mContext.getString(R.string.fave_added), Toast.LENGTH_SHORT).show();
                 }
 
                 //FIND OUT WHICH FRAGMENT CALLED THE ADAPTER AND REFRESH THE CURSOR
