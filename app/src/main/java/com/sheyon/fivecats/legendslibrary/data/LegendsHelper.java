@@ -22,7 +22,7 @@ public class LegendsHelper extends SQLiteAssetHelper
         db.execSQL("PRAGMA foreign_keys=ON;");
         //CREATE TABLE FOR FULL-TEXT-SEARCH
         db.execSQL("DROP TABLE IF EXISTS LoreSearch;");
-        db.execSQL("CREATE VIRTUAL TABLE LoreSearch USING fts4 (_id, title, prefix, legend, blackLore, categoryName, faved);");
+        db.execSQL(LegendsContract.Queries.CREATE_DEFAULT_TABLE);
         db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE);
     }
 

@@ -29,12 +29,12 @@ public class LegendsHelperDE extends SQLiteAssetHelper
         boolean normalizationOn = legendsPrefs.getNormalizationPref();
 
         if (normalizationOn) {
-            db.execSQL("CREATE VIRTUAL TABLE LoreSearch USING fts4 (_id, prefix, title, ASCII_title, legend, ASCII_legend, blackLore, ASCII_blackLore, categoryName, faved);");
+            db.execSQL(LegendsContract.Queries.CREATE_ASCII_TABLE);
             db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE_FR_DE_NORMALIZED);
         }
 
         else {
-            db.execSQL("CREATE VIRTUAL TABLE LoreSearch USING fts4 (_id, prefix, title, legend, blackLore, categoryName, faved);");
+            db.execSQL(LegendsContract.Queries.CREATE_DEFAULT_TABLE);
             db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE);
         }
     }

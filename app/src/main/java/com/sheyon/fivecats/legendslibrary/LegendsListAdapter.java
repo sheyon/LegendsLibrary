@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 
-import static android.media.CamcorderProfile.get;
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 class LegendsListAdapter extends CursorAdapter implements View.OnClickListener

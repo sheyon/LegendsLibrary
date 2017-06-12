@@ -142,9 +142,15 @@ public final class LegendsContract
         public static final String CHECK_FOR_FAVED_LORE = "select title from lore\n" +
                 "where faved = 1";
 
+        //CREATE TABLE WITH DEFAULT COLUMNS
+        static final String CREATE_DEFAULT_TABLE = "CREATE VIRTUAL TABLE LoreSearch USING fts4 (_id, prefix, title, legend, blackLore, categoryName, faved);";
+
+        //CREATE TABLE NORMALIZED COLUMNS
+        static final String CREATE_ASCII_TABLE = "CREATE VIRTUAL TABLE LoreSearch USING fts4 (_id, prefix, title, ASCII_title, legend, ASCII_legend, blackLore, ASCII_blackLore, categoryName, faved);";
+
         //BUILD THE VIRTUAL TABLE FOR FTS
         static final String POPULATE_VIRTUAL_TABLE = "INSERT INTO LoreSearch\n" +
-                "SELECT _id, title, prefix, legend, blackLore, category.categoryName, faved\n" +
+                "SELECT _id, prefix, title, legend, blackLore, category.categoryName, faved\n" +
                 "FROM lore\n" +
                 "JOIN category\n" +
                 "on lore.categoryId = category.CategoryID;";
