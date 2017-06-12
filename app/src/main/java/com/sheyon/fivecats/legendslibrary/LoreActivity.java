@@ -31,6 +31,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     private Boolean startupComplete = false;
     private String searchString;
     private String titleString;
+    private String fullTitleString;
     private ImageView favedImageView;
     private LegendsPreferences legendsPrefs;
 
@@ -84,6 +85,11 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
 
         titleTextview.setText(titleString);
         categoryTextview.setText(categoryString);
+
+        //FULL TITLE STRING IS FOR THE FAVE TOASTS; SAVE IT SO YOU CAN USE IT LATER
+        fullTitleString = titleString;
+        //TRUNCATES THE TITLE SO PREFIXES DON'T BREAK FAVES
+        titleString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_TITLE));
 
         setStar(faved);
 
@@ -195,26 +201,23 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setStar(int faved) {
-        String convertedTitle = new TitleRenamer().convertTitle(titleString);
-
         if (faved == 0) {
             favedImageView.setImageResource(R.drawable.ic_star_border_white_48dp);
             if (startupComplete) {
-                Toast.makeText(this, convertedTitle + " " + R.string.fave_removed, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, fullTitleString + " " + getString(R.string.fave_removed), Toast.LENGTH_SHORT).show();
             }
         }
         if (faved == 1) {
             favedImageView.setImageResource(R.drawable.ic_star_white_48dp);
             if (startupComplete) {
-                Toast.makeText(this, convertedTitle + " " + R.string.fave_added, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, fullTitleString + " " + getString(R.string.fave_added), Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.loreActivity_fave_clickable)
-        {
+        if (v.getId() == R.id.loreActivity_fave_clickable) {
             String modTitleString = "\"" + titleString + "\"";
 
             //EXECUTE UPDATE QUERY

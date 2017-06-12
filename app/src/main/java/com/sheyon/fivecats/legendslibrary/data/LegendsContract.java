@@ -132,7 +132,7 @@ public final class LegendsContract
                 "from lore\n" +
                 "where title = ?";
 
-        public static final String GET_ALL_FAVES = "select lore._id AS _id, title, lore.categoryId, category.categoryName, faved\n" +
+        public static final String GET_ALL_FAVES = "select lore._id AS _id, title, prefix, lore.categoryId, category.categoryName, faved\n" +
                 "from lore\n" +
                 "join category\n" +
                 "on lore.categoryId = category.categoryId\n" +
@@ -142,20 +142,14 @@ public final class LegendsContract
         public static final String CHECK_FOR_FAVED_LORE = "select title from lore\n" +
                 "where faved = 1";
 
-        static final String POPULATE_VIRTUAL_TABLE_ENGLISH = "INSERT INTO LoreSearch\n" +
-                "SELECT _id, title, legend, blackLore, category.categoryName, faved\n" +
+        //BUILD THE VIRTUAL TABLE FOR FTS
+        static final String POPULATE_VIRTUAL_TABLE = "INSERT INTO LoreSearch\n" +
+                "SELECT _id, title, prefix, legend, blackLore, category.categoryName, faved\n" +
                 "FROM lore\n" +
                 "JOIN category\n" +
                 "on lore.categoryId = category.CategoryID;";
 
-        //FOR BUILDING THE FTS IN FR AND DE
-        static final String POPULATE_VIRTUAL_TABLE_FR_DE_NATIVE = "INSERT INTO LoreSearch\n" +
-                "SELECT _id, prefix, title, legend, blackLore, category.categoryName, faved\n" +
-                "FROM lore\n" +
-                "JOIN category\n" +
-                "on lore.categoryId = category.CategoryID;";
-
-        //FOR BUILDING THE FTS IN FR AND DE (OMITS DIACRITICS)
+        //BUILD THE VIRTUAL TABLE FOR FTS (OMITS DIACRITICS)
         static final String POPULATE_VIRTUAL_TABLE_FR_DE_NORMALIZED = "INSERT INTO LoreSearch\n" +
                 "SELECT _id, prefix, title, ASCII_title, legend, ASCII_legend, blackLore, ASCII_blacklore, category.categoryName, faved\n" +
                 "FROM lore\n" +

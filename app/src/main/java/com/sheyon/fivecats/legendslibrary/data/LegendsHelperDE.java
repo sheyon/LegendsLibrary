@@ -35,7 +35,7 @@ public class LegendsHelperDE extends SQLiteAssetHelper
 
         else {
             db.execSQL("CREATE VIRTUAL TABLE LoreSearch USING fts4 (_id, prefix, title, legend, blackLore, categoryName, faved);");
-            db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE_FR_DE_NATIVE);
+            db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE);
         }
     }
 

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,6 @@ import android.widget.Toast;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
-
-import java.util.Arrays;
 
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
@@ -82,7 +79,7 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
         loreFavorite_IV.setImageResource(R.drawable.ic_star_border_white_48dp);
 
         //IF COMING FROM THE SEARCH PAGE, HIDE THE STAR
-        //WITH FTS, IMPLEMENTING FAVES WILL BE A MESS
+        //LORES FROM THE SEARCH VIEW DON'T SYNC PROPERLY BECAUSE OF VIRTUAL TABLES
         if (mFragment.getClass() == SearchFragment.class) {
             loreFavorite_IV.setVisibility(View.INVISIBLE);
         }
@@ -93,7 +90,7 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
         int faved = cursor.getInt(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_FAVED));
 
         if (prefixText != null) {
-            loreTitle_TV.setText(prefixText + titleText);
+            loreTitle_TV.setText("" + prefixText + titleText);
         }
         else {
             loreTitle_TV.setText(titleText);
@@ -107,6 +104,10 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        String [] union = { Queries.GET_CAT_ID_UNION_1, Queries.GET_CAT_ID_UNION_2 };
+        String joinedQuery = qb.buildUnionQuery(union, null, null);
+
         switch (v.getId())
         {
             case R.id.container_text_views:
@@ -115,10 +116,6 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 
                 String clickedTitle = loreTitle_TV.getText().toString();
                 String clickedCategory = loreCategory_TV.getText().toString();
-
-                SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-                String [] union = { Queries.GET_CAT_ID_UNION_1, Queries.GET_CAT_ID_UNION_2 };
-                String joinedQuery = qb.buildUnionQuery(union, null, null);
 
                 String[] catIdArgs = { clickedTitle, clickedCategory, clickedTitle, clickedCategory };
                 Cursor catIdCursor = legendsDB.rawQuery(joinedQuery, catIdArgs);
@@ -136,10 +133,29 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                 break;
 
             case R.id.container_fave_clickable:
+                //IF ON THE SEARCH PAGE, PREVENT THE USER FROM CONTINUING
+                if (mFragment.getClass() == SearchFragment.class) {
+                    break;
+                }
                 //GET PARENT VIEW TO CATCH THE TITLE STRING
                 View parentView = (View) v.getParent();
                 loreTitle_TV = (TextView) parentView.findViewById(R.id.lore_title_text_view);
+                loreCategory_TV = (TextView) parentView.findViewById(R.id.lore_category_text_view);
+
                 String faveTitle = loreTitle_TV.getText().toString();
+                String faveCategory = loreCategory_TV.getText().toString();
+
+                //FULL TITLE STRING IS USED FOR FAVE TOASTS; SAVE SO YOU CAN USE IT LATER
+                String fullTitleString = faveTitle;
+
+                //REMOVE THE PREFIX FROM THE TITLE STRING
+                String[] plainTitleArgs = { faveTitle, faveCategory, faveTitle, faveCategory };
+                Cursor plainTitleCursor = legendsDB.rawQuery(joinedQuery, plainTitleArgs);
+                if (plainTitleCursor != null) {
+                    plainTitleCursor.moveToFirst(); }
+                faveTitle = plainTitleCursor.getString(plainTitleCursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
+                plainTitleCursor.close();
+
                 String modFaveTitle = "\"" + faveTitle + "\"";
 
                 //EXECUTE UPDATE QUERY
@@ -154,14 +170,13 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                 loreFavorite_IV = (ImageView) v.findViewById(R.id.lore_favorites_image_view);
 
                 //SET FAVED OR UNFAVED
-                String convertedTitle = new TitleRenamer().convertTitle(faveTitle);
                 if (faved == 0){
                     loreFavorite_IV.setImageResource(R.drawable.ic_star_border_white_48dp);
-                    Toast.makeText(mContext, convertedTitle + " removed from Favorites.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, fullTitleString + " removed from Favorites.", Toast.LENGTH_SHORT).show();
                 }
                 if (faved == 1){
                     loreFavorite_IV.setImageResource(R.drawable.ic_star_white_48dp);
-                    Toast.makeText(mContext, convertedTitle + " set to Favorites.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, fullTitleString + " set to Favorites.", Toast.LENGTH_SHORT).show();
                 }
 
                 //FIND OUT WHICH FRAGMENT CALLED THE ADAPTER AND REFRESH THE CURSOR
