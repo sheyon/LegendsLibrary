@@ -129,7 +129,6 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 
                 Intent intent = new Intent(mContext, LoreActivity.class);
                 intent.putExtra("catNumber", clickedCatId);
-                intent.putExtra("catName", clickedCategory);
                 intent.putExtra("loreTitle", clickedTitle);
                 intent.putExtra("searchString", mSearchString);
 

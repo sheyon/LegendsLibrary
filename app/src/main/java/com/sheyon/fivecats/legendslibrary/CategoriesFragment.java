@@ -28,7 +28,6 @@ public class CategoriesFragment extends Fragment {
     private Cursor cursor;
 
     private int spinnerCatNumber;
-    private String categoryName;
     private String loreTitle;
 
     @Override
@@ -74,35 +73,27 @@ public class CategoriesFragment extends Fragment {
                         return;
                     }
                     if (selection.equals("Solomon Island")) {
-                        categoryName = "Solomon Island";
                         spinnerCatNumber = LoreLibrary.CAT_1_SOL;
                     }
                     if (selection.equals("Valley of the Sun God")) {
-                        categoryName = "Valley of the Sun God";
                         spinnerCatNumber = LoreLibrary.CAT_2_EGY;
                     }
                     if (selection.equals("Transylvania")) {
-                        categoryName = "Transylvania";
                         spinnerCatNumber = LoreLibrary.CAT_3_TRN;
                     }
                     if (selection.equals("Tokyo")) {
-                        categoryName = "Tokyo";
                         spinnerCatNumber = LoreLibrary.CAT_4_TOK;
                     }
                     if (selection.equals("Global")) {
-                        categoryName = "Global";
                         spinnerCatNumber = LoreLibrary.CAT_5_GBL;
                     }
                     if (selection.equals("The Bestiary")) {
-                        categoryName = "The Bestiary";
                         spinnerCatNumber = LoreLibrary.CAT_6_BES;
                     }
                     if (selection.equals("Events")) {
-                        categoryName = "Events";
                         spinnerCatNumber = LoreLibrary.CAT_7_EVN;
                     }
                     if (selection.equals("Issues")) {
-                        categoryName = "Issues";
                         spinnerCatNumber = LoreLibrary.CAT_8_ISU;
                     }
                 displayCategoryScreen();
@@ -156,7 +147,6 @@ public class CategoriesFragment extends Fragment {
     private void startLoreActivity() {
         Intent intent = new Intent(getContext(), LoreActivity.class);
         intent.putExtra("catNumber", spinnerCatNumber);
-        intent.putExtra("catName", categoryName);
         intent.putExtra("loreTitle", loreTitle);
 
         closeCursor();

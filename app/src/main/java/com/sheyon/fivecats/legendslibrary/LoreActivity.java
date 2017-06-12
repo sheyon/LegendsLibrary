@@ -53,7 +53,6 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         int categoryNumber = getIntent().getIntExtra("catNumber", 0);
-        String categoryString = getIntent().getStringExtra("catName");
         titleString = getIntent().getStringExtra("loreTitle");
         searchString = getIntent().getStringExtra("searchString");
 
@@ -67,6 +66,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
 
         String buzzingText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BUZZING));
         String blackSignalText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BLACK_SIGNAL));
+        String categoryString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_NAME));
         int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
 
         LinearLayout faveClickable = (LinearLayout) findViewById(R.id.loreActivity_fave_clickable);

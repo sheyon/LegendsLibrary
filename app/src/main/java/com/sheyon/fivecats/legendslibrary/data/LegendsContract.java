@@ -87,13 +87,17 @@ public final class LegendsContract
                 "where lore.title like ? and category.categoryName like ?";
 
         //Returns info for the LoreActivity Part 1
-        public static final String SINGLE_LORE_UNION_1 = "select lore._id AS _id, title, prefix, lore.categoryId, legend, blackLore, faved\n" +
+        public static final String SINGLE_LORE_UNION_1 = "select lore._id AS _id, title, prefix, lore.categoryId, category.categoryName, legend, blackLore, faved\n" +
                 "from lore\n" +
+                "join category\n" +
+                "on lore.categoryId = category.categoryId\n" +
                 "where lore.categoryId = ? and title LIKE ?";
 
         //Returns info for the LoreActivity Part 2
-        public static final String SINGLE_LORE_UNION_2 = "select lore._id AS _id, title, prefix, lore.categoryId, legend, blackLore, faved\n" +
+        public static final String SINGLE_LORE_UNION_2 = "select lore._id AS _id, title, prefix, lore.categoryId, category.categoryName, legend, blackLore, faved\n" +
                 "from lore\n" +
+                "join category\n" +
+                "on lore.categoryId = category.categoryId\n" +
                 "where lore.categoryId = ? and prefix || title LIKE ?";
 
 //        Returns results from the SearchView
