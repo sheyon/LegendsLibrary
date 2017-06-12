@@ -128,6 +128,14 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     private CharSequence highlight(String originalText, TextView textView) {
         Boolean normalize = legendsPrefs.getNormalizationPref();
 
+        //IF ROMANIAN CHARACTERS FOUND, OVERRIDE NORMALIZATION (ENGLISH ONLY)
+        if ( legendsPrefs.getLangPref() == 0 &&
+                ( searchString.contains("ș") || searchString.contains("ă") || originalText.contains("ș") || originalText.contains("ă")) ) {
+            searchString = searchString.replaceAll("ș", "s");
+            searchString = searchString.replaceAll("ă", "a");
+            normalize = true;
+        }
+
         //BOTH NORMAL AND UN-NORMALIZED MODES MUST BE IN LOWER-CASE!
         String normalizedText = originalText.toLowerCase(Locale.getDefault());
 
@@ -190,9 +198,10 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
                         textView.setText(highlighted);
                         textView.setVisibility(View.VISIBLE);
                     }
-                    else {
-                        highlighted.removeSpan(span);
-                    }
+//                    DO I NEED THS?
+//                    else {
+//                        highlighted.removeSpan(span);
+//                    }
                 }
                 //SETS THE NEW START POINT AND THEN LOOP
                 start = normalizedText.indexOf(searchString, spanEnd);

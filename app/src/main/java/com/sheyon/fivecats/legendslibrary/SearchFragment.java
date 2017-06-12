@@ -25,6 +25,8 @@ import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
 import java.text.Normalizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
@@ -135,7 +137,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
         closeCursor();
         getPrefs();
 
-        //ENGLISH DOES NOT SUPPORT A NORMALIZATION QUERY
+        //FOR DE and FR; ENGLISH DOES NOT SUPPORT A NORMALIZATION QUERY
         if (prefsNormalization && prefsLang != 0) {
             searchString = normalizeSearchString(searchString);
 
@@ -145,6 +147,9 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
             cursor = legendsDB.rawQuery(Queries.QUERY_FTS_NORMALIZED, selectionArgs);
         }
         else {
+            //CHECK FOR ROMANIAN WORDS
+            searchString = checkForRomanianWords(searchString);
+
             modString = "'"+searchString+"'";
             String [] selectionArgs = { modString, modString, modString };
 
@@ -157,6 +162,30 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
 
         adapter = new LegendsListAdapter(getContext(), cursor, searchString, this);
         listView.setAdapter(adapter);
+    }
+
+    String checkForRomanianWords(String search) {
+        Pattern patternDrac = Pattern.compile("dr.cule.ti");
+        Pattern patternHarb = Pattern.compile("h.rb.bure.ti");
+        Pattern patternBacas = Pattern.compile("baca.");
+        Pattern patternMosul = Pattern.compile("mo.ul");
+        Pattern patternIaz = Pattern.compile("iazm.*");
+        Pattern patternMoarta = Pattern.compile("moart.");
+
+        Matcher matchDrac = patternDrac.matcher(search);
+        Matcher matchHarb = patternHarb.matcher(search);
+        Matcher matchBacas = patternBacas.matcher(search);
+        Matcher matchMosul = patternMosul.matcher(search);
+        Matcher matchIaz = patternIaz.matcher(search);
+        Matcher matchMoarta = patternMoarta.matcher(search);
+
+        if (matchDrac.matches()){ search = "drăculești"; }
+        if (matchHarb.matches()){ search = "harbaburești"; }
+        if (matchBacas.matches()){ search = "bacaș"; }
+        if (matchMosul.matches()){ search = "moșul"; }
+        if (matchIaz.matches()){ search = "iazmăciune"; }
+        if (matchMoarta.matches()){ search = "moartă"; }
+        return search;
     }
 
     //THIS FUNCTION EXISTS IN CASE A USER PUTS DIACRITICS INTO A DIACRITIC-INSENSITIVE QUERY
