@@ -28,6 +28,7 @@ class DrawerAdapter extends ArrayAdapter<String> {
 
         TextView drawerSelection = (TextView) listItemView.findViewById(R.id.drawer_selection);
         drawerSelection.setText(getItem(position));
+        drawerSelection.setAllCaps(false);
 
         return listItemView;
     }
