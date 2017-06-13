@@ -152,9 +152,10 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                 String[] plainTitleArgs = { faveTitle, faveCategory, faveTitle, faveCategory };
                 Cursor plainTitleCursor = legendsDB.rawQuery(joinedQuery, plainTitleArgs);
                 if (plainTitleCursor != null) {
-                    plainTitleCursor.moveToFirst(); }
-                faveTitle = plainTitleCursor.getString(plainTitleCursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
-                plainTitleCursor.close();
+                    plainTitleCursor.moveToFirst();
+                    faveTitle = plainTitleCursor.getString(plainTitleCursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
+                    plainTitleCursor.close();
+                }
 
                 String modFaveTitle = "\"" + faveTitle + "\"";
 

@@ -28,6 +28,10 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
+    <string name="empty_nothing_here">There\'s nothing here!</string>
+    <string name="empty_library_awaits">The library awaits&#8230;</string>
+    <string name="empty_retrieving">Retrieving&#8230;</string>
+
     <string name="title_categories">Categories</string>
     <string name="title_alphabetical">Alphabetical</string>
     <string name="title_favorites">Favorites</string>
