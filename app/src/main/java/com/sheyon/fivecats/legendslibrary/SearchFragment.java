@@ -40,6 +40,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
 
     private int prefsLang;
     private boolean prefsNormalization;
+    private boolean prefsWildcardOn;
 
     private Cursor cursor;
     private Cursor refreshedCursor;
@@ -81,6 +82,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
         LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(getContext());
         prefsLang = legendsPrefs.getLangPref();
         prefsNormalization = legendsPrefs.getNormalizationPref();
+        prefsWildcardOn = legendsPrefs.getWildcardAlwaysOnPref();
     }
 
     private void setupSearchBar(View view) {
@@ -137,7 +139,12 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
         closeCursor();
         getPrefs();
 
-        //FOR DE and FR; ENGLISH DOES NOT SUPPORT A NORMALIZATION QUERY
+        //PREF OVERRIDE CHECK
+        if (prefsWildcardOn) {
+            searchString = searchString + "*";
+        }
+
+        //FOR DE and FR (NORMALIZED); ENGLISH DOES NOT SUPPORT A NORMALIZATION QUERY
         if (prefsNormalization && prefsLang != 0) {
             searchString = normalizeSearchString(searchString);
 
@@ -147,7 +154,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
             cursor = legendsDB.rawQuery(Queries.QUERY_FTS_NORMALIZED, selectionArgs);
         }
         else {
-            //CHECK FOR ROMANIAN WORDS
+            //FOR EN, DE, FR (UN-NORMALIZED); CHECK FOR ROMANIAN WORDS FIRST
             searchString = checkForRomanianWords(searchString);
 
             modString = "'"+searchString+"'";

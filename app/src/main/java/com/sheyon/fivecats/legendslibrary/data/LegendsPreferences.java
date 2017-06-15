@@ -10,6 +10,8 @@ public class LegendsPreferences {
 
     public static final String PREF_LANG = "LANG_PREFS";
     public static final String PREF_NORMALIZATION = "NORMALIZATION_PREFS";
+    public static final String PREF_WILDCARD_ON = "WILDCARD_ON_PREFS";
+    public static final String PREF_DOUBLE_WILDCARD = "DOUBLE_WILDCARD_PREFS";
 
     private SharedPreferences mPref;
     private SharedPreferences.Editor mEditor;
@@ -38,6 +40,18 @@ public class LegendsPreferences {
         doCommit();
     }
 
+    public void setWildcardAlwaysOnPref(boolean val) {
+        doEdit();
+        mEditor.putBoolean(PREF_WILDCARD_ON, val);
+        doCommit();
+    }
+
+    public void setDoubleWildcardPref(boolean val) {
+        doEdit();
+        mEditor.putBoolean(PREF_DOUBLE_WILDCARD, val);
+        doCommit();
+    }
+
     public boolean doesContain(String prefKey){
         doEdit();
         return mPref.contains(prefKey);
@@ -49,6 +63,14 @@ public class LegendsPreferences {
 
     public boolean getNormalizationPref() {
         return mPref.getBoolean(PREF_NORMALIZATION, true);
+    }
+
+    public boolean getWildcardAlwaysOnPref() {
+        return mPref.getBoolean(PREF_WILDCARD_ON, false);
+    }
+
+    public boolean getDoubleWildcardPref() {
+        return mPref.getBoolean(PREF_DOUBLE_WILDCARD, false);
     }
 
     private void doEdit() {

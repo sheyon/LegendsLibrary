@@ -116,6 +116,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
                 highlight(blackSignalText, blackSignalTextview);
             }
         }
+
         //A LORE MAY OR MAY NOT HAVE A BLACK SIGNAL TO DISPLAY
         if (blackSignalText != null) {
             blackSignalTextview.setVisibility(View.VISIBLE);
@@ -158,6 +159,10 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         else {
             Spannable highlighted = new SpannableString(originalText);
 
+            //THIS PREVENTS THE HIGHLIGHTER FROM FINDING A SINGLE HIT THEN ABORTING, RESULTING IN AN EMPTY STRING
+            textView.setText(originalText);
+            textView.setVisibility(View.VISIBLE);
+
             while (start >= 0) {
                 //GETS THE START AND END POSITIONS OF THE WORD TO BE HIGHLIGHTED
                 int spanStart = Math.min(start, originalText.length());
@@ -180,28 +185,26 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
                                     highlighted.charAt(spanEnd) == '!' || highlighted.charAt(spanEnd) == ';' || highlighted.charAt(spanEnd) == ':' ||
                                     highlighted.charAt(spanEnd) == '\"' ) ) {
                         textView.setText(highlighted);
-                        textView.setVisibility(View.VISIBLE);
                     }
-                    else{
+                    else {
                         highlighted.removeSpan(span);
                     }
                 }
                 else {
-                    //WILDCARD-ON WILL RETURN RESULT* (BUT NOT *RESULT)
-                    if ( highlighted.charAt(spanStart - 1) == ' ' || highlighted.charAt(spanStart - 1) == '\n' || highlighted.charAt(spanStart - 1) == '-' ||
+                    //DOUBLE WILDCARDS WILL RETURN *RESULT, *RESULT*, and RESULT*
+                    if (legendsPrefs.getDoubleWildcardPref()) {
+                        textView.setText(highlighted);
+                    }
+                    else {
+                        //SIMPLE WILDCARD WILL RETURN ONLY RESULT*
+                        if ( highlighted.charAt(spanStart - 1) == ' ' || highlighted.charAt(spanStart - 1) == '\n' || highlighted.charAt(spanStart - 1) == '-' ||
                                 highlighted.charAt(spanStart - 1) == '\"' || highlighted.charAt(spanStart - 1) == '\'') {
                             textView.setText(highlighted);
-                            textView.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            highlighted.removeSpan(span);
+                        }
                     }
-                    //GERMAN MIGHT BENEFIT FROM TRUE WILDCARD...
-                    if (legendsPrefs.getLangPref() == 1 ) {
-                        textView.setText(highlighted);
-                        textView.setVisibility(View.VISIBLE);
-                    }
-//                    DO I NEED THS?
-//                    else {
-//                        highlighted.removeSpan(span);
-//                    }
                 }
                 //SETS THE NEW START POINT AND THEN LOOP
                 start = normalizedText.indexOf(searchString, spanEnd);

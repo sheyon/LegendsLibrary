@@ -15,8 +15,8 @@
 
     <string-array name="languages_array">
         <item>English</item>
-        <item>German</item>
-        <item>French</item>
+        <item>Deutsch</item>
+        <item>Français</item>
     </string-array>
 
     <string-array name="drawer_items">
@@ -31,6 +31,8 @@
     <string name="empty_nothing_here">There\'s nothing here!</string>
     <string name="empty_library_awaits">The library awaits&#8230;</string>
     <string name="empty_retrieving">Retrieving&#8230;</string>
+
+    <string name="empty_error">If you see this, there was an error! Please report it to the author so that it can be investigated!</string>
 
     <string name="title_categories">Categories</string>
     <string name="title_alphabetical">Alphabetical</string>
@@ -53,7 +55,7 @@
     <string name="toast_no_email">There was an error in locating an email program.</string>
     <string name="toast_faves_removed">All favorites removed.</string>
     <string name="toast_already_empty">This list is already empty.</string>
-    <string name="toast_lang_changes">Language changes applied.</string>
+    <string name="toast_lang_changes">Changes applied.</string>
 
     <string name="fave_added">added to Favorites.</string>
     <string name="fave_removed">removed from Favorites.</string>
@@ -68,7 +70,7 @@
     <string name="popup_ligatures">Ligatures (œ and ß) are not normalized! Do not decompose into oe or sz when searching!</string>
     <string name="popup_close">Close</string>
 
-    <string name="about_aboutText">The Legends Library is a resource for players of the modern horror MMORPG the <b>Secret World</b> and <b>Secret World: Legends</b> by Funcom. All in-game Legends (or Lore, as some players might know them) are complied into a searchable database for reading or research. The author hopes that you enjoy this resource, made completely free and ad-free to you, as you peer into the intricate world of secret societies, magic, and twisting horrors.
+    <string name="about_aboutText">The Legends Library is a resource for players of the modern horror MMORPG the <b>Secret World</b> and <b>Secret World: Legends</b> by Funcom. All in-game Legends (or Lore, as some players might know them) are compiled into a searchable database for reading or research. The author hopes that you enjoy this resource, made completely free and ad-free to you, as you peer into the world of secret societies, magic, and twisting horrors.
     \n\nBut don\'t look too deeply, sweetling&#8230;</string>
     <string name="about_privacyText">The Legends Library is an off-line app. It collects no information about you, your device, or your habits. It does not communicate to any outside servers. Rest assured that the author is not an agent of the Illuminati (or any other secret society) and has no interest or desire to collect or sell any information about you to third-parties, especially without your consent.</string>
     <string name="about_legalText">The Legends Library application and logo are the author\'s own copyright © 2017. They may not be redistributed or altered or sold for commercial use.

@@ -26,6 +26,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     private UniversalDrawer universalDrawer;
     private CheckBox langCheckbox;
+    private CheckBox wildcardOn;
+    private CheckBox doubleWildcard;
     private int langSelection;
     private LegendsPreferences legendsPrefs;
     private boolean normalizationSelection = true;
@@ -45,7 +47,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         setupLangSpinner();
         setupLangCheckbox();
-        setupLangButton();
+        setupApplyButton();
+        setupSearchCheckboxes();
     }
 
     private void setupLangSpinner() {
@@ -61,10 +64,10 @@ public class SettingsActivity extends AppCompatActivity {
                 if (parent.getItemAtPosition(position).equals("English")) {
                     langSelection = LoreLibrary.LANG_EN;
                 }
-                if (parent.getItemAtPosition(position).equals("German")) {
+                if (parent.getItemAtPosition(position).equals("Deutsch")) {
                     langSelection = LoreLibrary.LANG_DE;
                 }
-                if (parent.getItemAtPosition(position).equals("French")) {
+                if (parent.getItemAtPosition(position).equals("Français")) {
                     langSelection = LoreLibrary.LANG_FR;
                 }
             }
@@ -83,21 +86,31 @@ public class SettingsActivity extends AppCompatActivity {
         langCheckbox.setChecked(legendsPrefs.getNormalizationPref());
     }
 
-    private void setupLangButton() {
-        Button langButtonApply = (Button) findViewById(R.id.settings_lang_button);
+    private void setupSearchCheckboxes() {
+        wildcardOn = (CheckBox) findViewById(R.id.settings_search_wildcard_on);
+        wildcardOn.setChecked(legendsPrefs.getWildcardAlwaysOnPref());
 
-        langButtonApply.setOnClickListener(new View.OnClickListener() {
+        doubleWildcard = (CheckBox) findViewById(R.id.settings_search_double_wildcard);
+        doubleWildcard.setChecked(legendsPrefs.getDoubleWildcardPref());
+    }
+
+    private void setupApplyButton() {
+        Button settingsApplyButton = (Button) findViewById(R.id.settings_lang_button);
+
+        settingsApplyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (langCheckbox.isChecked()) {
-                    normalizationSelection = true;
-                }
-                else {
-                    normalizationSelection = false;
-                }
+//                if (langCheckbox.isChecked()) {
+//                    normalizationSelection = true;
+//                }
+//                else {
+//                    normalizationSelection = false;
+//                }
 
                 legendsPrefs.setLangPref(langSelection);
-                legendsPrefs.setNormalizationPref(normalizationSelection);
+                legendsPrefs.setNormalizationPref(langCheckbox.isChecked());
+                legendsPrefs.setWildcardAlwaysOnPref(wildcardOn.isChecked());
+                legendsPrefs.setDoubleWildcardPref(doubleWildcard.isChecked());
                 restartDatabase();
             }
         });

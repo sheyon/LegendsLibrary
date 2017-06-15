@@ -53,12 +53,34 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_checkbox_diacritics"
+                    android:layout_marginBottom="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/AboutHeaderStyles"
+                    android:text="Search"
                     android:layout_marginBottom="8dp"/>
+
+                <CheckBox
+                    android:id="@+id/settings_search_wildcard_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wildcard ( * ) always on"
+                    android:layout_marginBottom="0dp"/>
+
+                <CheckBox
+                    android:id="@+id/settings_search_double_wildcard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Double-sided wildcard"
+                    android:layout_marginBottom="16dp"/>
 
                 <Button
                     android:id="@+id/settings_lang_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:text="@string/settings_button_apply"/>
 
             </LinearLayout>
