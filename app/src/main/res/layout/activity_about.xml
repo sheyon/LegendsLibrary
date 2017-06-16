@@ -265,6 +265,52 @@
                     android:textColor="@android:color/white"
                     android:visibility="gone" />
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp">
+
+                    <TextView
+                        android:id="@+id/header_thanks"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimaryDark"
+                        android:padding="8dp"
+                        android:text="@string/header_thanks"
+                        android:textAppearance="@style/AboutHeaderStyles" />
+
+                    <ImageView
+                        android:id="@+id/thanks_expand_collapse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:src="@drawable/ic_keyboard_arrow_down_white_18dp" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/textView_thanks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@color/backgroundAccent"
+                    android:padding="8dp"
+                    android:text="@string/about_thanksText"
+                    android:textColor="@android:color/white"
+                    android:visibility="gone" />
+
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>

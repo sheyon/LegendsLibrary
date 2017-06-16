@@ -35,6 +35,13 @@
         android:textColor="@android:color/white"
         android:text="@string/popup_ligatures" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:textColor="@android:color/white"
+        android:text="@string/popup_doubleWildcards" />
+
     <Button
         android:id="@+id/popup_button_dismiss"
         android:layout_width="wrap_content"

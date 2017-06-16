@@ -22,15 +22,13 @@ public class AboutActivity extends AppCompatActivity {
     private LinearLayout contactLayout;
     private TextView privacyBlurb;
     private TextView legalBlurb;
+    private TextView thanksBlurb;
 
     private ImageView aboutExpander;
     private ImageView contactExpander;
     private ImageView privacyExpander;
     private ImageView legalExpander;
-
-    private ImageView iconEmail;
-    private ImageView iconTwitter;
-    private ImageView iconTumblr;
+    private ImageView thanksExpander;
 
     private Context context;
 
@@ -51,20 +49,23 @@ public class AboutActivity extends AppCompatActivity {
         TextView contactHeader = (TextView) findViewById(R.id.header_contact);
         TextView privacyHeader = (TextView) findViewById(R.id.header_privacy);
         TextView legalHeader = (TextView) findViewById(R.id.header_legal);
+        TextView thanksHeader = (TextView) findViewById(R.id.header_thanks);
 
         aboutBlurb = (TextView) findViewById(R.id.textView_about);
         contactLayout = (LinearLayout) findViewById(R.id.contact_icon_layout);
         privacyBlurb = (TextView) findViewById(R.id.textView_privacy);
         legalBlurb = (TextView) findViewById(R.id.textView_legal);
+        thanksBlurb = (TextView) findViewById(R.id.textView_thanks);
 
         aboutExpander = (ImageView) findViewById(R.id.about_expand_collapse);
         contactExpander = (ImageView) findViewById(R.id.contact_expand_collapse);
         privacyExpander = (ImageView) findViewById(R.id.privacy_expand_collapse);
         legalExpander = (ImageView) findViewById(R.id.legal_expand_collapse);
+        thanksExpander = (ImageView) findViewById(R.id.thanks_expand_collapse);
 
-        iconEmail = (ImageView) findViewById(R.id.email_icon);
-        iconTwitter = (ImageView) findViewById(R.id.twitter_icon);
-        iconTumblr = (ImageView) findViewById(R.id.tumblr_icon);
+        ImageView iconEmail = (ImageView) findViewById(R.id.email_icon);
+        ImageView iconTwitter = (ImageView) findViewById(R.id.twitter_icon);
+        ImageView iconTumblr = (ImageView) findViewById(R.id.tumblr_icon);
 
         aboutHeader.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,6 +119,20 @@ public class AboutActivity extends AppCompatActivity {
                 else {
                     legalBlurb.setVisibility(View.VISIBLE);
                     legalExpander.setImageResource(R.drawable.ic_keyboard_arrow_up_white_18dp);
+                }
+            }
+        });
+
+        thanksHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (thanksBlurb.getVisibility() == View.VISIBLE){
+                    thanksBlurb.setVisibility(View.GONE);
+                    thanksExpander.setImageResource(R.drawable.ic_keyboard_arrow_down_white_18dp);
+                }
+                else {
+                    thanksBlurb.setVisibility(View.VISIBLE);
+                    thanksExpander.setImageResource(R.drawable.ic_keyboard_arrow_up_white_18dp);
                 }
             }
         });

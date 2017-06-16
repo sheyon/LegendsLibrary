@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Legends Library</string>
+
+    <string-array name="categories_array">
+        <item>[Choisissez une catégorie:]</item>
+        <item>Solomon Island</item>
+        <item>Vallée du Dieu Solaire</item>
+        <item>Transylvanie</item>
+        <item>Tokyo</item>
+        <item>Monde</item>
+        <item>Bestiare</item>
+        <item>Évènements</item>
+        <item>Épisodes</item>
+    </string-array>
+
+    <string-array name="languages_array">
+        <item>English</item>
+        <item>Deutsch</item>
+        <item>Français</item>
+    </string-array>
+
+    <string-array name="drawer_items">
+        <item>@string/drawer_legends</item>
+        <item>@string/drawer_settings</item>
+        <item>@string/drawer_about</item>
+    </string-array>
+
+    <string name="drawer_legends">Legends Library</string>
+    <string name="drawer_settings">Paramètres</string>
+    <string name="drawer_about">À propos</string>
+
+    <string name="drawer_open">Ouvrir le menu de navigation</string>
+    <string name="drawer_close">Fermer le menu de navigation</string>
+
+    <string name="empty_nothing_here">Cette section est vide!</string>
+    <string name="empty_library_awaits">La bibliothèque attend&#8230;</string>
+    <string name="empty_retrieving">Chargement en cours&#8230;</string>
+
+    <string name="empty_error">Si vous voyez ceci, c’est qu’il y a eu une erreur! S’il vous plaît, signalez-en l’auteur pour qu’il puisse la corriger.</string>
+
+    <string name="title_categories">Catégorie</string>
+    <string name="title_alphabetical">Alphabétique</string>
+    <string name="title_favorites">Favoris</string>
+    <string name="title_search">Recherche</string>
+
+    <string name="search_hint">Chercher dans la bibliothèque</string>
+
+    <string name="header_about">À propos</string>
+    <string name="header_contact">Contact</string>
+    <string name="header_privacy">Politique de confidentialité</string>
+    <string name="header_disclaimer">Mentions légales</string>
+    <string name="header_thanks">Remerciements spéciaux</string>
+
+    <string name="settings_lang_header">Language</string>
+    <string name="settings_checkbox_diacritics">Ignorer les signes diacritiques (recommandé)</string>
+    <string name="settings_search_header">Recherche</string>
+    <string name="settings_checkbox_wildcardOn">Caractère générique (*) toujours activé</string>
+    <string name="settings_checkbox_doubleWildcard">Caractère générique double face</string>
+    <string name="settings_button_apply">Appliquer</string>
+
+    <string name="toast_write_db_fail">La base de données n’a pas ouvert. Vous devez peut-être libérer de l’espace disque.</string>
+    <string name="toast_no_quotes">S’il vous plaît, veuillez omettre les guillemets dans votre requête de recherche. </string>
+    <string name="toast_three_chars">Les requêtes doivent avoir une longueur d\'au moins 3 caractères.</string>
+    <string name="toast_no_articles">S’il vous plaît, supprimez les articles au début de votre requête.</string>
+    <string name="toast_no_email">Une erreur s\'est produite lors de la localisation d\'un programme de messagerie électronique.</string>
+    <string name="toast_faves_removed">Tous les favoris ont été supprimés.</string>
+    <string name="toast_already_empty">Cette liste est déjà vide.</string>
+    <string name="toast_lang_changes">Vos préférences ont été appliquées.</string>
+
+    <string name="fave_added">a été ajouté à vos favoris.</string>
+    <string name="fave_removed">a été retiré de vos favoris.</string>
+
+    <string name="dialog_confirm_text">Êtes-vous sûr de vouloir supprimer tous les favoris?</string>
+    <string name="dialog_yes">Oui</string>
+    <string name="dialog_cancel">Annuler</string>
+
+    <string name="popup_phrases_permitted">Les phrases sont autorisées.</string>
+    <string name="popup_no_case">Les requêtes ne sont pas sensibles à la casse.</string>
+    <string name="popup_wildcard">Vous pouvez ajouter * à la fin d\'un mot pour activer les résultats génériques. (Exemple: démon * renvoie "démons", "démoniaque", et cetera.</string>
+    <string name="popup_ligatures">Les ligatures (œ et ß) ne sont pas normalisées. Ne pas substituer oe ou sz lors de la recherche!</string>
+    <string name="popup_doubleWildcards">Si activé, un caractère générique double face renverra <b>*résultat</b>, ainsi que le <b>résultat*</b></string>
+    <string name="popup_close">Fermer</string>
+
+    <string name="about_aboutText">The Legends Library est une ressource pour les joueurs du MMORPG d\'horreur moderne <b>The Secret World</b> et <b>Secret World: Legends</b> de Funcom. Tous les compendiums dans le jeu (ou Lore, comme certains joueurs pourraient les connaître) sont compilés dans une base de données consultable pour la lecture ou la recherche. L\'auteur espère que vous apprécierez cette ressource, offerte entièrement gratuite et sans publicité, alors que vous regardez dans le monde des sociétés secrètes, de la magie et de l\'horreur.
+    \n\nMais ne regarde pas trop profondément, enfant du miel&#8230;</string>
+    <string name="about_privacyText">La bibliothèque Legends est une application hors ligne. Elle ne collecte aucune information sur vous, votre appareil ou vos habitudes. Elle ne communique à aucun serveur externe. Soyez assuré que l\'auteur n\'est pas un agent des Illuminati (ou toute autre société secrète) et n\'a aucun intérêt ou désir de recueillir ou de vendre des informations à votre sujet à des tiers, en particulier sans votre consentement.</string>
+    <string name="about_legalText">L’auteur détient les droits d’auteur de l’application et du logo de Legends Library. Ils ne peuvent être redistribués, modifiés ou vendus à des fins commerciales.
+    \n\n<b>The Secret World</b> et <b>Secret World: Legends</b> sont des marques déposées de Funcom Oslo AS. Sauf indication contraire, les informations présentées dans cette application sont les propriétés de Funcom.
+    \n\nL\'auteur n\'est pas affilié à Funcom, et cette application n\'est pas autorisée ou approuvée par la Société.</string>
+    <string name="about_contactText">Je peux être contacté par courrier électronique, Twitter et Tumblr. Tumblr est également le blog de développement où vous pouvez suivre la progression de cette application. Tous les commentaires, suggestions et rapports de bugs sont les bienvenus.
+    \n\nLe nom de mon personnage est <b>Markel</b>. Faites-moi signe de la main si vous me voyez dans le jeu!</string>
+    <string name="about_thanksText">La communauté Secret World est vraiment l\'une des plus serviable parmi les MMO. L\'auteur souhaite remercier les personnes suivantes pour leur aide dans la traduction de cette application:
+    \n\nKuro-Hebi (Français)</string>
+
+</resources>
