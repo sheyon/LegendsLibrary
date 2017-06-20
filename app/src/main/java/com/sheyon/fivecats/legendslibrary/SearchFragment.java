@@ -108,7 +108,12 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
                 }
                 //ARTICLES CAN RETURN FALSE SEARCH RESULTS
                 if (searchString.startsWith("les ") || searchString.startsWith("la ") || searchString.startsWith("le ") || searchString.startsWith("l' ") ||
-                        searchString.startsWith("des ") || searchString.startsWith("de ") || searchString.startsWith("du ") || searchString.startsWith("d' ") ) {
+                        searchString.startsWith("des ") || searchString.startsWith("de ") || searchString.startsWith("du ") || searchString.startsWith("d' ") ||
+                        searchString.startsWith("the ") || searchString.startsWith("a ") || searchString.startsWith("an ") ||
+                        searchString.startsWith("der ") || searchString.startsWith("die ") || searchString.startsWith("das ") ||
+                        searchString.startsWith("dem ") || searchString.startsWith("den ") ||
+                        searchString.startsWith("ein ") || searchString.startsWith("eine ") || searchString.startsWith("einen ") ||
+                        searchString.startsWith("einem ") || searchString.startsWith("einer ") || searchString.startsWith("eines ") ) {
                     Toast.makeText(getContext(), R.string.toast_no_articles, Toast.LENGTH_SHORT).show();
                 }
                 else  {
