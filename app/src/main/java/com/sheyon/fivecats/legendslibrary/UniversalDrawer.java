@@ -40,14 +40,21 @@ public class UniversalDrawer extends AppCompatActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mDrawerItems[position].equals("Legends Library")) {
+                if (mDrawerItems[position].equals(mActivity.getString(R.string.drawer_legends))) {
                     Intent intent = new Intent(mActivity, MainActivity.class);
                     if (mActivity.getClass() != MainActivity.class) {
                         mActivity.startActivity(intent);
                         mDrawerLayout.closeDrawer(mDrawerList);
                     }
                 }
-                if (mDrawerItems[position].equals("About")) {
+                if (mDrawerItems[position].equals(mActivity.getString(R.string.drawer_settings))) {
+                    Intent intent = new Intent(mActivity, SettingsActivity.class);
+                    if (mActivity.getClass() != SettingsActivity.class) {
+                        mActivity.startActivity(intent);
+                        mDrawerLayout.closeDrawer(mDrawerList);
+                    }
+                }
+                if (mDrawerItems[position].equals(mActivity.getString(R.string.drawer_about))) {
                     Intent intent = new Intent(mActivity, AboutActivity.class);
                     if (mActivity.getClass() != AboutActivity.class) {
                         mActivity.startActivity(intent);

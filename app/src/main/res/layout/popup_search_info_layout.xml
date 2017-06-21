@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:text="Phrases are permitted."
+        android:text="@string/popup_phrases_permitted"
         android:textColor="@android:color/white" />
 
     <TextView
@@ -19,27 +19,34 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:textColor="@android:color/white"
-        android:text="Queries are not case-sensitive." />
+        android:text="@string/popup_no_case" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:textColor="@android:color/white"
-        android:text="You may add * to the end of a word to activate wildcard results. (Example: demon* returns 'demons', 'demonic', ect.)" />
+        android:text="@string/popup_wildcard" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:textColor="@android:color/white"
-        android:text="Due to technical limitations, you cannot fave entries directly from the Search tab. You can still mark entries from its Lore page however." />
+        android:text="@string/popup_ligatures" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:textColor="@android:color/white"
+        android:text="@string/popup_doubleWildcards" />
 
     <Button
         android:id="@+id/popup_button_dismiss"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Close"/>
+        android:text="@string/popup_close"/>
 
 </LinearLayout>

@@ -5,9 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +27,6 @@ public class CategoriesFragment extends Fragment {
     private Cursor cursor;
 
     private int spinnerCatNumber;
-    private String categoryName;
     private String loreTitle;
 
     @Override
@@ -66,48 +63,36 @@ public class CategoriesFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                String selection = (String) parent.getItemAtPosition(position);
-                if (!TextUtils.isEmpty(selection)) {
-                    if (selection.equals("[Choose a category:]")) {
-                        spinnerCatNumber = LoreLibrary.CAT_0;
-                        closeCursor();
-                        return;
-                    }
-                    if (selection.equals("Solomon Island")) {
-                        categoryName = "Solomon Island";
-                        spinnerCatNumber = LoreLibrary.CAT_1_SOL;
-                    }
-                    if (selection.equals("Valley of the Sun God")) {
-                        categoryName = "Valley of the Sun God";
-                        spinnerCatNumber = LoreLibrary.CAT_2_EGY;
-                    }
-                    if (selection.equals("Transylvania")) {
-                        categoryName = "Transylvania";
-                        spinnerCatNumber = LoreLibrary.CAT_3_TRN;
-                    }
-                    if (selection.equals("Tokyo")) {
-                        categoryName = "Tokyo";
-                        spinnerCatNumber = LoreLibrary.CAT_4_TOK;
-                    }
-                    if (selection.equals("Global")) {
-                        categoryName = "Global";
-                        spinnerCatNumber = LoreLibrary.CAT_5_GBL;
-                    }
-                    if (selection.equals("The Bestiary")) {
-                        categoryName = "The Bestiary";
-                        spinnerCatNumber = LoreLibrary.CAT_6_BES;
-                    }
-                    if (selection.equals("Events")) {
-                        categoryName = "Events";
-                        spinnerCatNumber = LoreLibrary.CAT_7_EVN;
-                    }
-                    if (selection.equals("Issues")) {
-                        categoryName = "Issues";
-                        spinnerCatNumber = LoreLibrary.CAT_8_ISU;
-                    }
-                displayCategoryScreen();
+                if (position == 0) {
+                    spinnerCatNumber = LoreLibrary.CAT_0;
+                    closeCursor();
+                    return;
                 }
+                if (position == 1) {
+                    spinnerCatNumber = LoreLibrary.CAT_1_SOL;
+                }
+                if (position == 2) {
+                    spinnerCatNumber = LoreLibrary.CAT_2_EGY;
+                }
+                if (position == 3) {
+                    spinnerCatNumber = LoreLibrary.CAT_3_TRN;
+                }
+                if (position == 4) {
+                    spinnerCatNumber = LoreLibrary.CAT_4_TOK;
+                }
+                if (position == 5) {
+                    spinnerCatNumber = LoreLibrary.CAT_5_GBL;
+                }
+                if (position == 6) {
+                    spinnerCatNumber = LoreLibrary.CAT_6_BES;
+                }
+                if (position == 7) {
+                    spinnerCatNumber = LoreLibrary.CAT_7_EVN;
+                }
+                if (position == 8) {
+                    spinnerCatNumber = LoreLibrary.CAT_8_ISU;
+                }
+                displayCategoryScreen();
             }
 
             @Override
@@ -157,7 +142,6 @@ public class CategoriesFragment extends Fragment {
     private void startLoreActivity() {
         Intent intent = new Intent(getContext(), LoreActivity.class);
         intent.putExtra("catNumber", spinnerCatNumber);
-        intent.putExtra("catName", categoryName);
         intent.putExtra("loreTitle", loreTitle);
 
         closeCursor();

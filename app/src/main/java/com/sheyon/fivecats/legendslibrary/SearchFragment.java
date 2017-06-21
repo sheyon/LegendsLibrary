@@ -22,6 +22,11 @@ import android.widget.Toast;
 
 import com.sbrukhanda.fragmentviewpager.FragmentVisibilityListener;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
+import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
+
+import java.text.Normalizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
@@ -32,6 +37,10 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     private SearchView searchView;
     private ListView listView;
     private LegendsListAdapter adapter;
+
+    private int prefsLang;
+    private boolean prefsNormalization;
+    private boolean prefsWildcardOn;
 
     private Cursor cursor;
     private Cursor refreshedCursor;
@@ -69,13 +78,15 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
         return view;
     }
 
-    private void setupSearchBar(View view)
-    {
-        // Get the SearchView and set the searchable configuration
-        //  SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+    private void getPrefs(){
+        LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(getContext());
+        prefsLang = legendsPrefs.getLangPref();
+        prefsNormalization = legendsPrefs.getNormalizationPref();
+        prefsWildcardOn = legendsPrefs.getWildcardAlwaysOnPref();
+    }
+
+    private void setupSearchBar(View view) {
         searchView = (SearchView) view.findViewById(R.id.search_view);
-        // Assumes current activity is the searchable activity
-        //  searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -87,13 +98,23 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
 
                 //QUOTATION MARKS CRASH THE SEARCH
                 if (searchString.contains("\"")) {
-                    Toast.makeText(getContext(), "Do not include quotation marks in your queries.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.toast_no_quotes, Toast.LENGTH_SHORT).show();
                     return false;
                 }
                 //PEOPLE CAN STILL SEARCH FOR 'UTA' OR 'BEE'; ANYTHING LESS WILL RETURN NOTHING USEFUL
                 if (searchString.length() < 3) {
-                    Toast.makeText(getContext(), "Queries must have a length of at least 3 characters.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.toast_three_chars, Toast.LENGTH_SHORT).show();
                     return false;
+                }
+                //ARTICLES CAN RETURN FALSE SEARCH RESULTS
+                if (searchString.startsWith("les ") || searchString.startsWith("la ") || searchString.startsWith("le ") || searchString.startsWith("l' ") ||
+                        searchString.startsWith("des ") || searchString.startsWith("de ") || searchString.startsWith("du ") || searchString.startsWith("d' ") ||
+                        searchString.startsWith("the ") || searchString.startsWith("a ") || searchString.startsWith("an ") ||
+                        searchString.startsWith("der ") || searchString.startsWith("die ") || searchString.startsWith("das ") ||
+                        searchString.startsWith("dem ") || searchString.startsWith("den ") ||
+                        searchString.startsWith("ein ") || searchString.startsWith("eine ") || searchString.startsWith("einen ") ||
+                        searchString.startsWith("einem ") || searchString.startsWith("einer ") || searchString.startsWith("eines ") ) {
+                    Toast.makeText(getContext(), R.string.toast_no_articles, Toast.LENGTH_SHORT).show();
                 }
                 else  {
                     runQuery();
@@ -121,17 +142,69 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     private void runQuery() {
         //CLOSE ANY OF THE PREVIOUS QUERIES IF THEY EXIST
         closeCursor();
+        getPrefs();
 
-        modString = "'"+searchString+"'";
-        String [] selectionArgs = { modString, modString, modString };
+        //PREF OVERRIDE CHECK
+        if (prefsWildcardOn) {
+            searchString = searchString + "*";
+        }
 
-        cursor = legendsDB.rawQuery(Queries.QUERY_FTS, selectionArgs);
+        //FOR DE and FR (NORMALIZED); ENGLISH DOES NOT SUPPORT A NORMALIZATION QUERY
+        if (prefsNormalization && prefsLang != 0) {
+            searchString = normalizeSearchString(searchString);
+
+            modString = "'"+searchString+"'";
+            String [] selectionArgs = { modString, modString, modString };
+
+            cursor = legendsDB.rawQuery(Queries.QUERY_FTS_NORMALIZED, selectionArgs);
+        }
+        else {
+            //FOR EN, DE, FR (UN-NORMALIZED); CHECK FOR ROMANIAN WORDS FIRST
+            searchString = checkForRomanianWords(searchString);
+
+            modString = "'"+searchString+"'";
+            String [] selectionArgs = { modString, modString, modString };
+
+            cursor = legendsDB.rawQuery(Queries.QUERY_FTS, selectionArgs);
+        }
+
         if (cursor != null) {
             cursor.moveToFirst();
         }
 
         adapter = new LegendsListAdapter(getContext(), cursor, searchString, this);
         listView.setAdapter(adapter);
+    }
+
+    String checkForRomanianWords(String search) {
+        Pattern patternDrac = Pattern.compile("dr.cule.ti");
+        Pattern patternHarb = Pattern.compile("h.rb.bure.ti");
+        Pattern patternBacas = Pattern.compile("baca.");
+        Pattern patternMosul = Pattern.compile("mo.ul");
+        Pattern patternIaz = Pattern.compile("iazm.*");
+        Pattern patternMoarta = Pattern.compile("moart.");
+
+        Matcher matchDrac = patternDrac.matcher(search);
+        Matcher matchHarb = patternHarb.matcher(search);
+        Matcher matchBacas = patternBacas.matcher(search);
+        Matcher matchMosul = patternMosul.matcher(search);
+        Matcher matchIaz = patternIaz.matcher(search);
+        Matcher matchMoarta = patternMoarta.matcher(search);
+
+        if (matchDrac.matches()){ search = "drăculești"; }
+        if (matchHarb.matches()){ search = "harbaburești"; }
+        if (matchBacas.matches()){ search = "bacaș"; }
+        if (matchMosul.matches()){ search = "moșul"; }
+        if (matchIaz.matches()){ search = "iazmăciune"; }
+        if (matchMoarta.matches()){ search = "moartă"; }
+        return search;
+    }
+
+    //THIS FUNCTION EXISTS IN CASE A USER PUTS DIACRITICS INTO A DIACRITIC-INSENSITIVE QUERY
+    String normalizeSearchString(String query){
+        String normalizedQuery = Normalizer.normalize(query, Normalizer.Form.NFD);
+        normalizedQuery = normalizedQuery.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        return normalizedQuery;
     }
 
     public void refreshCursor() {
@@ -146,8 +219,17 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
         }
 
         closeCursor();
+        getPrefs();
         String[] selectionArgs = { modString, modString, modString };
-        refreshedCursor = legendsDB.rawQuery(Queries.QUERY_FTS, selectionArgs);
+
+        //ENGLISH DOES NOT SUPPORT A NORMALIZATION QUERY
+        if (prefsNormalization && prefsLang != 0) {
+            refreshedCursor = legendsDB.rawQuery(Queries.QUERY_FTS_NORMALIZED, selectionArgs);
+        }
+        else {
+            refreshedCursor = legendsDB.rawQuery(Queries.QUERY_FTS, selectionArgs);
+        }
+
         adapter.swapCursor(refreshedCursor);
     }
 

@@ -13,24 +13,83 @@
         <item>Issues</item>
     </string-array>
 
-    <string-array name="drawer_items">
-        <item>Legends Library</item>
-        <item>About</item>
+    <string-array name="languages_array">
+        <item>English</item>
+        <item>Deutsch</item>
+        <item>Français</item>
     </string-array>
+
+    <string-array name="drawer_items">
+        <item>@string/drawer_legends</item>
+        <item>@string/drawer_settings</item>
+        <item>@string/drawer_about</item>
+    </string-array>
+
+    <string name="drawer_legends">Legends Library</string>
+    <string name="drawer_settings">Settings</string>
+    <string name="drawer_about">About</string>
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="empty_nothing_here">There\'s nothing here!</string>
+    <string name="empty_library_awaits">The library awaits&#8230;</string>
+    <string name="empty_retrieving">Retrieving&#8230;</string>
+
+    <string name="empty_error">If you see this, there was an error! Please report it to the author so that it can be investigated!</string>
 
     <string name="title_categories">Categories</string>
     <string name="title_alphabetical">Alphabetical</string>
     <string name="title_favorites">Favorites</string>
     <string name="title_search">Search</string>
 
-    <string name="about_aboutText">The Legends Library is a resource for players of the modern horror MMORPG the <b>Secret World</b> and <b>Secret World: Legends</b> by Funcom. All in-game Legends (or Lore, as some players might know them) are complied into a searchable database for reading or research. The author hopes that you enjoy this resource, made completely free and ad-free to you, as you peer into the intricate world of secret societies, magic, and twisting horrors.
+    <string name="search_hint">Search the Library</string>
+
+    <string name="header_about">About</string>
+    <string name="header_contact">Contact</string>
+    <string name="header_privacy">Privacy Policy</string>
+    <string name="header_disclaimer">Disclaimer</string>
+    <string name="header_thanks">Special Thanks</string>
+
+    <string name="settings_lang_header">Language</string>
+    <string name="settings_checkbox_diacritics">Ignore diacritics (recommended)</string>
+    <string name="settings_search_header">Search</string>
+    <string name="settings_checkbox_wildcardOn">Wildcards ( * ) always on</string>
+    <string name="settings_checkbox_doubleWildcard">Use double-sided wildcards</string>
+    <string name="settings_button_apply">Apply</string>
+
+    <string name="toast_write_db_fail">Database failed to open. You may need to clear some disk space.</string>
+    <string name="toast_no_quotes">Please omit quotation marks from your queries.</string>
+    <string name="toast_three_chars">Queries must have a length of at least 3 characters.</string>
+    <string name="toast_no_articles">Please omit articles from the beginning of your query.</string>
+    <string name="toast_no_email">There was an error in locating an email program.</string>
+    <string name="toast_faves_removed">All favorites removed.</string>
+    <string name="toast_already_empty">This list is already empty.</string>
+    <string name="toast_lang_changes">Changes applied.</string>
+
+    <string name="fave_added">added to Favorites.</string>
+    <string name="fave_removed">removed from Favorites.</string>
+
+    <string name="dialog_confirm_text">Are you sure you want to remove all favorites?</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_cancel">Cancel</string>
+
+    <string name="popup_phrases_permitted">Phrases are permitted.</string>
+    <string name="popup_no_case">Queries are not case-sensitive.</string>
+    <string name="popup_wildcard">You may add * to the end of a word to activate wildcard results. (Example: demon* returns \"demons\", \"demonic\", etc.</string>
+    <string name="popup_ligatures">Ligatures (œ and ß) are not normalized! Do not decompose into oe or sz when searching!</string>
+    <string name="popup_doubleWildcards">If enabled, a double-sided wildcard will return <b>*result</b>, as well as <b>result*</b></string>
+    <string name="popup_close">Close</string>
+
+    <string name="about_aboutText">The Legends Library is a resource for players of the modern horror MMORPG the <b>Secret World</b> and <b>Secret World: Legends</b> by Funcom. All in-game Legends (or Lore, as some players might know them) are compiled into a searchable database for reading or research. The author hopes that you enjoy this resource, made completely free and ad-free to you, as you peer into the world of secret societies, magic, and twisting horrors.
     \n\nBut don\'t look too deeply, sweetling&#8230;</string>
-    <string name="about_privacyText">The Legends Library is an off-line app. It collects no information about you, your device, or your habits. It does not communicate to any outside servers. Everything is kept local. Rest assured that the author is not an agent of the Illuminati (or any other secret society) and has no interest or desire to collect or sell any information about you to third-parties, especially without your consent.</string>
+    <string name="about_privacyText">The Legends Library is an off-line app. It collects no information about you, your device, or your habits. It does not communicate to any outside servers. Rest assured that the author is not an agent of the Illuminati (or any other secret society) and has no interest or desire to collect or sell any information about you to third-parties, especially without your consent.</string>
     <string name="about_legalText">The Legends Library application and logo are the author\'s own copyright © 2017. They may not be redistributed or altered or sold for commercial use.
-    \n\n<b>The Secret World</b> and <b>Secret World: Legends</b> are registered trademarks of Funcom Oslo AS. Unless otherwise indicated, the information presented within this app are properties of Funcom and used under the United States doctrine of Fair Use.
+    \n\n<b>The Secret World</b> and <b>Secret World: Legends</b> are registered trademarks of Funcom Oslo AS. Unless otherwise indicated, the information presented within this app are properties of Funcom.
     \n\nThe author is unaffiliated with Funcom, and this app is not authorized or endorsed by the Company.</string>
+    <string name="about_contactText">I am reachable by email, Twitter, and Tumblr. Tumblr is also the development blog where you may follow the progress of this app. All feedback, suggestions, and bug reports are welcome.
+    \n\nMy character\'s name is <b>Markel</b>. Give me a wave if you happen to see me in the game!</string>
+    <string name="about_thanksText">The Secret World community is truly one of the most helpful among MMOs. The author would like to thank the following people for their help in translating this app:
+    \n\nKuro-Hebi (Français)</string>
 
 </resources>

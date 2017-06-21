@@ -14,7 +14,6 @@
         android:id="@+id/empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
         android:gravity="center_vertical">
 
         <ImageView
@@ -33,7 +32,7 @@
             android:layout_centerHorizontal="true"
             android:fontFamily="sans-serif-medium"
             android:paddingTop="16dp"
-            android:text="There's nothing here!"
+            android:text="@string/empty_nothing_here"
             android:textAppearance="?android:textAppearanceMedium" />
 
         <TextView
@@ -44,7 +43,7 @@
             android:layout_centerHorizontal="true"
             android:fontFamily="sans-serif"
             android:paddingTop="8dp"
-            android:text="The library awaits..."
+            android:text="@string/empty_library_awaits"
             android:textAppearance="?android:textAppearanceSmall"
             android:textColor="#A2AAB0" />
 
@@ -53,7 +52,6 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
         android:gravity="center_vertical">
 
         <android.support.v4.widget.ContentLoadingProgressBar
@@ -71,7 +69,7 @@
             android:layout_centerHorizontal="true"
             android:fontFamily="sans-serif-medium"
             android:paddingTop="16dp"
-            android:text="Retrieving..."
+            android:text="@string/empty_retrieving"
             android:textAppearance="?android:textAppearanceMedium" />
 
     </RelativeLayout>

@@ -112,7 +112,7 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
         check.close();
 
         if (i == 0) {
-            Toast.makeText(getContext(), "This list is already empty.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.toast_already_empty, Toast.LENGTH_SHORT).show();
         }
         else {
             confirmRemoveAll();
@@ -121,15 +121,15 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
 
     private void confirmRemoveAll() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage("Are you sure you want to remove all favorites?");
+        builder.setMessage(R.string.dialog_confirm_text);
 
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 removeAllFavorites();
             }
         });
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 if (dialog != null) {
                     dialog.dismiss();
@@ -147,7 +147,7 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
         String [] whereArgs = { "1" };
         legendsDB.update(LoreLibrary.LORE_TABLE_NAME, contentValues, LoreLibrary.COLUMN_FAVED + " = ?", whereArgs);
 
-        Toast.makeText(getContext(), "All favorites removed.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.toast_faves_removed, Toast.LENGTH_SHORT).show();
         refreshCursor();
     }
 
