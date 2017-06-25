@@ -3,7 +3,6 @@ package com.sheyon.fivecats.legendslibrary;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -13,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -28,6 +28,7 @@ import java.text.Normalizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
@@ -36,6 +37,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     private LinearLayout searchLayout;
     private SearchView searchView;
     private ListView listView;
+    private View loadingView;
     private LegendsListAdapter adapter;
 
     private int prefsLang;
@@ -132,6 +134,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     private void setupListView(View view) {
         searchLayout = (LinearLayout) view.findViewById(R.id.search_layout);
         listView = (ListView) view.findViewById(R.id.search_list_view);
+        loadingView = view.findViewById(R.id.search_loading_view);
 
         LinearLayout infoClickable = (LinearLayout) view.findViewById(R.id.search_info_clickable);
         ViewHolder holder = new ViewHolder();
@@ -264,7 +267,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
 
     private void clearSearch() {
         //EMPTY THE SEARCH FIELD
-        searchView.setQuery("", false);
+        searchView.setQuery(null, false);
 
         //NULL CATCH; IF THERE IS A NULL, DO NOTHING
         if (cursor == null && refreshedCursor == null){
@@ -277,23 +280,31 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
         }
     }
 
+//    GETTING LOG SPAM ON PHYSICAL DEVICE ABOUT EXPIRED INPUT-CONNECTION; NOT SURE HOW TO FIX; OTHERWISE HARMLESS
+//    private void restartInput() {
+//        if (inputMethodManager != null) {
+//            inputMethodManager.restartInput(searchLayout);
+//        }
+//    }
+
+    private void hideKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
+    }
+
     @Override
     public void onFragmentInvisible() {
         searchLayout.setVisibility(View.GONE);
+        loadingView.setAlpha(1f);
+        hideKeyboard();
     }
 
     @Override
     public void onFragmentVisible() {
         refreshCursor();
 
-        // ACTION TO RUN AFTER 1/10TH OF A SECOND
-        // THIS IS NECESSARY TO ENSURE A SMOOTH TRANSITION WHEN FAVING A LORE FROM ANOTHER TAB AND THEN NAVIGATING BACK
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                searchLayout.setVisibility(View.VISIBLE);
-            }
-        }, 100);
+        Crossfader crossfader = new Crossfader();
+        crossfader.crossfadeView(searchLayout, loadingView);
     }
 
     @Override
