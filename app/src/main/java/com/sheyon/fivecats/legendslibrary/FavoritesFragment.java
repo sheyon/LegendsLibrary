@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -30,6 +29,7 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
 
     private ListView listView;
     private View emptyView;
+    private View loadingView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,22 +52,20 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
         //THIS FRAGMENT REUSES THE ALPHABETICAL LAYOUT; THIS IS FINE
         View view = inflater.inflate(R.layout.fragment_alphabetical, container, false);
 
-        cursor = legendsDB.rawQuery(Queries.GET_ALL_FAVES, null);
-        cursor.moveToFirst();
-        adapter = new LegendsListAdapter(getContext(), cursor, this);
-
-        setupListView(view);
-
-        return view;
-}
-
-    private void setupListView(View view) {
-        //THIS FRAGMENT REUSES THE ALPHABETICAL LAYOUT; THIS IS FINE
         listView = (ListView) view.findViewById(R.id.alphabetical_list_view);
         emptyView = view.findViewById(R.id.empty_view);
+        loadingView = view.findViewById(R.id.loading_view);
+
+        cursor = legendsDB.rawQuery(Queries.GET_ALL_FAVES, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            adapter = new LegendsListAdapter(getContext(), cursor, this);
+        }
 
         listView.setAdapter(adapter);
         listView.setEmptyView(emptyView);
+
+        return view;
     }
 
     public void refreshCursor() {
@@ -155,21 +153,19 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
     public void onFragmentInvisible() {
         listView.setVisibility(View.GONE);
         emptyView.setVisibility(View.GONE);
+        loadingView.setAlpha(1f);
     }
 
     @Override
     public void onFragmentVisible() {
         refreshCursor();
 
-        // ACTION TO RUN AFTER 1/10TH OF A SECOND
-        // THIS IS NECESSARY TO ENSURE A SMOOTH TRANSITION WHEN FAVING A LORE FROM ANOTHER TAB AND THEN NAVIGATING BACK
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                listView.setVisibility(View.VISIBLE);
-                emptyView.setVisibility(View.VISIBLE);
-                listView.setEmptyView(emptyView);
-            }
-        }, 100);
+        Crossfader crossfader = new Crossfader();
+        if (emptyView.isShown()) {
+            crossfader.crossfadeView(emptyView, loadingView);
+        }
+        else {
+            crossfader.crossfadeView(listView, loadingView);
+        }
     }
 }

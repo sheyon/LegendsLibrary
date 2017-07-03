@@ -89,6 +89,7 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
         String categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_NAME));
         int faved = cursor.getInt(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_FAVED));
 
+        //SOMETHING ABOUT THIS BLOCK IS CAUSING LOG SPAM ON A PHYSICAL DEVICE; OTHERWISE HARMLESS
         if (prefixText != null) {
             loreTitle_TV.setText("" + prefixText + titleText);
         }
