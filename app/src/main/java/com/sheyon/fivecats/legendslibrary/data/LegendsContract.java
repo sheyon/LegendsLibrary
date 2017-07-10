@@ -13,6 +13,7 @@ public final class LegendsContract
         public static final String LORE_TABLE_NAME = "lore";
         public static final String CATEGORY_TABLE_NAME = "category";
         public static final String SUBCAT_TABLE_NAME = "subcat";
+        public static final String IMAGE_TABLE_NAME = "image";
 
         //THE STRING NAMES ARE CASE-SENSITIVE. DOUBLE-CHECK WITH THE SQLITE .DB FILE!
         public static final String _ID = "_id";
@@ -30,6 +31,7 @@ public final class LegendsContract
         public static final String COLUMN_BUZZING = "legend";
         public static final String COLUMN_BLACK_SIGNAL = "blackLore";
         public static final String COLUMN_FAVED = "faved";
+        public static final String COLUMN_IMAGE = "resourceLink";
 
         //VALUES FOR SPINNER SELECTION
         public static final int CAT_0 = 0;
@@ -181,5 +183,18 @@ public final class LegendsContract
                 "UNION\n" +
                 "SELECT * FROM LoreSearch\n" +
                 "WHERE ASCII_blacklore MATCH ?";
+
+        //FOR REPLACING THE DEFAULT IMAGE ON THE LORE PAGE
+        public static final String GET_IMAGE = "select * from "+ LoreLibrary.IMAGE_TABLE_NAME +
+                " where title = ?";
+
+        //NULL CATCH FOR LORE ACTIVITY (ON CREATE)
+        public static final String CAT_ID_CATCH = "select lore._id AS _id, lore.categoryId AS categoryId, lore.title\n" +
+                "from lore\n" +
+                "where title LIKE ?\n" +
+                "UNION\n" +
+                "select lore._id AS _id, lore.categoryId, lore.title\n" +
+                "from lore\n" +
+                "where prefix || title LIKE ?";
     }
 }
