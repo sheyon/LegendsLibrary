@@ -1,5 +1,6 @@
 package com.sheyon.fivecats.legendslibrary;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -57,6 +58,17 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         int categoryNumber = getIntent().getIntExtra("catNumber", 0);
         titleString = getIntent().getStringExtra("loreTitle");
         searchString = getIntent().getStringExtra("searchString");
+
+        //NULL CATCH; IT SHOULD NEVER HAPPEN, BUT IT DO
+        if (categoryNumber == 0) {
+            String [] catchArgs = { titleString, titleString };
+            Cursor catchCursor = legendsDB.rawQuery(Queries.CAT_ID_CATCH, catchArgs);
+            if (catchCursor != null) {
+                catchCursor.moveToFirst();
+                categoryNumber = catchCursor.getInt(catchCursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_ID));
+                catchCursor.close();
+            }
+        }
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         String [] union = { Queries.SINGLE_LORE_UNION_1, Queries.SINGLE_LORE_UNION_2 };
@@ -123,7 +135,45 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
             blackSignalImageview.setVisibility(View.VISIBLE);
         }
         cursor.close();
+
+        setFlavorImage(titleString);
         startupComplete = true;
+    }
+
+    private void setFlavorImage(String titleString) {
+        ImageView flavorImageView = (ImageView) findViewById(R.id.lore_flavor_image);
+        String[] selectionArgs = { titleString };
+        Cursor flavorImageCursor = legendsDB.rawQuery(Queries.GET_IMAGE, selectionArgs);
+
+        if (flavorImageCursor != null)
+        {
+            flavorImageCursor.moveToFirst();
+            String imageResource = flavorImageCursor.getString(flavorImageCursor.getColumnIndex(LoreLibrary.COLUMN_IMAGE));
+
+            if (imageResource != null){
+                flavorImageView.setImageResource(getImageId(this, imageResource));
+            }
+
+            flavorImageCursor.close();
+        }
+
+        showFlavorImage(flavorImageView);
+    }
+
+    static int getImageId(Context context, String imageResource) {
+        return context.getResources().getIdentifier("drawable/" + imageResource, null, context.getPackageName());
+    }
+
+    private void showFlavorImage(ImageView imageView) {
+        LegendsPreferences legendsPreferences = LegendsPreferences.getInstance(this);
+
+        if (!legendsPreferences.doesContain(LegendsPreferences.PREF_SHOW_IMAGES)) {
+            legendsPreferences.setImagePref(true);
+        }
+
+        if (!legendsPreferences.getImagePref()) {
+            imageView.setVisibility(View.GONE);
+        }
     }
 
     private CharSequence highlight(String originalText, TextView textView) {

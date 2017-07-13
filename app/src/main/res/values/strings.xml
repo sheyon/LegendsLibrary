@@ -56,6 +56,8 @@
     <string name="settings_search_header">Search</string>
     <string name="settings_checkbox_wildcardOn">Wildcards ( * ) always on</string>
     <string name="settings_checkbox_doubleWildcard">Use double-sided wildcards</string>
+    <string name="settings_misc_header">Other</string>
+    <string name="settings_checkbox_showImages">Display images</string>
     <string name="settings_button_apply">Apply</string>
 
     <string name="toast_write_db_fail">Database failed to open. You may need to clear some disk space.</string>

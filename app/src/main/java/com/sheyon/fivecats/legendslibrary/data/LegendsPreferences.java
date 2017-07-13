@@ -12,6 +12,7 @@ public class LegendsPreferences {
     public static final String PREF_NORMALIZATION = "NORMALIZATION_PREFS";
     public static final String PREF_WILDCARD_ON = "WILDCARD_ON_PREFS";
     public static final String PREF_DOUBLE_WILDCARD = "DOUBLE_WILDCARD_PREFS";
+    public static final String PREF_SHOW_IMAGES = "SHOW_IMAGES_PREF";
 
     private SharedPreferences mPref;
     private SharedPreferences.Editor mEditor;
@@ -26,6 +27,12 @@ public class LegendsPreferences {
 
     private LegendsPreferences (Context context) {
         mPref = context.getSharedPreferences(PREFS_FILE_KEY, Context.MODE_PRIVATE);
+    }
+
+    public void setImagePref(boolean val) {
+        doEdit();
+        mEditor.putBoolean(PREF_SHOW_IMAGES, val);
+        doCommit();
     }
 
     public void setLangPref(int val) {
@@ -55,6 +62,10 @@ public class LegendsPreferences {
     public boolean doesContain(String prefKey){
         doEdit();
         return mPref.contains(prefKey);
+    }
+
+    public boolean getImagePref() {
+        return mPref.getBoolean(PREF_SHOW_IMAGES, true);
     }
 
     public int getLangPref() {

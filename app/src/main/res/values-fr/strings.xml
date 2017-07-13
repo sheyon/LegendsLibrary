@@ -57,6 +57,8 @@
     <string name="settings_search_header">Recherche</string>
     <string name="settings_checkbox_wildcardOn">Caractère générique (*) toujours activé</string>
     <string name="settings_checkbox_doubleWildcard">Caractère générique double face</string>
+    <string name="settings_misc_header">Autres paramètres</string>
+    <string name="settings_checkbox_showImages">Afficher les images</string>
     <string name="settings_button_apply">Appliquer</string>
 
     <string name="toast_write_db_fail">La base de données n’a pas ouvert. Vous devez peut-être libérer de l’espace disque.</string>

@@ -28,9 +28,9 @@ public class SettingsActivity extends AppCompatActivity {
     private CheckBox langCheckbox;
     private CheckBox wildcardOn;
     private CheckBox doubleWildcard;
+    private CheckBox displayImages;
     private int langSelection;
     private LegendsPreferences legendsPrefs;
-    private boolean normalizationSelection = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
         setupLangCheckbox();
         setupApplyButton();
         setupSearchCheckboxes();
+        setupMiscCheckboxes();
     }
 
     private void setupLangSpinner() {
@@ -94,6 +95,11 @@ public class SettingsActivity extends AppCompatActivity {
         doubleWildcard.setChecked(legendsPrefs.getDoubleWildcardPref());
     }
 
+    private void setupMiscCheckboxes() {
+        displayImages = (CheckBox) findViewById(R.id.settings_display_images);
+        displayImages.setChecked(legendsPrefs.getImagePref());
+    }
+
     private void setupApplyButton() {
         Button settingsApplyButton = (Button) findViewById(R.id.settings_lang_button);
 
@@ -111,6 +117,7 @@ public class SettingsActivity extends AppCompatActivity {
                 legendsPrefs.setNormalizationPref(langCheckbox.isChecked());
                 legendsPrefs.setWildcardAlwaysOnPref(wildcardOn.isChecked());
                 legendsPrefs.setDoubleWildcardPref(doubleWildcard.isChecked());
+                legendsPrefs.setImagePref(displayImages.isChecked());
                 restartDatabase();
             }
         });

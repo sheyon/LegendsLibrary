@@ -76,6 +76,20 @@
                     android:text="@string/settings_checkbox_doubleWildcard"
                     android:layout_marginBottom="16dp"/>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/AboutHeaderStyles"
+                    android:text="@string/settings_misc_header"
+                    android:layout_marginBottom="8dp"/>
+
+                <CheckBox
+                    android:id="@+id/settings_display_images"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_checkbox_showImages"
+                    android:layout_marginBottom="16dp"/>
+
                 <Button
                     android:id="@+id/settings_lang_button"
                     android:layout_width="wrap_content"
