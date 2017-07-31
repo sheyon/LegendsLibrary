@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
@@ -55,9 +56,27 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        TextView titleTextView = (TextView) findViewById(R.id.loreActivity_title_text_view);
+        TextView categoryTextView = (TextView) findViewById(R.id.loreActivity_category_text_view);
+        TextView buzzingTextView = (TextView) findViewById(R.id.loreActivity_buzzing_text_view);
+        favedImageView = (ImageView) findViewById(R.id.loreActivity_fave_imageView);
+
+        LinearLayout blackSignalLayout = (LinearLayout) findViewById(R.id.loreActivity_BlackSignalLayout);
+        TextView blackSignalTextView = (TextView) findViewById(R.id.loreActivity_signal_text_view);
+
+        LinearLayout faveClickable = (LinearLayout) findViewById(R.id.loreActivity_fave_clickable);
+        ViewHolder holder = new ViewHolder();
+        holder.mImageLayout = faveClickable;
+        holder.mImageLayout.setOnClickListener(this);
+
         int categoryNumber = getIntent().getIntExtra("catNumber", 0);
         titleString = getIntent().getStringExtra("loreTitle");
         searchString = getIntent().getStringExtra("searchString");
+
+        //NULL CATCH; IT SHOULD NEVER HAPPEN, BUT IT DO
+        if (titleString == null) {
+            titleString = legendsPrefs.getLoreTitle();
+        }
 
         //NULL CATCH; IT SHOULD NEVER HAPPEN, BUT IT DO
         if (categoryNumber == 0) {
@@ -76,40 +95,74 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
 
         String[] selectionArgs = { Integer.toString(categoryNumber), titleString, Integer.toString(categoryNumber), titleString };
         Cursor cursor = legendsDB.rawQuery(joinedQuery, selectionArgs);
-        cursor.moveToFirst();
+        if (cursor != null) {
+            cursor.moveToFirst();
 
-        String buzzingText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BUZZING));
-        String blackSignalText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BLACK_SIGNAL));
-        String categoryString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_NAME));
-        int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
+            String buzzingText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BUZZING));
+            String blackSignalText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BLACK_SIGNAL));
+            String categoryString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_NAME));
+            int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
 
-        LinearLayout faveClickable = (LinearLayout) findViewById(R.id.loreActivity_fave_clickable);
-        ViewHolder holder = new ViewHolder();
-        holder.mImageLayout = faveClickable;
-        holder.mImageLayout.setOnClickListener(this);
+            titleTextView.setText(titleString);
+            categoryTextView.setText(categoryString);
 
-        TextView titleTextview = (TextView) findViewById(R.id.loreActivity_title_text_view);
-        TextView categoryTextview = (TextView) findViewById(R.id.loreActivity_category_text_view);
-        TextView buzzingTextview = (TextView) findViewById(R.id.loreActivity_buzzing_text_view);
-        favedImageView = (ImageView) findViewById(R.id.loreActivity_fave_imageView);
+            //FULL TITLE STRING IS FOR THE FAVE TOASTS; SAVE IT SO YOU CAN USE IT LATER
+            fullTitleString = titleString;
+            //TRUNCATES THE TITLE SO PREFIXES DON'T BREAK FAVES
+            titleString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_TITLE));
 
-        TextView blackSignalTextview = (TextView) findViewById(R.id.loreActivity_signal_text_view);
-        ImageView blackSignalImageview = (ImageView) findViewById(R.id.loreActivity_signal_image_view);
+            setStar(faved);
+            initiateHighlighter(buzzingTextView, buzzingText, blackSignalTextView, blackSignalText);
 
-        titleTextview.setText(titleString);
-        categoryTextview.setText(categoryString);
+            //A LORE MAY OR MAY NOT HAVE A BLACK SIGNAL TO DISPLAY
+            if (blackSignalText != null) {
+                blackSignalLayout.setVisibility(View.VISIBLE);
+            }
 
-        //FULL TITLE STRING IS FOR THE FAVE TOASTS; SAVE IT SO YOU CAN USE IT LATER
-        fullTitleString = titleString;
-        //TRUNCATES THE TITLE SO PREFIXES DON'T BREAK FAVES
-        titleString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_TITLE));
+            cursor.close();
+        }
 
-        setStar(faved);
+        setFlavorImage(titleString);
+        adjustFontSize(buzzingTextView, blackSignalTextView);
+        startupComplete = true;
+    }
 
+    private void adjustFontSize(TextView buzzingTextView, TextView blackSignalTextView){
+        //IF FONT SIZE PREFS DO NOT EXIST, CREATE THEM (DEFAULT: 0)
+        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_FONT_SIZE)) {
+            legendsPrefs.setFontSizePref(0);
+        }
+
+        switch (legendsPrefs.getFontSizePref()) {
+            //SetLineSpacingMultiplier does not seem to work from the Styles.XML; SET PROGRAMATICALLY!
+            case 0:
+                TextViewCompat.setTextAppearance(buzzingTextView, R.style.LoreDefault);
+                TextViewCompat.setTextAppearance(blackSignalTextView, R.style.LoreDefault);
+                break;
+            case 1:
+                buzzingTextView.setLineSpacing(0, 1.1f);
+                blackSignalTextView.setLineSpacing(0, 1.1f);
+                TextViewCompat.setTextAppearance(buzzingTextView, R.style.LoreBigger);
+                TextViewCompat.setTextAppearance(blackSignalTextView, R.style.LoreBigger);
+                break;
+            case 2:
+                buzzingTextView.setLineSpacing(0, 1.25f);
+                blackSignalTextView.setLineSpacing(0, 1.25f);
+                TextViewCompat.setTextAppearance(buzzingTextView, R.style.LoreBiggest);
+                TextViewCompat.setTextAppearance(blackSignalTextView, R.style.LoreBiggest);
+                break;
+            default:
+                TextViewCompat.setTextAppearance(buzzingTextView, R.style.LoreDefault);
+                TextViewCompat.setTextAppearance(blackSignalTextView, R.style.LoreDefault);
+                break;
+        }
+    }
+
+    private void initiateHighlighter(TextView buzzingTextView, String buzzingText, TextView blackSignalTextView, String blackSignalText) {
         //DID YOU COME HERE FROM THE SEARCH TAB? IF NOT, SEARCH STRING SHOULD BE NULL
         if (searchString == null) {
-            buzzingTextview.setText(buzzingText);
-            blackSignalTextview.setText(blackSignalText);
+            buzzingTextView.setText(buzzingText);
+            blackSignalTextView.setText(blackSignalText);
         }
         //IF YOU WERE LOOKING FOR SOMETHING...
         else {
@@ -123,21 +176,11 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
                 searchString = searchString.replace("'", " ").trim();
             }
             //THEN HIGHLIGHT YOUR RESULTS
-            highlight(buzzingText, buzzingTextview);
+            highlight(buzzingText, buzzingTextView);
             if (blackSignalText != null) {
-                highlight(blackSignalText, blackSignalTextview);
+                highlight(blackSignalText, blackSignalTextView);
             }
         }
-
-        //A LORE MAY OR MAY NOT HAVE A BLACK SIGNAL TO DISPLAY
-        if (blackSignalText != null) {
-            blackSignalTextview.setVisibility(View.VISIBLE);
-            blackSignalImageview.setVisibility(View.VISIBLE);
-        }
-        cursor.close();
-
-        setFlavorImage(titleString);
-        startupComplete = true;
     }
 
     private void setFlavorImage(String titleString) {
@@ -167,10 +210,12 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     private void showFlavorImage(ImageView imageView) {
         LegendsPreferences legendsPreferences = LegendsPreferences.getInstance(this);
 
+        //IF PREFS DON'T EXIST, CREATE THEM. (DEFAULT: SHOW IMAGES)
         if (!legendsPreferences.doesContain(LegendsPreferences.PREF_SHOW_IMAGES)) {
             legendsPreferences.setImagePref(true);
         }
 
+        //HIDE IMAGE IF NEEDED
         if (!legendsPreferences.getImagePref()) {
             imageView.setVisibility(View.GONE);
         }
@@ -203,7 +248,6 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
 
         if (start < 0) {
             textView.setText(originalText);
-            textView.setVisibility(View.VISIBLE);
             return null;
         }
         else {
@@ -211,7 +255,6 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
 
             //THIS PREVENTS THE HIGHLIGHTER FROM FINDING A SINGLE HIT THEN ABORTING, RESULTING IN AN EMPTY STRING
             textView.setText(originalText);
-            textView.setVisibility(View.VISIBLE);
 
             while (start >= 0) {
                 //GETS THE START AND END POSITIONS OF THE WORD TO BE HIGHLIGHTED
@@ -292,15 +335,17 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
             //EXECUTE UPDATE QUERY
             legendsDB.execSQL(Queries.UPDATE_FAVE + modTitleString + ";");
 
-            //GET UPDATED CURSOR
+            //GET UPDATED CURSOR TO SET THE NEW FAVED STATE
             String[] selectionArgs = { titleString };
             Cursor cursor = legendsDB.rawQuery(Queries.GET_FAVE, selectionArgs);
-            cursor.moveToFirst();
+            if (cursor != null) {
+                cursor.moveToFirst();
 
-            int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
-            setStar(faved);
+                int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
+                setStar(faved);
 
-            cursor.close();
+                cursor.close();
+            }
         }
     }
 }

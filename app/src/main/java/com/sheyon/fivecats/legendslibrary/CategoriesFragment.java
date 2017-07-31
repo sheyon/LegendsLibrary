@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
+import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
@@ -27,6 +28,7 @@ public class CategoriesFragment extends Fragment {
     private Cursor cursor;
 
     private int spinnerCatNumber;
+    private int groupNumber = -1;
     private String loreTitle;
 
     @Override
@@ -50,6 +52,10 @@ public class CategoriesFragment extends Fragment {
     public void onStart() {
         super.onStart();
         displayCategoryScreen();
+
+        if (groupNumber != -1) {
+            legendsExpandableView.expandGroup(groupNumber);
+        }
     }
 
     private void setupSpinner(View view)
@@ -115,13 +121,14 @@ public class CategoriesFragment extends Fragment {
 
                 //IF THE TEXT STYLE IS BOLDED, EXPAND THE CATEGORY
                 if ( style == 1 ) {
+                    groupNumber = groupPosition;
                     return false;
                 }
                 //IF NOT, LAUNCH THE LORE PAGE
                 else {
                     loreTitle = tv.getText().toString();
                     startLoreActivity();
-                    return false;
+                    return true;
                 }
             }
         });
@@ -133,6 +140,8 @@ public class CategoriesFragment extends Fragment {
                 TextView tv = (TextView) ll.findViewById(R.id.subcategory_text_view);
                 loreTitle = tv.getText().toString();
 
+                groupNumber = groupPosition;
+
                 startLoreActivity();
                 return false;
             }
@@ -143,6 +152,9 @@ public class CategoriesFragment extends Fragment {
         Intent intent = new Intent(getContext(), LoreActivity.class);
         intent.putExtra("catNumber", spinnerCatNumber);
         intent.putExtra("loreTitle", loreTitle);
+
+        //FAILSAFE
+        LegendsPreferences.getInstance(getContext()).setLoreTitle(loreTitle);
 
         closeCursor();
         startActivity(intent);

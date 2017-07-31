@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
+import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
@@ -119,6 +120,9 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                 intent.putExtra("catNumber", clickedCatId);
                 intent.putExtra("loreTitle", clickedTitle);
                 intent.putExtra("searchString", mSearchString);
+
+                //FAILSAFE
+                LegendsPreferences.getInstance(mContext).setLoreTitle(clickedTitle);
 
                 mContext.startActivity(intent);
 

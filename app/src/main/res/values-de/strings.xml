@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Legends Library</string>
+
+    <string-array name="categories_array">
+        <item>[Wähle eine Kategorie:]</item>
+        <item>Solomon Island</item>
+        <item>Tal des Sonnengottes</item>
+        <item>Transsylvanien</item>
+        <item>Tokio</item>
+        <item>Global</item>
+        <item>Das Bestiarium</item>
+        <item>Veranstaltungen</item>
+        <item>Ausgaben</item>
+    </string-array>
+
+    <string-array name="languages_array">
+        <item>English</item>
+        <item>Deutsch</item>
+        <item>Français</item>
+    </string-array>
+
+    <string name="lore_header_buzzing">Das Summen</string>
+    <string name="lore_header_blackSignal">Das schwarze Sign</string>
+
+</resources>

@@ -11,6 +11,8 @@ import android.widget.ListView;
 
 import com.sbrukhanda.fragmentviewpager.FragmentVisibilityListener;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
+import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
+
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 public class AlphabeticalFragment extends Fragment implements FragmentVisibilityListener
@@ -46,6 +48,7 @@ public class AlphabeticalFragment extends Fragment implements FragmentVisibility
         }
 
         listView.setAdapter(adapter);
+        listView.setVerticalScrollbarPosition(LegendsPreferences.getInstance(getContext()).getAlphabeticalPosition());
 
         return view;
     }
@@ -77,6 +80,9 @@ public class AlphabeticalFragment extends Fragment implements FragmentVisibility
 
     @Override
     public void onFragmentInvisible() {
+        //SAVE POSITION IN LISTVIEW
+        LegendsPreferences.getInstance(getContext()).setAlphabeticalPosition(listView.getFirstVisiblePosition());
+
         //THE ALPHABETICAL LIST WILL NEVER BE EMPTY
         //BUT THE EMPTY VIEW IS SET TO GONE SO IT SHOULD NEVER COME UP
         listView.setVisibility(View.GONE);
@@ -90,5 +96,8 @@ public class AlphabeticalFragment extends Fragment implements FragmentVisibility
 
         Crossfader crossfader = new Crossfader();
         crossfader.crossfadeView(listView, loadingView);
+
+        //JUMP TO LAST SAVED POSITION; PERSISTS AFTER APP CLOSE
+        listView.setSelection(LegendsPreferences.getInstance(getContext()).getAlphabeticalPosition());
     }
 }
