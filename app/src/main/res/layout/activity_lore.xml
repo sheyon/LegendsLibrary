@@ -30,9 +30,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:orientation="horizontal">
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -47,7 +46,8 @@
                         android:text="Lore Title"
                         android:textIsSelectable="true"
                         android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white"/>
 
                     <TextView
                         android:id="@+id/loreActivity_category_text_view"
@@ -55,7 +55,8 @@
                         android:layout_height="wrap_content"
                         android:text="Lore Category"
                         android:textIsSelectable="true"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textColor="@android:color/white"/>
 
                 </LinearLayout>
 
@@ -77,59 +78,125 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+
+                <ImageView
+                    android:id="@+id/lore_flavor_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/flavor_default" />
+
+            </LinearLayout>
+
+            <!--Buzzing Layout-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="8dp"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/loreActivity_buzzing_image_view"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:src="@drawable/lore" />
+                    android:background="@color/colorPrimaryDark"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingEnd="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingStart="8dp"
+                        android:text="@string/lore_header_buzzing"
+                        android:textAppearance="@style/AboutHeaderStyles"
+                        android:textSize="20sp"/>
+
+                    <ImageView
+                        android:id="@+id/loreActivity_buzzing_image_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:padding="8dp"
+                        android:scaleType="fitEnd"
+                        android:src="@drawable/lore"/>
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/loreActivity_buzzing_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
                     android:text="@string/empty_error"
                     android:textIsSelectable="true"
                     android:textSize="16sp" />
 
             </LinearLayout>
 
+            <!--Black Signal Layout-->
+
             <LinearLayout
+                android:id="@+id/loreActivity_BlackSignalLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:layout_marginTop="8dp"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:visibility="gone">
 
-                <ImageView
-                    android:id="@+id/loreActivity_signal_image_view"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:src="@drawable/blacklore"
-                    android:visibility="gone" />
+                    android:background="@color/colorPrimaryDark"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingEnd="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingStart="8dp"
+                        android:text="@string/lore_header_blackSignal"
+                        android:textAppearance="@style/AboutHeaderStyles"
+                        android:textSize="20sp" />
+
+                    <ImageView
+                        android:id="@+id/loreActivity_signal_image_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:padding="8dp"
+                        android:scaleType="fitEnd"
+                        android:src="@drawable/blacklore" />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/loreActivity_signal_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
                     android:layout_marginStart="8dp"
-                    android:gravity="top"
+                    android:layout_marginTop="8dp"
                     android:text="@string/empty_error"
                     android:textIsSelectable="true"
-                    android:textSize="16sp"
-                    android:visibility="gone" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 

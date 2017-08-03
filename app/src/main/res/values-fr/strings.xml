@@ -26,6 +26,9 @@
         <item>@string/drawer_about</item>
     </string-array>
 
+    <string name="lore_header_buzzing">Le bourdonnement</string>
+    <string name="lore_header_blackSignal">Le Signal Noir</string>
+
     <string name="drawer_legends">Legends Library</string>
     <string name="drawer_settings">Paramètres</string>
     <string name="drawer_about">À propos</string>
@@ -57,6 +60,9 @@
     <string name="settings_search_header">Recherche</string>
     <string name="settings_checkbox_wildcardOn">Caractère générique (*) toujours activé</string>
     <string name="settings_checkbox_doubleWildcard">Caractère générique double face</string>
+    <string name="settings_misc_header">Autres paramètres</string>
+    <string name="settings_checkbox_showImages">Afficher les images</string>
+    <string name="settings_font_size">Taille de police: </string>
     <string name="settings_button_apply">Appliquer</string>
 
     <string name="toast_write_db_fail">La base de données n’a pas ouvert. Vous devez peut-être libérer de l’espace disque.</string>

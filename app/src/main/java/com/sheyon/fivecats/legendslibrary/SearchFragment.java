@@ -303,6 +303,9 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     public void onFragmentVisible() {
         refreshCursor();
 
+        //TO KEEP THE KEYBOARD FROM POPPING UP WHEN COMING BACK FROM THE LORE SCREEN
+        listView.requestFocus();
+
         Crossfader crossfader = new Crossfader();
         crossfader.crossfadeView(searchLayout, loadingView);
     }

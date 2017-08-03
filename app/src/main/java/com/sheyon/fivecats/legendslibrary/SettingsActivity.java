@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
@@ -28,9 +29,10 @@ public class SettingsActivity extends AppCompatActivity {
     private CheckBox langCheckbox;
     private CheckBox wildcardOn;
     private CheckBox doubleWildcard;
+    private CheckBox displayImages;
+    private int fontSize;
     private int langSelection;
     private LegendsPreferences legendsPrefs;
-    private boolean normalizationSelection = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,8 @@ public class SettingsActivity extends AppCompatActivity {
         setupLangCheckbox();
         setupApplyButton();
         setupSearchCheckboxes();
+        setupMiscCheckboxes();
+        setupFontSize();
     }
 
     private void setupLangSpinner() {
@@ -94,23 +98,64 @@ public class SettingsActivity extends AppCompatActivity {
         doubleWildcard.setChecked(legendsPrefs.getDoubleWildcardPref());
     }
 
+    private void setupMiscCheckboxes() {
+        displayImages = (CheckBox) findViewById(R.id.settings_display_images);
+        displayImages.setChecked(legendsPrefs.getImagePref());
+    }
+
+    private void setupFontSize() {
+        Button fontDecrement = (Button) findViewById(R.id.settings_font_decrement);
+        Button fontIncrement = (Button) findViewById(R.id.settings_font_increment);
+        final TextView fontSizeTextView = (TextView) findViewById(R.id.settings_font_size);
+
+        //IF FONT SIZE PREFS DO NOT EXIST, CREATE THEM (DEFAULT: 0)
+        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_FONT_SIZE)) {
+            legendsPrefs.setFontSizePref(0);
+        }
+
+        fontSize = legendsPrefs.getFontSizePref();
+        updateFontSize(fontSizeTextView);
+
+        fontDecrement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fontSize--;
+                if (fontSize <= -1) {
+                    fontSize = 0;
+                }
+                updateFontSize(fontSizeTextView);
+            }
+        });
+
+        fontIncrement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fontSize++;
+                if (fontSize >= 3) {
+                    fontSize = 2;
+                }
+                updateFontSize(fontSizeTextView);
+            }
+        });
+    }
+
+    private void updateFontSize(TextView textView) {
+        textView.setText("" + fontSize);
+    }
+
     private void setupApplyButton() {
         Button settingsApplyButton = (Button) findViewById(R.id.settings_lang_button);
 
         settingsApplyButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-//                if (langCheckbox.isChecked()) {
-//                    normalizationSelection = true;
-//                }
-//                else {
-//                    normalizationSelection = false;
-//                }
-
+            public void onClick(View v)
+            {
                 legendsPrefs.setLangPref(langSelection);
                 legendsPrefs.setNormalizationPref(langCheckbox.isChecked());
                 legendsPrefs.setWildcardAlwaysOnPref(wildcardOn.isChecked());
                 legendsPrefs.setDoubleWildcardPref(doubleWildcard.isChecked());
+                legendsPrefs.setImagePref(displayImages.isChecked());
+                legendsPrefs.setFontSizePref(fontSize);
                 restartDatabase();
             }
         });

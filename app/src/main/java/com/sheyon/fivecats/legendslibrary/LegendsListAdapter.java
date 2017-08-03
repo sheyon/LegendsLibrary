@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
+import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
 import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
@@ -29,15 +30,6 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
     private Context mContext;
     private String mSearchString;
     private Fragment mFragment;
-
-    private ImageView loreFavorite_IV;
-    private TextView loreTitle_TV;
-    private TextView loreCategory_TV;
-
-    public LegendsListAdapter(Context context, Cursor c) {
-        super(context, c, 0);
-        mContext = context;
-    }
 
     LegendsListAdapter(Context context, Cursor c, Fragment fragment) {
         super(context, c, 0);
@@ -54,8 +46,12 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        View view = LayoutInflater.from(context).inflate(R.layout.lore_list_item,parent, false);
+        return LayoutInflater.from(context).inflate(R.layout.lore_list_item, parent, false);
+    }
 
+    @Override
+    public void bindView(View view, Context context, Cursor cursor) {
+        //SET UP THE CLICKABLE LAYOUTS
         LinearLayout textLayout = (LinearLayout) view.findViewById(R.id.container_text_views);
         LinearLayout imageLayout = (LinearLayout) view.findViewById(R.id.container_fave_clickable);
 
@@ -66,23 +62,18 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
         holder.mTextLayout.setOnClickListener(this);
         holder.mImageLayout.setOnClickListener(this);
 
-        return view;
-    }
-
-    @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-        loreTitle_TV = (TextView) view.findViewById(R.id.lore_title_text_view);
-        loreCategory_TV = (TextView) view.findViewById(R.id.lore_category_text_view);
-
-        //START UNFAVED
-        loreFavorite_IV = (ImageView) view.findViewById(R.id.lore_favorites_image_view);
-        loreFavorite_IV.setImageResource(R.drawable.ic_star_border_white_48dp);
-
         //IF COMING FROM THE SEARCH PAGE, HIDE THE STAR
         //LORES FROM THE SEARCH VIEW DON'T SYNC PROPERLY BECAUSE OF VIRTUAL TABLES
         if (mFragment.getClass() == SearchFragment.class) {
-            loreFavorite_IV.setVisibility(View.INVISIBLE);
+            imageLayout.setVisibility(View.INVISIBLE);
         }
+
+        TextView loreTitle_TV = (TextView) view.findViewById(R.id.lore_title_text_view);
+        TextView loreCategory_TV = (TextView) view.findViewById(R.id.lore_category_text_view);
+        ImageView loreFavorite_IV = (ImageView) view.findViewById(R.id.lore_favorites_image_view);
+
+        //START UNFAVED
+        loreFavorite_IV.setImageResource(R.drawable.ic_star_border_white_48dp);
 
         String prefixText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_PREFIX));
         String titleText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
@@ -112,8 +103,8 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
         switch (v.getId())
         {
             case R.id.container_text_views:
-                loreTitle_TV = (TextView) v.findViewById(R.id.lore_title_text_view);
-                loreCategory_TV = (TextView) v.findViewById(R.id.lore_category_text_view);
+                TextView loreTitle_TV = (TextView) v.findViewById(R.id.lore_title_text_view);
+                TextView loreCategory_TV = (TextView) v.findViewById(R.id.lore_category_text_view);
 
                 String clickedTitle = loreTitle_TV.getText().toString();
                 String clickedCategory = loreCategory_TV.getText().toString();
@@ -130,7 +121,11 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                 intent.putExtra("loreTitle", clickedTitle);
                 intent.putExtra("searchString", mSearchString);
 
+                //FAILSAFE
+                LegendsPreferences.getInstance(mContext).setLoreTitle(clickedTitle);
+
                 mContext.startActivity(intent);
+
                 break;
 
             case R.id.container_fave_clickable:
@@ -169,7 +164,7 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                 cursor.moveToFirst();
                 int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
 
-                loreFavorite_IV = (ImageView) v.findViewById(R.id.lore_favorites_image_view);
+                ImageView loreFavorite_IV = (ImageView) v.findViewById(R.id.lore_favorites_image_view);
 
                 //SET FAVED OR UNFAVED
                 if (faved == 0){
@@ -186,17 +181,6 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                     AlphabeticalFragment af = (AlphabeticalFragment) mFragment;
                     af.refreshCursor();
                 }
-
-//                DO NOT CALL REFRESH FOR THE FAVORITES FRAGMENT. USERS MAY MISCLICK OR RESELECT
-//                if (mFragment.getClass() == FavoritesFragment.class) {
-//                    FavoritesFragment ff = (FavoritesFragment) mFragment;
-//                    ff.refreshCursor();
-//                }
-//                WITH FTS, IT IS NOW IMPOSSIBLE TO FAVE A LORE FROM THE SEARCH TAB
-//                if (mFragment.getClass() == SearchFragment.class) {
-//                    SearchFragment sf = (SearchFragment) mFragment;
-//                    sf.refreshCursor();
-//                }
 
                 cursor.close();
                 break;

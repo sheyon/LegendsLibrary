@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setPageTitle(TabLayout.Tab tab, LegendsPagerAdapter pagerAdapter) {
-        Fragment f = pagerAdapter.getItem(tab.getPosition());
+        Fragment f = pagerAdapter.instantiateFragment(tab.getPosition());
 
         if (f.getClass() == CategoriesFragment.class) {
             toolbar.setTitle(R.string.title_categories);
