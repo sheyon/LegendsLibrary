@@ -59,9 +59,6 @@ public class AlphabeticalFragment extends Fragment implements FragmentVisibility
     public void refreshCursor() {
         closeCursor();
 
-        //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
-        db = new LegendsDatabase().getInstance(getContext());
-
         refreshedCursor = db.rawQuery(Queries.ALPHABETICAL, null);
         if (cursor != null){
             adapter.swapCursor(refreshedCursor);
@@ -99,6 +96,9 @@ public class AlphabeticalFragment extends Fragment implements FragmentVisibility
 
     @Override
     public void onFragmentVisible() {
+        //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
+        db = new LegendsDatabase().getInstance(getContext());
+
         refreshCursor();
 
         Crossfader crossfader = new Crossfader();

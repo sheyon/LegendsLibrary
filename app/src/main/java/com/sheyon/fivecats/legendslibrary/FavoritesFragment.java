@@ -72,10 +72,6 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
 
     public void refreshCursor() {
         closeCursor();
-
-        //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
-        db = new LegendsDatabase().getInstance(getContext());
-
         refreshedCursor = db.rawQuery(Queries.GET_ALL_FAVES, null);
         adapter.swapCursor(refreshedCursor);
     }
@@ -164,6 +160,9 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
 
     @Override
     public void onFragmentVisible() {
+        //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
+        db = new LegendsDatabase().getInstance(getContext());
+
         refreshCursor();
 
         Crossfader crossfader = new Crossfader();

@@ -214,9 +214,6 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     }
 
     public void refreshCursor() {
-        //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
-        db = new LegendsDatabase().getInstance(getContext());
-
         //NULL CATCH; NPE OCCURS IF THERE IS A NULL CURSOR TO SWAP
         if (cursor == null) {
             return;
@@ -307,6 +304,9 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
 
     @Override
     public void onFragmentVisible() {
+        //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
+        db = new LegendsDatabase().getInstance(getContext());
+
         refreshCursor();
 
         //TO KEEP THE KEYBOARD FROM POPPING UP WHEN COMING BACK FROM THE LORE SCREEN

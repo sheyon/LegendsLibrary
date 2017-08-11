@@ -167,7 +167,7 @@ public class SettingsActivity extends AppCompatActivity {
     private void restartDatabase() {
         db.close();
 
-        switch (LegendsPreferences.getInstance(this).getLangPref()) {
+        switch (legendsPrefs.getLangPref()) {
             case 0:
                 //ENGLISH
                 LegendsHelper legendsHelper = new LegendsHelper(this);
