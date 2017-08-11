@@ -2,8 +2,6 @@ package com.sheyon.fivecats.legendslibrary;
 
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -11,20 +9,11 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.sbrukhanda.fragmentviewpager.FragmentViewPager;
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
-import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
-import com.sheyon.fivecats.legendslibrary.data.LegendsHelperDE;
-import com.sheyon.fivecats.legendslibrary.data.LegendsHelperFR;
-import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
-
-import java.util.Locale;
+import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 
 public class MainActivity extends AppCompatActivity {
-
-    public static SQLiteDatabase legendsDB;
 
     private Toolbar toolbar;
     private FragmentViewPager viewPager;
@@ -105,67 +94,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openDatabase() {
-        LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(this);
-
-        //IF LANG PREFS DO NOT EXIST, CREATE THEM (DEFAULT: ENGLISH)
-        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_LANG)) {
-            String lang = Locale.getDefault().getLanguage();
-            switch (lang) {
-                case "en":
-                    legendsPrefs.setLangPref(LoreLibrary.LANG_EN);
-                    break;
-                case "de":
-                    legendsPrefs.setLangPref(LoreLibrary.LANG_DE);
-                    break;
-                case "fr":
-                    legendsPrefs.setLangPref(LoreLibrary.LANG_FR);
-                    break;
-                default:
-                    legendsPrefs.setLangPref(LoreLibrary.LANG_EN);
-                    break;
-            }
-        }
-
-        //IF NORMALIZATION PREFS DO NOT EXIST, CREATE THEM (DEFAULT: NORMALIZED)
-        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_NORMALIZATION)) {
-            legendsPrefs.setNormalizationPref(true);
-        }
-
-        //GET DATABASE PREFERENCES
-        int langPref = legendsPrefs.getLangPref();
-
-        //OPEN DATABASE
-        switch (langPref) {
-            case 0:
-                LegendsHelper legendsHelper = new LegendsHelper(this);
-                try {
-                    legendsDB = legendsHelper.getWritableDatabase();
-                } catch (SQLiteException e) {
-                    legendsDB = legendsHelper.getReadableDatabase();
-                    Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
-                }
-                break;
-
-            case 1:
-                LegendsHelperDE legendsHelperDE = new LegendsHelperDE(this);
-                try {
-                    legendsDB = legendsHelperDE.getWritableDatabase();
-                } catch (SQLiteException e) {
-                    legendsDB = legendsHelperDE.getReadableDatabase();
-                    Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
-                }
-                break;
-
-            case 2:
-                LegendsHelperFR legendsHelperFR = new LegendsHelperFR(this);
-                try {
-                    legendsDB = legendsHelperFR.getWritableDatabase();
-                } catch (SQLiteException e) {
-                    legendsDB = legendsHelperFR.getReadableDatabase();
-                    Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
-                }
-                break;
-        }
+        LegendsDatabase legendsDatabase = new LegendsDatabase();
+        legendsDatabase.getInstance(this);
     }
 
     private void setupIcons(TabLayout tabLayout){

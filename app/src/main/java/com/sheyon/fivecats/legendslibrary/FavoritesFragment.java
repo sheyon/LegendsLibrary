@@ -3,6 +3,7 @@ package com.sheyon.fivecats.legendslibrary;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,11 +19,11 @@ import android.widget.Toast;
 import com.sbrukhanda.fragmentviewpager.FragmentVisibilityListener;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
-
-import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
+import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 
 public class FavoritesFragment extends Fragment implements FragmentVisibilityListener
 {
+    private SQLiteDatabase db;
     private Cursor cursor;
     private Cursor refreshedCursor;
     private LegendsListAdapter adapter;
@@ -56,7 +57,8 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
         emptyView = view.findViewById(R.id.empty_view);
         loadingView = view.findViewById(R.id.loading_view);
 
-        cursor = legendsDB.rawQuery(Queries.GET_ALL_FAVES, null);
+        db = new LegendsDatabase().getInstance(getContext());
+        cursor = db.rawQuery(Queries.GET_ALL_FAVES, null);
         if (cursor != null) {
             cursor.moveToFirst();
             adapter = new LegendsListAdapter(getContext(), cursor, this);
@@ -70,7 +72,11 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
 
     public void refreshCursor() {
         closeCursor();
-        refreshedCursor = legendsDB.rawQuery(Queries.GET_ALL_FAVES, null);
+
+        //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
+        db = new LegendsDatabase().getInstance(getContext());
+
+        refreshedCursor = db.rawQuery(Queries.GET_ALL_FAVES, null);
         adapter.swapCursor(refreshedCursor);
     }
 
@@ -104,7 +110,7 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
     }
 
     private void checkForFavorites() {
-        Cursor check = legendsDB.rawQuery(Queries.CHECK_FOR_FAVED_LORE, null);
+        Cursor check = db.rawQuery(Queries.CHECK_FOR_FAVED_LORE, null);
         check.moveToFirst();
         int i = check.getCount();
         check.close();
@@ -143,7 +149,7 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
         ContentValues contentValues = new ContentValues();
         contentValues.put(LoreLibrary.COLUMN_FAVED, "0");
         String [] whereArgs = { "1" };
-        legendsDB.update(LoreLibrary.LORE_TABLE_NAME, contentValues, LoreLibrary.COLUMN_FAVED + " = ?", whereArgs);
+        db.update(LoreLibrary.LORE_TABLE_NAME, contentValues, LoreLibrary.COLUMN_FAVED + " = ?", whereArgs);
 
         Toast.makeText(getContext(), R.string.toast_faves_removed, Toast.LENGTH_SHORT).show();
         refreshCursor();

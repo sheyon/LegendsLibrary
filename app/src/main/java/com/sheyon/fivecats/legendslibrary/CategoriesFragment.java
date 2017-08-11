@@ -2,6 +2,7 @@ package com.sheyon.fivecats.legendslibrary;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,9 +19,8 @@ import android.widget.TextView;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
+import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
-
-import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 public class CategoriesFragment extends Fragment {
 
@@ -71,6 +71,7 @@ public class CategoriesFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
                     spinnerCatNumber = LoreLibrary.CAT_0;
+                    LegendsPreferences.getInstance(getContext()).setSpinnerCatNumber(spinnerCatNumber);
                     closeCursor();
                     return;
                 }
@@ -98,6 +99,7 @@ public class CategoriesFragment extends Fragment {
                 if (position == 8) {
                     spinnerCatNumber = LoreLibrary.CAT_8_ISU;
                 }
+                LegendsPreferences.getInstance(getContext()).setSpinnerCatNumber(spinnerCatNumber);
                 displayCategoryScreen();
             }
 
@@ -163,13 +165,16 @@ public class CategoriesFragment extends Fragment {
     private void displayCategoryScreen() {
         closeCursor();
 
+        spinnerCatNumber = LegendsPreferences.getInstance(getContext()).getSpinnerCatNumber();
+
         String[] selectionArgs = { Integer.toString(spinnerCatNumber), Integer.toString(spinnerCatNumber) };
         String[] mergedQuery = { Queries.UNION_1, Queries.UNION_2};
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         String unionQuery = qb.buildUnionQuery(mergedQuery, null, null);
 
-        cursor = legendsDB.rawQuery(unionQuery, selectionArgs);
+        SQLiteDatabase db = new LegendsDatabase().getInstance(getContext());
+        cursor = db.rawQuery(unionQuery, selectionArgs);
 
         LegendsCursorTreeAdapter legendsCursorTreeAdapter = new LegendsCursorTreeAdapter(cursor, getContext());
         legendsExpandableView.setAdapter(legendsCursorTreeAdapter);
@@ -178,13 +183,13 @@ public class CategoriesFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        closeCursor();
+        //closeCursor();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        closeCursor();
+        //closeCursor();
     }
 
     private void closeCursor() {

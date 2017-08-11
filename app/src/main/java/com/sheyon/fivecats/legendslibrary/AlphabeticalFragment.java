@@ -1,6 +1,7 @@
 package com.sheyon.fivecats.legendslibrary;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,12 +12,12 @@ import android.widget.ListView;
 
 import com.sbrukhanda.fragmentviewpager.FragmentVisibilityListener;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
+import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
-
-import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 public class AlphabeticalFragment extends Fragment implements FragmentVisibilityListener
 {
+    private SQLiteDatabase db;
     private Cursor cursor;
     private Cursor refreshedCursor;
 
@@ -41,7 +42,9 @@ public class AlphabeticalFragment extends Fragment implements FragmentVisibility
         emptyView = view.findViewById(R.id.empty_view);
         loadingView = view.findViewById(R.id.loading_view);
 
-        cursor = legendsDB.rawQuery(Queries.ALPHABETICAL, null);
+        db = new LegendsDatabase().getInstance(getContext());
+
+        cursor = db.rawQuery(Queries.ALPHABETICAL, null);
         if (cursor != null) {
             cursor.moveToFirst();
             adapter = new LegendsListAdapter(getContext(), cursor, this);
@@ -55,7 +58,11 @@ public class AlphabeticalFragment extends Fragment implements FragmentVisibility
 
     public void refreshCursor() {
         closeCursor();
-        refreshedCursor = legendsDB.rawQuery(Queries.ALPHABETICAL, null);
+
+        //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
+        db = new LegendsDatabase().getInstance(getContext());
+
+        refreshedCursor = db.rawQuery(Queries.ALPHABETICAL, null);
         if (cursor != null){
             adapter.swapCursor(refreshedCursor);
         }
