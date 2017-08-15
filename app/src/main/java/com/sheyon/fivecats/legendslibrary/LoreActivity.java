@@ -63,6 +63,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     {
         super.onCreate(savedInstanceState);
         legendsPrefs = LegendsPreferences.getInstance(this);
+        db = new LegendsDatabase().getInstance(this);
 
         int categoryNumber = getIntent().getIntExtra("catNumber", 0);
         titleString = getIntent().getStringExtra("loreTitle");
@@ -90,7 +91,6 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
 
         String[] selectionArgs = { Integer.toString(categoryNumber), titleString, Integer.toString(categoryNumber), titleString };
 
-        db = new LegendsDatabase().getInstance(this);
         Cursor cursor = db.rawQuery(joinedQuery, selectionArgs);
         if (cursor != null) {
             cursor.moveToFirst();
