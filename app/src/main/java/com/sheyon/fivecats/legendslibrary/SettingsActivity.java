@@ -12,6 +12,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +49,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         universalDrawer = new UniversalDrawer();
         universalDrawer.setupDrawer(this, toolbar);
+
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.settingsActivity_relativeLayout);
+        ScrollView scrollView = (ScrollView) findViewById(R.id.settingsActivity_scrollView);
+        RotationHandler rotationHandler = new RotationHandler();
+        rotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 
         legendsPrefs = LegendsPreferences.getInstance(getApplicationContext());
 

@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +46,11 @@ public class AboutActivity extends AppCompatActivity {
 
         universalDrawer = new UniversalDrawer();
         universalDrawer.setupDrawer(this, toolbar);
+
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.aboutActivity_relativeLayout);
+        ScrollView scrollView = (ScrollView) findViewById(R.id.aboutActivity_scrollView);
+        RotationHandler rotationHandler = new RotationHandler();
+        rotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 
         TextView aboutHeader = (TextView) findViewById(R.id.header_about);
         TextView contactHeader = (TextView) findViewById(R.id.header_contact);

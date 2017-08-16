@@ -8,17 +8,14 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -145,7 +142,10 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         setFlavorImage(titleString);
         adjustFontSize(buzzingTextView, blackSignalTextView);
 
-        determineWidth();
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.loreActivity_relativeLayout);
+        ScrollView scrollView = (ScrollView) findViewById(R.id.loreActivity_scrollView);
+        RotationHandler rotationHandler = new RotationHandler();
+        rotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 
         startupComplete = true;
     }
@@ -366,39 +366,6 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void determineWidth() {
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.loreActivity_relativeLayout);
-
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        int w = metrics.widthPixels;
-        int h = metrics.heightPixels;
-        boolean portrait;
-
-        //SAVE THE WIDTH OF DEVICE IN PORTRAIT MODE
-        float trueWidth;
-        if (w > h) {
-            trueWidth = h;
-            portrait = false;
-        }
-        else {
-            trueWidth = w;
-            portrait = true;
-        }
-
-        //SO THE TOOLBAR STRETCHES ACROSS THE LENGTH OF THE SCREEN
-        relativeLayout.setLayoutParams(new FrameLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
-
-        //SET SCROLLVIEW PARAMS
-        RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams((int) trueWidth, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        p.addRule(RelativeLayout.BELOW, R.id.loreActivity_toolbar);
-        p.addRule(RelativeLayout.CENTER_IN_PARENT);
-        scrollView.setLayoutParams(p);
-
-        if (!portrait) {
-            relativeLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.backgroundDarker));
-        }
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -408,7 +375,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        //Stupid hackjob. Why can't this work the proper way?
+        //STUPID HACKJOB. 200ms DELAY SINCE THE LAYOUT ISN'T COMPLETELY DRAWN BEFORE IT CAN SCROLL
         scrollView = (ScrollView) findViewById(R.id.loreActivity_scrollView);
         scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
