@@ -48,7 +48,7 @@ public class AboutActivity extends AppCompatActivity {
         universalDrawer.setupDrawer(this, toolbar);
 
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.aboutActivity_relativeLayout);
-        ScrollView scrollView = (ScrollView) findViewById(R.id.aboutActivity_scrollView);
+        final ScrollView scrollView = (ScrollView) findViewById(R.id.aboutActivity_scrollView);
         RotationHandler rotationHandler = new RotationHandler();
         rotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 

@@ -1,6 +1,6 @@
 package com.sheyon.fivecats.legendslibrary;
 
-import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,13 +13,13 @@ import android.widget.RelativeLayout;
 
 class RotationHandler extends AppCompatActivity {
 
+    private Context mContext;
     private ViewGroup mRootLayout;
     private ViewGroup mChildLayout;
-    private Activity mActivity;
     private Toolbar mToolbar;
 
-    public void setupRotationLayout (Activity activity, ViewGroup rootLayout, ViewGroup childLayout, @Nullable Toolbar toolbar) {
-        mActivity = activity;
+    public void setupRotationLayout (Context context, ViewGroup rootLayout, ViewGroup childLayout, @Nullable Toolbar toolbar) {
+        mContext = context;
         mRootLayout = rootLayout;
         mChildLayout = childLayout;
         mToolbar = toolbar;
@@ -28,28 +28,35 @@ class RotationHandler extends AppCompatActivity {
     }
 
     private void determineWidth() {
-        DisplayMetrics metrics = mActivity.getResources().getDisplayMetrics();
+        DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
         int w = metrics.widthPixels;
         int h = metrics.heightPixels;
-        boolean portrait;
+        boolean landscape;
 
         //SAVE THE WIDTH OF DEVICE IN PORTRAIT MODE
         float trueWidth;
         if (w > h) {
             trueWidth = h;
-            portrait = false;
+            landscape = true;
         }
         else {
             trueWidth = w;
-            portrait = true;
+            landscape = false;
         }
 
-        //THE LORE ACTIVITY REQUIRES DIFFERENT PARAMS BECAUSE IT DOES NOT USE THE DRAWER LAYOUT
-        if (mActivity.getClass() == LoreActivity.class) {
-            mRootLayout.setLayoutParams(new FrameLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
-        }
-        else {
-            mRootLayout.setLayoutParams(new DrawerLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+        //DIFFERENT LAYOUT REQUIRES DIFFERENT PARAMS
+        if (landscape) {
+            //APPLIES TO ABOUT AND SETTINGS ACTIVITY
+            if (mRootLayout.getLayoutParams().getClass() == DrawerLayout.LayoutParams.class) {
+                mRootLayout.setLayoutParams(new DrawerLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+            }
+            //APPLIES TO LORE ACTIVITY
+            else {
+                mRootLayout.setLayoutParams(new FrameLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+            }
+            //DARKEN THE ROOT BACKGROUND
+            mRootLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.backgroundDarker));
+            mChildLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.backgroundBase));
         }
 
         //SET SCROLLVIEW PARAMS
@@ -59,10 +66,5 @@ class RotationHandler extends AppCompatActivity {
         }
         p.addRule(RelativeLayout.CENTER_IN_PARENT);
         mChildLayout.setLayoutParams(p);
-
-        if (!portrait) {
-            mRootLayout.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.backgroundDarker));
-            mChildLayout.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.backgroundBase));
-        }
     }
 }

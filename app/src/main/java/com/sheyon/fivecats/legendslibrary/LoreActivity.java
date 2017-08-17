@@ -143,7 +143,6 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         adjustFontSize(buzzingTextView, blackSignalTextView);
 
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.loreActivity_relativeLayout);
-        ScrollView scrollView = (ScrollView) findViewById(R.id.loreActivity_scrollView);
         RotationHandler rotationHandler = new RotationHandler();
         rotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 
@@ -376,7 +375,6 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         //STUPID HACKJOB. 200ms DELAY SINCE THE LAYOUT ISN'T COMPLETELY DRAWN BEFORE IT CAN SCROLL
-        scrollView = (ScrollView) findViewById(R.id.loreActivity_scrollView);
         scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
