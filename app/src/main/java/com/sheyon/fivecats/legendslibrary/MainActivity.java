@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.sbrukhanda.fragmentviewpager.FragmentViewPager;
-import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,8 +28,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        openDatabase();
 
         toolbar = (Toolbar) findViewById(R.id.mainActivity_toolbar);
         toolbar.setTitle(R.string.title_alphabetical);
@@ -91,11 +88,6 @@ public class MainActivity extends AppCompatActivity {
         }
         // Handle your other action bar items...
         return super.onOptionsItemSelected(item);
-    }
-
-    private void openDatabase() {
-        LegendsDatabase legendsDatabase = new LegendsDatabase();
-        legendsDatabase.getInstance(this);
     }
 
     private void setupIcons(TabLayout tabLayout){

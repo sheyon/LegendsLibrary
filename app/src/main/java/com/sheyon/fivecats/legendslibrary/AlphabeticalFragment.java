@@ -42,7 +42,7 @@ public class AlphabeticalFragment extends Fragment implements FragmentVisibility
         emptyView = view.findViewById(R.id.empty_view);
         loadingView = view.findViewById(R.id.loading_view);
 
-        db = new LegendsDatabase().getInstance(getContext());
+        db = LegendsDatabase.getInstance(getContext());
 
         cursor = db.rawQuery(Queries.ALPHABETICAL, null);
         if (cursor != null) {
@@ -97,12 +97,13 @@ public class AlphabeticalFragment extends Fragment implements FragmentVisibility
     @Override
     public void onFragmentVisible() {
         //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
-        db = new LegendsDatabase().getInstance(getContext());
+        if (db == null) {
+            db = LegendsDatabase.getInstance(getContext());
+        }
 
         refreshCursor();
 
-        Crossfader crossfader = new Crossfader();
-        crossfader.crossfadeView(listView, loadingView);
+        Crossfader.crossfadeView(listView, loadingView);
 
         //JUMP TO LAST SAVED POSITION; PERSISTS AFTER APP CLOSE
         listView.setSelection(LegendsPreferences.getInstance(getContext()).getAlphabeticalPosition());

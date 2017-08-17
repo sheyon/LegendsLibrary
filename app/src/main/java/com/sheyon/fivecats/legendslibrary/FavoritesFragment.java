@@ -57,7 +57,7 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
         emptyView = view.findViewById(R.id.empty_view);
         loadingView = view.findViewById(R.id.loading_view);
 
-        db = new LegendsDatabase().getInstance(getContext());
+        db = LegendsDatabase.getInstance(getContext());
         cursor = db.rawQuery(Queries.GET_ALL_FAVES, null);
         if (cursor != null) {
             cursor.moveToFirst();
@@ -161,16 +161,17 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
     @Override
     public void onFragmentVisible() {
         //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
-        db = new LegendsDatabase().getInstance(getContext());
+        if (db == null) {
+            db = LegendsDatabase.getInstance(getContext());
+        }
 
         refreshCursor();
 
-        Crossfader crossfader = new Crossfader();
         if (emptyView.isShown()) {
-            crossfader.crossfadeView(emptyView, loadingView);
+            Crossfader.crossfadeView(emptyView, loadingView);
         }
         else {
-            crossfader.crossfadeView(listView, loadingView);
+            Crossfader.crossfadeView(listView, loadingView);
         }
     }
 }

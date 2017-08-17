@@ -37,7 +37,7 @@ class LegendsCursorTreeAdapter extends CursorTreeAdapter
     @Override
     protected Cursor getChildrenCursor(Cursor groupCursor) {
         //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
-        SQLiteDatabase mDb = new LegendsDatabase().getInstance(mContext);
+        SQLiteDatabase mDb = LegendsDatabase.getInstance(mContext);
 
         int subcatNumber = mCursor.getInt(mCursor.getColumnIndex(LoreLibrary.COLUMN_SUBCAT_ID));
 
@@ -78,7 +78,7 @@ class LegendsCursorTreeAdapter extends CursorTreeAdapter
             prefixText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_PREFIX));
             categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
             if (prefixText != null) {
-                categoryHeader.setText("" + prefixText + categoryText);;
+                categoryHeader.setText("" + prefixText + categoryText);
             }
             else {
                 categoryHeader.setText(categoryText);

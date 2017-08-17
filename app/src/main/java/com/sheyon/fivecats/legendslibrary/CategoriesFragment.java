@@ -27,6 +27,10 @@ public class CategoriesFragment extends Fragment {
     private ExpandableListView legendsExpandableView;
     private Cursor cursor;
 
+    private Spinner spinner;
+    private LegendsPreferences legendsPreferences;
+    private SQLiteDatabase db;
+
     private int spinnerCatNumber;
     private int groupNumber = -1;
     private String loreTitle;
@@ -35,12 +39,15 @@ public class CategoriesFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(false);
+        legendsPreferences = LegendsPreferences.getInstance(getContext());
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_categories_layout, container, false);
+
+        db = LegendsDatabase.getInstance(getContext());
 
         setupSpinner(view);
         setupExpandableView(view);
@@ -61,7 +68,7 @@ public class CategoriesFragment extends Fragment {
     private void setupSpinner(View view)
     {
         //THE SPINNER SEEMS TO BE PRODUCING A WINDOW ALREADY FOCUSED ERROR. FIX LATER
-        final Spinner spinner = (Spinner) view.findViewById(R.id.category_spinner);
+        spinner = (Spinner) view.findViewById(R.id.category_spinner);
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.categories_array, R.layout.spinner_custom_layout);
         spinnerAdapter.setDropDownViewResource(R.layout.spinner_custom_dropdown_text);
         spinner.setAdapter(spinnerAdapter);
@@ -71,7 +78,7 @@ public class CategoriesFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
                     spinnerCatNumber = LoreLibrary.CAT_0;
-                    LegendsPreferences.getInstance(getContext()).setSpinnerCatNumber(spinnerCatNumber);
+                    legendsPreferences.setSpinnerCatNumber(spinnerCatNumber);
                     closeCursor();
                     return;
                 }
@@ -99,7 +106,7 @@ public class CategoriesFragment extends Fragment {
                 if (position == 8) {
                     spinnerCatNumber = LoreLibrary.CAT_8_ISU;
                 }
-                LegendsPreferences.getInstance(getContext()).setSpinnerCatNumber(spinnerCatNumber);
+                legendsPreferences.setSpinnerCatNumber(spinnerCatNumber);
                 displayCategoryScreen();
             }
 
@@ -156,7 +163,7 @@ public class CategoriesFragment extends Fragment {
         intent.putExtra("loreTitle", loreTitle);
 
         //FAILSAFE
-        LegendsPreferences.getInstance(getContext()).setLoreTitle(loreTitle);
+        legendsPreferences.setLoreTitle(loreTitle);
 
         closeCursor();
         startActivity(intent);
@@ -165,15 +172,15 @@ public class CategoriesFragment extends Fragment {
     private void displayCategoryScreen() {
         closeCursor();
 
-        spinnerCatNumber = LegendsPreferences.getInstance(getContext()).getSpinnerCatNumber();
-
         String[] selectionArgs = { Integer.toString(spinnerCatNumber), Integer.toString(spinnerCatNumber) };
         String[] mergedQuery = { Queries.UNION_1, Queries.UNION_2};
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         String unionQuery = qb.buildUnionQuery(mergedQuery, null, null);
 
-        SQLiteDatabase db = new LegendsDatabase().getInstance(getContext());
+        if (db == null) {
+            db = LegendsDatabase.getInstance(getContext());
+        }
         cursor = db.rawQuery(unionQuery, selectionArgs);
 
         LegendsCursorTreeAdapter legendsCursorTreeAdapter = new LegendsCursorTreeAdapter(cursor, getContext());
@@ -183,13 +190,13 @@ public class CategoriesFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        //closeCursor();
+        legendsPreferences.setSpinnerCatNumber(spinnerCatNumber);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        //closeCursor();
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        spinner.setSelection(legendsPreferences.getSpinnerCatNumber());
     }
 
     private void closeCursor() {

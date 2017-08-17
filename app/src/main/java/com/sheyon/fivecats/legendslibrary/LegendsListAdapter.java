@@ -97,7 +97,7 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
     @Override
     public void onClick(View v) {
         //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
-        SQLiteDatabase mDb = new LegendsDatabase().getInstance(mContext);
+        SQLiteDatabase mDb = LegendsDatabase.getInstance(mContext);
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         String [] union = { Queries.GET_CAT_ID_UNION_1, Queries.GET_CAT_ID_UNION_2 };

@@ -11,24 +11,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-class RotationHandler extends AppCompatActivity {
+abstract class RotationHandler extends AppCompatActivity {
 
-    private Context mContext;
-    private ViewGroup mRootLayout;
-    private ViewGroup mChildLayout;
-    private Toolbar mToolbar;
-
-    public void setupRotationLayout (Context context, ViewGroup rootLayout, ViewGroup childLayout, @Nullable Toolbar toolbar) {
-        mContext = context;
-        mRootLayout = rootLayout;
-        mChildLayout = childLayout;
-        mToolbar = toolbar;
-
-        determineWidth();
-    }
-
-    private void determineWidth() {
-        DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
+    public static void setupRotationLayout (Context context, ViewGroup rootLayout, ViewGroup childLayout, @Nullable Toolbar toolbar) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int w = metrics.widthPixels;
         int h = metrics.heightPixels;
         boolean landscape;
@@ -47,24 +33,24 @@ class RotationHandler extends AppCompatActivity {
         //DIFFERENT LAYOUT REQUIRES DIFFERENT PARAMS
         if (landscape) {
             //APPLIES TO ABOUT AND SETTINGS ACTIVITY
-            if (mRootLayout.getLayoutParams().getClass() == DrawerLayout.LayoutParams.class) {
-                mRootLayout.setLayoutParams(new DrawerLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+            if (rootLayout.getLayoutParams().getClass() == DrawerLayout.LayoutParams.class) {
+                rootLayout.setLayoutParams(new DrawerLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
             }
             //APPLIES TO LORE ACTIVITY
             else {
-                mRootLayout.setLayoutParams(new FrameLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+                rootLayout.setLayoutParams(new FrameLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
             }
             //DARKEN THE ROOT BACKGROUND
-            mRootLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.backgroundDarker));
-            mChildLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.backgroundBase));
+            rootLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.backgroundDarker));
+            childLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.backgroundBase));
         }
 
         //SET SCROLLVIEW PARAMS
         RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams((int) trueWidth, RelativeLayout.LayoutParams.MATCH_PARENT);
-        if (mToolbar != null) {
-            p.addRule(RelativeLayout.BELOW, mToolbar.getId());
+        if (toolbar != null) {
+            p.addRule(RelativeLayout.BELOW, toolbar.getId());
         }
         p.addRule(RelativeLayout.CENTER_IN_PARENT);
-        mChildLayout.setLayoutParams(p);
+        childLayout.setLayoutParams(p);
     }
 }

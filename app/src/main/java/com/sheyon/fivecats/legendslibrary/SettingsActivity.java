@@ -42,7 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        db = new LegendsDatabase().getInstance(this);
+        db = LegendsDatabase.getInstance(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.settingsActivity_toolbar);
         setSupportActionBar(toolbar);
@@ -52,8 +52,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.settingsActivity_relativeLayout);
         ScrollView scrollView = (ScrollView) findViewById(R.id.settingsActivity_scrollView);
-        RotationHandler rotationHandler = new RotationHandler();
-        rotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
+        RotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 
         legendsPrefs = LegendsPreferences.getInstance(getApplicationContext());
 

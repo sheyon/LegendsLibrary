@@ -60,7 +60,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     {
         super.onCreate(savedInstanceState);
         legendsPrefs = LegendsPreferences.getInstance(this);
-        db = new LegendsDatabase().getInstance(this);
+        db = LegendsDatabase.getInstance(this);
 
         int categoryNumber = getIntent().getIntExtra("catNumber", 0);
         titleString = getIntent().getStringExtra("loreTitle");
@@ -143,8 +143,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         adjustFontSize(buzzingTextView, blackSignalTextView);
 
         RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.loreActivity_relativeLayout);
-        RotationHandler rotationHandler = new RotationHandler();
-        rotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
+        RotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 
         startupComplete = true;
     }
@@ -225,20 +224,18 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         showFlavorImage(flavorImageView);
     }
 
-    static int getImageId(Context context, String imageResource) {
+    private static int getImageId(Context context, String imageResource) {
         return context.getResources().getIdentifier("drawable/" + imageResource, null, context.getPackageName());
     }
 
     private void showFlavorImage(ImageView imageView) {
-        LegendsPreferences legendsPreferences = LegendsPreferences.getInstance(this);
-
         //IF PREFS DON'T EXIST, CREATE THEM. (DEFAULT: SHOW IMAGES)
-        if (!legendsPreferences.doesContain(LegendsPreferences.PREF_SHOW_IMAGES)) {
-            legendsPreferences.setImagePref(true);
+        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_SHOW_IMAGES)) {
+            legendsPrefs.setImagePref(true);
         }
 
         //HIDE IMAGE IF NEEDED
-        if (!legendsPreferences.getImagePref()) {
+        if (!legendsPrefs.getImagePref()) {
             imageView.setVisibility(View.GONE);
         }
     }
@@ -374,7 +371,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        //STUPID HACKJOB. 200ms DELAY SINCE THE LAYOUT ISN'T COMPLETELY DRAWN BEFORE IT CAN SCROLL
+        //STUPID HACKJOB. 250ms DELAY SINCE THE LAYOUT ISN'T COMPLETELY DRAWN BEFORE IT CAN SCROLL
         scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -383,7 +380,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
                     public void run() {
                         scrollView.scrollTo(0, legendsPrefs.getLorePagePosition());
                     }
-                }, 200);
+                }, 250);
             }
         });
     }

@@ -12,18 +12,16 @@ import java.util.Locale;
 public class LegendsDatabase{
 
     private static SQLiteDatabase legendsDB;
-    private Context mContext;
 
-    public SQLiteDatabase getInstance (Context context) {
-        mContext = context;
+    public static SQLiteDatabase getInstance (Context context) {
         if (legendsDB == null || !legendsDB.isOpen()) {
-            openDatabase();
+            openDatabase(context);
         }
         return legendsDB;
     }
 
-    private void openDatabase() {
-        LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(mContext);
+    private static void openDatabase(Context context) {
+        LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(context);
 
         //IF LANG PREFS DO NOT EXIST, CREATE THEM (DEFAULT: ENGLISH)
         if (!legendsPrefs.doesContain(LegendsPreferences.PREF_LANG)) {
@@ -52,32 +50,32 @@ public class LegendsDatabase{
         //OPEN DATABASE
         switch (legendsPrefs.getLangPref()) {
             case 0:
-                LegendsHelper legendsHelper = new LegendsHelper(mContext);
+                LegendsHelper legendsHelper = new LegendsHelper(context);
                 try {
                     legendsDB = legendsHelper.getWritableDatabase();
                 } catch (SQLiteException e) {
                     legendsDB = legendsHelper.getReadableDatabase();
-                    Toast.makeText(mContext, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
                 }
                 break;
 
             case 1:
-                LegendsHelperDE legendsHelperDE = new LegendsHelperDE(mContext);
+                LegendsHelperDE legendsHelperDE = new LegendsHelperDE(context);
                 try {
                     legendsDB = legendsHelperDE.getWritableDatabase();
                 } catch (SQLiteException e) {
                     legendsDB = legendsHelperDE.getReadableDatabase();
-                    Toast.makeText(mContext, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
                 }
                 break;
 
             case 2:
-                LegendsHelperFR legendsHelperFR = new LegendsHelperFR(mContext);
+                LegendsHelperFR legendsHelperFR = new LegendsHelperFR(context);
                 try {
                     legendsDB = legendsHelperFR.getWritableDatabase();
                 } catch (SQLiteException e) {
                     legendsDB = legendsHelperFR.getReadableDatabase();
-                    Toast.makeText(mContext, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
                 }
                 break;
         }

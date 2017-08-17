@@ -151,7 +151,6 @@ public class LegendsPreferences {
     private void doCommit() {
         if (mEditor != null) {
             mEditor.apply();
-            mEditor = null;
         }
     }
 }
