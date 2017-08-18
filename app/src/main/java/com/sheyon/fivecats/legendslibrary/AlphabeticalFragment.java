@@ -96,10 +96,8 @@ public class AlphabeticalFragment extends Fragment implements FragmentVisibility
 
     @Override
     public void onFragmentVisible() {
-        //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
-        if (db == null) {
-            db = LegendsDatabase.getInstance(getContext());
-        }
+        //ALWAYS GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
+        db = LegendsDatabase.getInstance(getContext());
 
         refreshCursor();
 

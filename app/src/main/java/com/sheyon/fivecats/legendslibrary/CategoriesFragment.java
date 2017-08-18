@@ -178,9 +178,8 @@ public class CategoriesFragment extends Fragment {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         String unionQuery = qb.buildUnionQuery(mergedQuery, null, null);
 
-        if (db == null) {
-            db = LegendsDatabase.getInstance(getContext());
-        }
+        //ALWAYS GET NEW DATABASE VARIABLE IN CASE SETTINGS WERE CHANGED
+        db = LegendsDatabase.getInstance(getContext());
         cursor = db.rawQuery(unionQuery, selectionArgs);
 
         LegendsCursorTreeAdapter legendsCursorTreeAdapter = new LegendsCursorTreeAdapter(cursor, getContext());

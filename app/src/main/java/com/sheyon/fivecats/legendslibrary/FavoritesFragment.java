@@ -161,9 +161,7 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
     @Override
     public void onFragmentVisible() {
         //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
-        if (db == null) {
-            db = LegendsDatabase.getInstance(getContext());
-        }
+        db = LegendsDatabase.getInstance(getContext());
 
         refreshCursor();
 
