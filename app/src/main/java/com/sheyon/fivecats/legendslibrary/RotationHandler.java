@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-abstract class RotationHandler extends AppCompatActivity {
+class RotationHandler extends AppCompatActivity {
 
     public static void setupRotationLayout (Context context, ViewGroup rootLayout, ViewGroup childLayout, @Nullable Toolbar toolbar) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();

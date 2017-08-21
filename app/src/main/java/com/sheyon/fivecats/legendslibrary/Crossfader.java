@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-abstract class Crossfader extends AppCompatActivity {
+class Crossfader extends AppCompatActivity {
 
     public static void crossfadeView (View contentView, View loadingView) {
         crossfade(contentView, loadingView);
