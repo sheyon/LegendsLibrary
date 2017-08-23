@@ -3,6 +3,7 @@ package com.sheyon.fivecats.legendslibrary;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,9 +17,8 @@ import android.widget.Toast;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
+import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
-
-import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 {
@@ -96,6 +96,9 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
+        SQLiteDatabase mDb = LegendsDatabase.getInstance(mContext);
+
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         String [] union = { Queries.GET_CAT_ID_UNION_1, Queries.GET_CAT_ID_UNION_2 };
         String joinedQuery = qb.buildUnionQuery(union, null, null);
@@ -110,7 +113,7 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                 String clickedCategory = loreCategory_TV.getText().toString();
 
                 String[] catIdArgs = { clickedTitle, clickedCategory, clickedTitle, clickedCategory };
-                Cursor catIdCursor = legendsDB.rawQuery(joinedQuery, catIdArgs);
+                Cursor catIdCursor = mDb.rawQuery(joinedQuery, catIdArgs);
 
                 catIdCursor.moveToFirst();
                 int clickedCatId = catIdCursor.getInt(catIdCursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_ID));
@@ -146,7 +149,7 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 
                 //REMOVE THE PREFIX FROM THE TITLE STRING
                 String[] plainTitleArgs = { faveTitle, faveCategory, faveTitle, faveCategory };
-                Cursor plainTitleCursor = legendsDB.rawQuery(joinedQuery, plainTitleArgs);
+                Cursor plainTitleCursor = mDb.rawQuery(joinedQuery, plainTitleArgs);
                 if (plainTitleCursor != null) {
                     plainTitleCursor.moveToFirst();
                     faveTitle = plainTitleCursor.getString(plainTitleCursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
@@ -156,11 +159,11 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                 String modFaveTitle = "\"" + faveTitle + "\"";
 
                 //EXECUTE UPDATE QUERY
-                legendsDB.execSQL(Queries.UPDATE_FAVE + modFaveTitle + ";");
+                mDb.execSQL(Queries.UPDATE_FAVE + modFaveTitle + ";");
 
                 //GET UPDATED CURSOR
                 String[] selectionArgs = { faveTitle };
-                Cursor cursor = legendsDB.rawQuery(Queries.GET_FAVE, selectionArgs);
+                Cursor cursor = mDb.rawQuery(Queries.GET_FAVE, selectionArgs);
                 cursor.moveToFirst();
                 int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
 

@@ -2,6 +2,7 @@ package com.sheyon.fivecats.legendslibrary;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +12,17 @@ import android.widget.TextView;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
-
+import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 
 class LegendsCursorTreeAdapter extends CursorTreeAdapter
 {
     private Cursor mCursor;
+    private Context mContext;
 
     LegendsCursorTreeAdapter(Cursor cursor, Context context) {
         super(cursor, context, false);
         mCursor = cursor;
+        mContext = context;
     }
 
     @Override
@@ -33,6 +36,9 @@ class LegendsCursorTreeAdapter extends CursorTreeAdapter
 
     @Override
     protected Cursor getChildrenCursor(Cursor groupCursor) {
+        //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
+        SQLiteDatabase mDb = LegendsDatabase.getInstance(mContext);
+
         int subcatNumber = mCursor.getInt(mCursor.getColumnIndex(LoreLibrary.COLUMN_SUBCAT_ID));
 
         //THE PREVIOUS CURSOR INCLUDES SUBCAT IDS WHICH MAY BE NULL. SKIP THESE ENTRIES.
@@ -41,7 +47,7 @@ class LegendsCursorTreeAdapter extends CursorTreeAdapter
         }
 
         String [] selectionArgs = { Integer.toString(subcatNumber) };
-        groupCursor = MainActivity.legendsDB.rawQuery(Queries.LORES, selectionArgs);
+        groupCursor = mDb.rawQuery(Queries.LORES, selectionArgs);
 
         return groupCursor;
         }
@@ -72,7 +78,7 @@ class LegendsCursorTreeAdapter extends CursorTreeAdapter
             prefixText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_PREFIX));
             categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
             if (prefixText != null) {
-                categoryHeader.setText("" + prefixText + categoryText);;
+                categoryHeader.setText("" + prefixText + categoryText);
             }
             else {
                 categoryHeader.setText(categoryText);

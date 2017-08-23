@@ -3,6 +3,7 @@ package com.sheyon.fivecats.legendslibrary;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -14,27 +15,39 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
+import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
 import java.text.Normalizer;
 import java.util.Locale;
 
-import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
-
 public class LoreActivity extends AppCompatActivity implements View.OnClickListener
 {
+    private SQLiteDatabase db;
+
     private Boolean startupComplete = false;
     private Boolean wildcardFlag = false;
+
     private String searchString;
     private String titleString;
     private String fullTitleString;
+    private String buzzingText;
+    private String blackSignalText;
+    private String categoryString;
+    private int faved;
+
+    private ScrollView scrollView;
+
     private ImageView favedImageView;
     private LegendsPreferences legendsPrefs;
 
@@ -46,15 +59,61 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lore);
+        legendsPrefs = LegendsPreferences.getInstance(this);
+        db = LegendsDatabase.getInstance(this);
 
-        legendsPrefs = LegendsPreferences.getInstance(getApplicationContext());
+        int categoryNumber = getIntent().getIntExtra("catNumber", 0);
+        titleString = getIntent().getStringExtra("loreTitle");
+        searchString = getIntent().getStringExtra("searchString");
+
+        //NULL CATCH; IT SHOULD NEVER HAPPEN, BUT IT DO
+        if (titleString == null) {
+            titleString = legendsPrefs.getLoreTitle();
+        }
+
+        //NULL CATCH; IT SHOULD NEVER HAPPEN, BUT IT DO
+        if (categoryNumber == 0) {
+            String [] catchArgs = { titleString, titleString };
+            Cursor catchCursor = db.rawQuery(Queries.CAT_ID_CATCH, catchArgs);
+            if (catchCursor != null) {
+                catchCursor.moveToFirst();
+                categoryNumber = catchCursor.getInt(catchCursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_ID));
+                catchCursor.close();
+            }
+        }
+
+        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+        String [] union = { Queries.SINGLE_LORE_UNION_1, Queries.SINGLE_LORE_UNION_2 };
+        String joinedQuery = qb.buildUnionQuery(union, null, null);
+
+        String[] selectionArgs = { Integer.toString(categoryNumber), titleString, Integer.toString(categoryNumber), titleString };
+
+        Cursor cursor = db.rawQuery(joinedQuery, selectionArgs);
+        if (cursor != null) {
+            cursor.moveToFirst();
+
+            buzzingText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BUZZING));
+            blackSignalText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BLACK_SIGNAL));
+            categoryString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_NAME));
+            faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
+
+            //FULL TITLE STRING IS FOR THE FAVE TOASTS; SAVE IT SO YOU CAN USE IT LATER
+            fullTitleString = titleString;
+            //TRUNCATES THE TITLE SO PREFIXES DON'T BREAK FAVES
+            titleString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_TITLE));
+
+            cursor.close();
+        }
+
+        setContentView(R.layout.activity_lore);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.loreActivity_toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        scrollView = (ScrollView) findViewById(R.id.loreActivity_scrollView);
 
         TextView titleTextView = (TextView) findViewById(R.id.loreActivity_title_text_view);
         TextView categoryTextView = (TextView) findViewById(R.id.loreActivity_category_text_view);
@@ -69,61 +128,23 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         holder.mImageLayout = faveClickable;
         holder.mImageLayout.setOnClickListener(this);
 
-        int categoryNumber = getIntent().getIntExtra("catNumber", 0);
-        titleString = getIntent().getStringExtra("loreTitle");
-        searchString = getIntent().getStringExtra("searchString");
+        titleTextView.setText(fullTitleString);
+        categoryTextView.setText(categoryString);
 
-        //NULL CATCH; IT SHOULD NEVER HAPPEN, BUT IT DO
-        if (titleString == null) {
-            titleString = legendsPrefs.getLoreTitle();
-        }
+        setStar(faved);
+        initiateHighlighter(buzzingTextView, buzzingText, blackSignalTextView, blackSignalText);
 
-        //NULL CATCH; IT SHOULD NEVER HAPPEN, BUT IT DO
-        if (categoryNumber == 0) {
-            String [] catchArgs = { titleString, titleString };
-            Cursor catchCursor = legendsDB.rawQuery(Queries.CAT_ID_CATCH, catchArgs);
-            if (catchCursor != null) {
-                catchCursor.moveToFirst();
-                categoryNumber = catchCursor.getInt(catchCursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_ID));
-                catchCursor.close();
-            }
-        }
-
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        String [] union = { Queries.SINGLE_LORE_UNION_1, Queries.SINGLE_LORE_UNION_2 };
-        String joinedQuery = qb.buildUnionQuery(union, null, null);
-
-        String[] selectionArgs = { Integer.toString(categoryNumber), titleString, Integer.toString(categoryNumber), titleString };
-        Cursor cursor = legendsDB.rawQuery(joinedQuery, selectionArgs);
-        if (cursor != null) {
-            cursor.moveToFirst();
-
-            String buzzingText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BUZZING));
-            String blackSignalText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BLACK_SIGNAL));
-            String categoryString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_NAME));
-            int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
-
-            titleTextView.setText(titleString);
-            categoryTextView.setText(categoryString);
-
-            //FULL TITLE STRING IS FOR THE FAVE TOASTS; SAVE IT SO YOU CAN USE IT LATER
-            fullTitleString = titleString;
-            //TRUNCATES THE TITLE SO PREFIXES DON'T BREAK FAVES
-            titleString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_TITLE));
-
-            setStar(faved);
-            initiateHighlighter(buzzingTextView, buzzingText, blackSignalTextView, blackSignalText);
-
-            //A LORE MAY OR MAY NOT HAVE A BLACK SIGNAL TO DISPLAY
-            if (blackSignalText != null) {
-                blackSignalLayout.setVisibility(View.VISIBLE);
-            }
-
-            cursor.close();
+        //A LORE MAY OR MAY NOT HAVE A BLACK SIGNAL TO DISPLAY
+        if (blackSignalText != null) {
+            blackSignalLayout.setVisibility(View.VISIBLE);
         }
 
         setFlavorImage(titleString);
         adjustFontSize(buzzingTextView, blackSignalTextView);
+
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.loreActivity_relativeLayout);
+        RotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
+
         startupComplete = true;
     }
 
@@ -186,7 +207,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     private void setFlavorImage(String titleString) {
         ImageView flavorImageView = (ImageView) findViewById(R.id.lore_flavor_image);
         String[] selectionArgs = { titleString };
-        Cursor flavorImageCursor = legendsDB.rawQuery(Queries.GET_IMAGE, selectionArgs);
+        Cursor flavorImageCursor = db.rawQuery(Queries.GET_IMAGE, selectionArgs);
 
         if (flavorImageCursor != null)
         {
@@ -203,20 +224,18 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         showFlavorImage(flavorImageView);
     }
 
-    static int getImageId(Context context, String imageResource) {
+    private static int getImageId(Context context, String imageResource) {
         return context.getResources().getIdentifier("drawable/" + imageResource, null, context.getPackageName());
     }
 
     private void showFlavorImage(ImageView imageView) {
-        LegendsPreferences legendsPreferences = LegendsPreferences.getInstance(this);
-
         //IF PREFS DON'T EXIST, CREATE THEM. (DEFAULT: SHOW IMAGES)
-        if (!legendsPreferences.doesContain(LegendsPreferences.PREF_SHOW_IMAGES)) {
-            legendsPreferences.setImagePref(true);
+        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_SHOW_IMAGES)) {
+            legendsPrefs.setImagePref(true);
         }
 
         //HIDE IMAGE IF NEEDED
-        if (!legendsPreferences.getImagePref()) {
+        if (!legendsPrefs.getImagePref()) {
             imageView.setVisibility(View.GONE);
         }
     }
@@ -306,12 +325,6 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @Override
-    public boolean onNavigateUp() {
-        onBackPressed();
-        return false;
-    }
-
     private void setStar(int faved) {
         if (faved == 0) {
             favedImageView.setImageResource(R.drawable.ic_star_border_white_48dp);
@@ -333,11 +346,11 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
             String modTitleString = "\"" + titleString + "\"";
 
             //EXECUTE UPDATE QUERY
-            legendsDB.execSQL(Queries.UPDATE_FAVE + modTitleString + ";");
+            db.execSQL(Queries.UPDATE_FAVE + modTitleString + ";");
 
             //GET UPDATED CURSOR TO SET THE NEW FAVED STATE
             String[] selectionArgs = { titleString };
-            Cursor cursor = legendsDB.rawQuery(Queries.GET_FAVE, selectionArgs);
+            Cursor cursor = db.rawQuery(Queries.GET_FAVE, selectionArgs);
             if (cursor != null) {
                 cursor.moveToFirst();
 
@@ -347,5 +360,40 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
                 cursor.close();
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        legendsPrefs.setLorePagePosition(scrollView.getScrollY());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        //STUPID HACKJOB. 250ms DELAY SINCE THE LAYOUT ISN'T COMPLETELY DRAWN BEFORE IT CAN SCROLL
+        scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                scrollView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        scrollView.scrollTo(0, legendsPrefs.getLorePagePosition());
+                    }
+                }, 250);
+            }
+        });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        legendsPrefs.setLorePagePosition(0);
     }
 }

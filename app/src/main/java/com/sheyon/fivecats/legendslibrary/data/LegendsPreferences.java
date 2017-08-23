@@ -17,6 +17,12 @@ public class LegendsPreferences {
 
     public static final String ALPHABETICAL_POSITION = "ALPHABETICAL_POSITION";
     public static final String LORE_TITLE = "LORE_TITLE";
+    public static final String LORE_PAGE_POSITION = "LORE_PAGE_POSITION";
+    public static final String SPINNER_CAT_NUMBER = "SPINNER_CAT_NUMBER";
+
+    public static final int LANG_EN = 0;
+    public static final int LANG_DE = 1;
+    public static final int LANG_FR = 2;
 
     private SharedPreferences mPref;
     private SharedPreferences.Editor mEditor;
@@ -31,6 +37,18 @@ public class LegendsPreferences {
 
     private LegendsPreferences (Context context) {
         mPref = context.getSharedPreferences(PREFS_FILE_KEY, Context.MODE_PRIVATE);
+    }
+
+    public void setSpinnerCatNumber(int val) {
+        doEdit();
+        mEditor.putInt(SPINNER_CAT_NUMBER, val);
+        doCommit();
+    }
+
+    public void setLorePagePosition(int val) {
+        doEdit();
+        mEditor.putInt(LORE_PAGE_POSITION, val);
+        doCommit();
     }
 
     public void setLoreTitle(String val) {
@@ -86,6 +104,14 @@ public class LegendsPreferences {
         return mPref.contains(prefKey);
     }
 
+    public int getSpinnerCatNumber() {
+        return mPref.getInt(SPINNER_CAT_NUMBER, 0);
+    }
+
+    public int getLorePagePosition() {
+        return mPref.getInt(LORE_PAGE_POSITION, 0);
+    }
+
     public String getLoreTitle() {
         return mPref.getString(LORE_TITLE, "Lilith");
     }
@@ -125,7 +151,6 @@ public class LegendsPreferences {
     private void doCommit() {
         if (mEditor != null) {
             mEditor.apply();
-            mEditor = null;
         }
     }
 }

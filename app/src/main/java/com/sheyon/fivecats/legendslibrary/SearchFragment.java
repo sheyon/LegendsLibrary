@@ -1,6 +1,7 @@
 package com.sheyon.fivecats.legendslibrary;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.sbrukhanda.fragmentviewpager.FragmentVisibilityListener;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
+import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
 import java.text.Normalizer;
@@ -30,7 +32,6 @@ import java.util.regex.Pattern;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
-import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
 
 public class SearchFragment extends Fragment implements FragmentVisibilityListener, View.OnClickListener
 {
@@ -44,6 +45,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     private boolean prefsNormalization;
     private boolean prefsWildcardOn;
 
+    private SQLiteDatabase db;
     private Cursor cursor;
     private Cursor refreshedCursor;
 
@@ -74,6 +76,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_layout, container, false);
 
+        db = LegendsDatabase.getInstance(getContext());
         setupSearchBar(view);
         setupListView(view);
 
@@ -159,7 +162,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
             modString = "'"+searchString+"'";
             String [] selectionArgs = { modString, modString, modString };
 
-            cursor = legendsDB.rawQuery(Queries.QUERY_FTS_NORMALIZED, selectionArgs);
+            cursor = db.rawQuery(Queries.QUERY_FTS_NORMALIZED, selectionArgs);
         }
         else {
             //FOR EN, DE, FR (UN-NORMALIZED); CHECK FOR ROMANIAN WORDS FIRST
@@ -168,7 +171,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
             modString = "'"+searchString+"'";
             String [] selectionArgs = { modString, modString, modString };
 
-            cursor = legendsDB.rawQuery(Queries.QUERY_FTS, selectionArgs);
+            cursor = db.rawQuery(Queries.QUERY_FTS, selectionArgs);
         }
 
         if (cursor != null) {
@@ -179,7 +182,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
         listView.setAdapter(adapter);
     }
 
-    String checkForRomanianWords(String search) {
+    private String checkForRomanianWords(String search) {
         Pattern patternDrac = Pattern.compile("dr.cule.ti");
         Pattern patternHarb = Pattern.compile("h.rb.bure.ti");
         Pattern patternBacas = Pattern.compile("baca.");
@@ -204,7 +207,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     }
 
     //THIS FUNCTION EXISTS IN CASE A USER PUTS DIACRITICS INTO A DIACRITIC-INSENSITIVE QUERY
-    String normalizeSearchString(String query){
+    private String normalizeSearchString(String query){
         String normalizedQuery = Normalizer.normalize(query, Normalizer.Form.NFD);
         normalizedQuery = normalizedQuery.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
         return normalizedQuery;
@@ -227,10 +230,10 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
 
         //ENGLISH DOES NOT SUPPORT A NORMALIZATION QUERY
         if (prefsNormalization && prefsLang != 0) {
-            refreshedCursor = legendsDB.rawQuery(Queries.QUERY_FTS_NORMALIZED, selectionArgs);
+            refreshedCursor = db.rawQuery(Queries.QUERY_FTS_NORMALIZED, selectionArgs);
         }
         else {
-            refreshedCursor = legendsDB.rawQuery(Queries.QUERY_FTS, selectionArgs);
+            refreshedCursor = db.rawQuery(Queries.QUERY_FTS, selectionArgs);
         }
 
         adapter.swapCursor(refreshedCursor);
@@ -301,13 +304,15 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
 
     @Override
     public void onFragmentVisible() {
+        //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
+        db = LegendsDatabase.getInstance(getContext());
+
         refreshCursor();
 
         //TO KEEP THE KEYBOARD FROM POPPING UP WHEN COMING BACK FROM THE LORE SCREEN
         listView.requestFocus();
 
-        Crossfader crossfader = new Crossfader();
-        crossfader.crossfadeView(searchLayout, loadingView);
+        Crossfader.crossfadeView(searchLayout, loadingView);
     }
 
     @Override

@@ -10,24 +10,19 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-public class UniversalDrawer extends AppCompatActivity {
+class UniversalDrawer extends AppCompatActivity {
 
     public ActionBarDrawerToggle mDrawerToggle;
-    private Activity mActivity;
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
 
-
-    public void setupDrawer(Activity activity, Toolbar toolbar){
-        mActivity = activity;
-        mDrawerLayout = (DrawerLayout) mActivity.findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) mActivity.findViewById(R.id.left_drawer);
-        final String[] mDrawerItems = mActivity.getResources().getStringArray(R.array.drawer_items);
+    public void setupDrawer(final Activity activity, Toolbar toolbar){
+        final DrawerLayout mDrawerLayout = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
+        final String[] mDrawerItems = activity.getResources().getStringArray(R.array.drawer_items);
+        final ListView mDrawerList = (ListView) activity.findViewById(R.id.left_drawer);
 
         // Set the adapter for the list view
-        DrawerAdapter drawerAdapter = new DrawerAdapter(mActivity, R.layout.drawer_list_item, mDrawerItems);
+        DrawerAdapter drawerAdapter = new DrawerAdapter(activity, R.layout.drawer_list_item, mDrawerItems);
         mDrawerList.setAdapter(drawerAdapter);
-        mDrawerToggle = new ActionBarDrawerToggle(mActivity, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close){
+        mDrawerToggle = new ActionBarDrawerToggle(activity, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close){
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
             }
@@ -40,37 +35,36 @@ public class UniversalDrawer extends AppCompatActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mDrawerItems[position].equals(mActivity.getString(R.string.drawer_legends))) {
-                    Intent intent = new Intent(mActivity, MainActivity.class);
-                    if (mActivity.getClass() != MainActivity.class) {
-                        mActivity.startActivity(intent);
+                if (mDrawerItems[position].equals(activity.getString(R.string.drawer_legends))) {
+                    Intent intent = new Intent(activity, MainActivity.class);
+                    if (activity.getClass() != MainActivity.class) {
+                        activity.startActivity(intent);
                         mDrawerLayout.closeDrawer(mDrawerList);
                     }
                 }
-                if (mDrawerItems[position].equals(mActivity.getString(R.string.drawer_settings))) {
-                    Intent intent = new Intent(mActivity, SettingsActivity.class);
-                    if (mActivity.getClass() != SettingsActivity.class) {
-                        mActivity.startActivity(intent);
+                if (mDrawerItems[position].equals(activity.getString(R.string.drawer_settings))) {
+                    Intent intent = new Intent(activity, SettingsActivity.class);
+                    if (activity.getClass() != SettingsActivity.class) {
+                        activity.startActivity(intent);
                         mDrawerLayout.closeDrawer(mDrawerList);
                     }
                 }
-                if (mDrawerItems[position].equals(mActivity.getString(R.string.drawer_about))) {
-                    Intent intent = new Intent(mActivity, AboutActivity.class);
-                    if (mActivity.getClass() != AboutActivity.class) {
-                        mActivity.startActivity(intent);
+                if (mDrawerItems[position].equals(activity.getString(R.string.drawer_about))) {
+                    Intent intent = new Intent(activity, AboutActivity.class);
+                    if (activity.getClass() != AboutActivity.class) {
+                        activity.startActivity(intent);
                         mDrawerLayout.closeDrawer(mDrawerList);
                     }
                 }
             }
         });
 
-        if ( mActivity.getActionBar() != null ){
-            mActivity.getActionBar().setDisplayHomeAsUpEnabled(true);
-            mActivity.getActionBar().setHomeButtonEnabled(true);
+        if ( activity.getActionBar() != null ){
+            activity.getActionBar().setDisplayHomeAsUpEnabled(true);
+            activity.getActionBar().setHomeButtonEnabled(true);
         }
 
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
     }
-
 }

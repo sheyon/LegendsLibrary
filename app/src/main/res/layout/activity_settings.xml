@@ -7,6 +7,7 @@
     tools:context=".SettingsActivity">
 
     <RelativeLayout
+        android:id="@+id/settingsActivity_relativeLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -20,6 +21,7 @@
             android:minHeight="?attr/actionBarSize" />
 
         <ScrollView
+            android:id="@+id/settingsActivity_scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/settingsActivity_toolbar"

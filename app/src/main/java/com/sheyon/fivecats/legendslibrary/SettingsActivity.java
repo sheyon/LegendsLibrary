@@ -1,6 +1,7 @@
 package com.sheyon.fivecats.legendslibrary;
 
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,20 +12,22 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
+import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelperDE;
 import com.sheyon.fivecats.legendslibrary.data.LegendsHelperFR;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
-import static com.sheyon.fivecats.legendslibrary.MainActivity.legendsDB;
-
 public class SettingsActivity extends AppCompatActivity {
 
+    private SQLiteDatabase db;
     private UniversalDrawer universalDrawer;
     private CheckBox langCheckbox;
     private CheckBox wildcardOn;
@@ -39,11 +42,17 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        db = LegendsDatabase.getInstance(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.settingsActivity_toolbar);
         setSupportActionBar(toolbar);
 
         universalDrawer = new UniversalDrawer();
         universalDrawer.setupDrawer(this, toolbar);
+
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.settingsActivity_relativeLayout);
+        ScrollView scrollView = (ScrollView) findViewById(R.id.settingsActivity_scrollView);
+        RotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 
         legendsPrefs = LegendsPreferences.getInstance(getApplicationContext());
 
@@ -162,17 +171,17 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void restartDatabase() {
-        legendsDB.close();
+        db.close();
 
-        switch (langSelection) {
+        switch (legendsPrefs.getLangPref()) {
             case 0:
                 //ENGLISH
                 LegendsHelper legendsHelper = new LegendsHelper(this);
                 try {
-                    legendsDB = legendsHelper.getWritableDatabase();
+                    db = legendsHelper.getWritableDatabase();
                     Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
                 } catch (SQLiteException e) {
-                    legendsDB = legendsHelper.getReadableDatabase();
+                    db = legendsHelper.getReadableDatabase();
                     Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
                 }
                 break;
@@ -181,10 +190,10 @@ public class SettingsActivity extends AppCompatActivity {
                 //GERMAN
                 LegendsHelperDE legendsHelperDE = new LegendsHelperDE(this);
                 try {
-                    legendsDB = legendsHelperDE.getWritableDatabase();
+                    db = legendsHelperDE.getWritableDatabase();
                     Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
                 } catch (SQLiteException e) {
-                    legendsDB = legendsHelperDE.getReadableDatabase();
+                    db = legendsHelperDE.getReadableDatabase();
                     Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
                 }
                 break;
@@ -193,10 +202,10 @@ public class SettingsActivity extends AppCompatActivity {
                 //FRENCH
                 LegendsHelperFR legendsHelperFR = new LegendsHelperFR(this);
                 try {
-                    legendsDB = legendsHelperFR.getWritableDatabase();
+                    db = legendsHelperFR.getWritableDatabase();
                     Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
                 } catch (SQLiteException e) {
-                    legendsDB = legendsHelperFR.getReadableDatabase();
+                    db = legendsHelperFR.getReadableDatabase();
                     Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
                 }
                 break;
