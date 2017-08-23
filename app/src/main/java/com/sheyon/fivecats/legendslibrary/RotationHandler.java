@@ -43,14 +43,14 @@ class RotationHandler extends AppCompatActivity {
             //DARKEN THE ROOT BACKGROUND
             rootLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.backgroundDarker));
             childLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.backgroundBase));
-        }
 
-        //SET SCROLLVIEW PARAMS
-        RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams((int) trueWidth, RelativeLayout.LayoutParams.MATCH_PARENT);
-        if (toolbar != null) {
-            p.addRule(RelativeLayout.BELOW, toolbar.getId());
+            //SET SCROLLVIEW PARAMS
+            RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams((int) trueWidth, RelativeLayout.LayoutParams.MATCH_PARENT);
+            if (toolbar != null) {
+                p.addRule(RelativeLayout.BELOW, toolbar.getId());
+            }
+            p.addRule(RelativeLayout.CENTER_IN_PARENT);
+            childLayout.setLayoutParams(p);
         }
-        p.addRule(RelativeLayout.CENTER_IN_PARENT);
-        childLayout.setLayoutParams(p);
     }
 }
