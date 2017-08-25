@@ -41,37 +41,37 @@ public class AboutActivity extends AppCompatActivity {
 
         context = this;
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.aboutActivity_toolbar);
+        Toolbar toolbar = findViewById(R.id.aboutActivity_toolbar);
         setSupportActionBar(toolbar);
 
         universalDrawer = new UniversalDrawer();
         universalDrawer.setupDrawer(this, toolbar);
 
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.aboutActivity_relativeLayout);
-        ScrollView scrollView = (ScrollView) findViewById(R.id.aboutActivity_scrollView);
+        RelativeLayout relativeLayout = findViewById(R.id.aboutActivity_relativeLayout);
+        ScrollView scrollView = findViewById(R.id.aboutActivity_scrollView);
         RotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 
-        TextView aboutHeader = (TextView) findViewById(R.id.header_about);
-        TextView contactHeader = (TextView) findViewById(R.id.header_contact);
-        TextView privacyHeader = (TextView) findViewById(R.id.header_privacy);
-        TextView legalHeader = (TextView) findViewById(R.id.header_legal);
-        TextView thanksHeader = (TextView) findViewById(R.id.header_thanks);
+        TextView aboutHeader = findViewById(R.id.header_about);
+        TextView contactHeader = findViewById(R.id.header_contact);
+        TextView privacyHeader = findViewById(R.id.header_privacy);
+        TextView legalHeader = findViewById(R.id.header_legal);
+        TextView thanksHeader = findViewById(R.id.header_thanks);
 
-        aboutBlurb = (TextView) findViewById(R.id.textView_about);
-        contactLayout = (LinearLayout) findViewById(R.id.contact_icon_layout);
-        privacyBlurb = (TextView) findViewById(R.id.textView_privacy);
-        legalBlurb = (TextView) findViewById(R.id.textView_legal);
-        thanksBlurb = (TextView) findViewById(R.id.textView_thanks);
+        aboutBlurb = findViewById(R.id.textView_about);
+        contactLayout = findViewById(R.id.contact_icon_layout);
+        privacyBlurb = findViewById(R.id.textView_privacy);
+        legalBlurb = findViewById(R.id.textView_legal);
+        thanksBlurb = findViewById(R.id.textView_thanks);
 
-        aboutExpander = (ImageView) findViewById(R.id.about_expand_collapse);
-        contactExpander = (ImageView) findViewById(R.id.contact_expand_collapse);
-        privacyExpander = (ImageView) findViewById(R.id.privacy_expand_collapse);
-        legalExpander = (ImageView) findViewById(R.id.legal_expand_collapse);
-        thanksExpander = (ImageView) findViewById(R.id.thanks_expand_collapse);
+        aboutExpander = findViewById(R.id.about_expand_collapse);
+        contactExpander = findViewById(R.id.contact_expand_collapse);
+        privacyExpander = findViewById(R.id.privacy_expand_collapse);
+        legalExpander = findViewById(R.id.legal_expand_collapse);
+        thanksExpander = findViewById(R.id.thanks_expand_collapse);
 
-        ImageView iconEmail = (ImageView) findViewById(R.id.email_icon);
-        ImageView iconTwitter = (ImageView) findViewById(R.id.twitter_icon);
-        ImageView iconTumblr = (ImageView) findViewById(R.id.tumblr_icon);
+        ImageView iconEmail = findViewById(R.id.email_icon);
+        ImageView iconTwitter = findViewById(R.id.twitter_icon);
+        ImageView iconTumblr = findViewById(R.id.tumblr_icon);
 
         aboutHeader.setOnClickListener(new View.OnClickListener() {
             @Override

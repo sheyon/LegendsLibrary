@@ -52,8 +52,8 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         //SET UP THE CLICKABLE LAYOUTS
-        LinearLayout textLayout = (LinearLayout) view.findViewById(R.id.container_text_views);
-        LinearLayout imageLayout = (LinearLayout) view.findViewById(R.id.container_fave_clickable);
+        LinearLayout textLayout = view.findViewById(R.id.container_text_views);
+        LinearLayout imageLayout = view.findViewById(R.id.container_fave_clickable);
 
         ViewHolder holder = new ViewHolder();
         holder.mTextLayout = textLayout;
@@ -68,9 +68,9 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
             imageLayout.setVisibility(View.INVISIBLE);
         }
 
-        TextView loreTitle_TV = (TextView) view.findViewById(R.id.lore_title_text_view);
-        TextView loreCategory_TV = (TextView) view.findViewById(R.id.lore_category_text_view);
-        ImageView loreFavorite_IV = (ImageView) view.findViewById(R.id.lore_favorites_image_view);
+        TextView loreTitle_TV = view.findViewById(R.id.lore_title_text_view);
+        TextView loreCategory_TV = view.findViewById(R.id.lore_category_text_view);
+        ImageView loreFavorite_IV = view.findViewById(R.id.lore_favorites_image_view);
 
         //START UNFAVED
         loreFavorite_IV.setImageResource(R.drawable.ic_star_border_white_48dp);
@@ -106,8 +106,8 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
         switch (v.getId())
         {
             case R.id.container_text_views:
-                TextView loreTitle_TV = (TextView) v.findViewById(R.id.lore_title_text_view);
-                TextView loreCategory_TV = (TextView) v.findViewById(R.id.lore_category_text_view);
+                TextView loreTitle_TV = v.findViewById(R.id.lore_title_text_view);
+                TextView loreCategory_TV = v.findViewById(R.id.lore_category_text_view);
 
                 String clickedTitle = loreTitle_TV.getText().toString();
                 String clickedCategory = loreCategory_TV.getText().toString();
@@ -138,8 +138,8 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                 }
                 //GET PARENT VIEW TO CATCH THE TITLE STRING
                 View parentView = (View) v.getParent();
-                loreTitle_TV = (TextView) parentView.findViewById(R.id.lore_title_text_view);
-                loreCategory_TV = (TextView) parentView.findViewById(R.id.lore_category_text_view);
+                loreTitle_TV = parentView.findViewById(R.id.lore_title_text_view);
+                loreCategory_TV = parentView.findViewById(R.id.lore_category_text_view);
 
                 String faveTitle = loreTitle_TV.getText().toString();
                 String faveCategory = loreCategory_TV.getText().toString();
@@ -167,7 +167,7 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                 cursor.moveToFirst();
                 int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
 
-                ImageView loreFavorite_IV = (ImageView) v.findViewById(R.id.lore_favorites_image_view);
+                ImageView loreFavorite_IV = v.findViewById(R.id.lore_favorites_image_view);
 
                 //SET FAVED OR UNFAVED
                 if (faved == 0){

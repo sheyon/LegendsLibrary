@@ -91,7 +91,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     }
 
     private void setupSearchBar(View view) {
-        searchView = (SearchView) view.findViewById(R.id.search_view);
+        searchView = view.findViewById(R.id.search_view);
         searchView.setIconifiedByDefault(false);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -135,11 +135,11 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     }
 
     private void setupListView(View view) {
-        searchLayout = (LinearLayout) view.findViewById(R.id.search_layout);
-        listView = (ListView) view.findViewById(R.id.search_list_view);
+        searchLayout = view.findViewById(R.id.search_layout);
+        listView = view.findViewById(R.id.search_list_view);
         loadingView = view.findViewById(R.id.search_loading_view);
 
-        LinearLayout infoClickable = (LinearLayout) view.findViewById(R.id.search_info_clickable);
+        LinearLayout infoClickable = view.findViewById(R.id.search_info_clickable);
         ViewHolder holder = new ViewHolder();
         holder.mClickableLayout = infoClickable;
         holder.mClickableLayout.setOnClickListener(this);
@@ -341,7 +341,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
                 }
             });
 
-            Button closeButton = (Button) popupView.findViewById(R.id.popup_button_dismiss);
+            Button closeButton = popupView.findViewById(R.id.popup_button_dismiss);
             closeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

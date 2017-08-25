@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = (Toolbar) findViewById(R.id.mainActivity_toolbar);
+        toolbar = findViewById(R.id.mainActivity_toolbar);
         toolbar.setTitle(R.string.title_alphabetical);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
         setSupportActionBar(toolbar);
@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         universalDrawer = new UniversalDrawer();
         universalDrawer.setupDrawer(this, toolbar);
 
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.mainActivity_tab_layout);
-        viewPager = (FragmentViewPager) findViewById(R.id.view_pager);
+        final TabLayout tabLayout = findViewById(R.id.mainActivity_tab_layout);
+        viewPager = findViewById(R.id.view_pager);
         final LegendsPagerAdapter pagerAdapter = new LegendsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
 
         viewPager.setAdapter(pagerAdapter);
