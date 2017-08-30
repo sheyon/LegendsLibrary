@@ -167,11 +167,11 @@ public class AboutActivity extends AppCompatActivity {
                 try {
                     // get the Twitter app if possible
                     getPackageManager().getPackageInfo("com.twitter.android", 0);
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?user_id=2204276767"));
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?user_id=879362303623352320"));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 } catch (Exception e) {
                     // no Twitter app, revert to browser
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/MarkelSmythe"));
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/legends_library"));
                 }
                 startActivity(intent);
             }
