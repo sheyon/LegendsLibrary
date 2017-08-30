@@ -103,24 +103,26 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
         String [] union = { Queries.GET_CAT_ID_UNION_1, Queries.GET_CAT_ID_UNION_2 };
         String joinedQuery = qb.buildUnionQuery(union, null, null);
 
+        TextView loreCategory_TV;
+
         switch (v.getId())
         {
             case R.id.container_text_views:
                 TextView loreTitle_TV = v.findViewById(R.id.lore_title_text_view);
-                TextView loreCategory_TV = v.findViewById(R.id.lore_category_text_view);
-
                 String clickedTitle = loreTitle_TV.getText().toString();
-                String clickedCategory = loreCategory_TV.getText().toString();
 
-                String[] catIdArgs = { clickedTitle, clickedCategory, clickedTitle, clickedCategory };
-                Cursor catIdCursor = mDb.rawQuery(joinedQuery, catIdArgs);
-
-                catIdCursor.moveToFirst();
-                int clickedCatId = catIdCursor.getInt(catIdCursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_ID));
-                catIdCursor.close();
+//                loreCategory_TV = v.findViewById(R.id.lore_category_text_view);
+//                String clickedCategory = loreCategory_TV.getText().toString();
+//
+//                String[] catIdArgs = { clickedTitle, clickedCategory, clickedTitle, clickedCategory };
+//                Cursor catIdCursor = mDb.rawQuery(joinedQuery, catIdArgs);
+//
+//                catIdCursor.moveToFirst();
+//                int clickedCatId = catIdCursor.getInt(catIdCursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_ID));
+//                catIdCursor.close();
 
                 Intent intent = new Intent(mContext, LoreActivity.class);
-                intent.putExtra("catNumber", clickedCatId);
+                //intent.putExtra("catNumber", clickedCatId);
                 intent.putExtra("loreTitle", clickedTitle);
                 intent.putExtra("searchString", mSearchString);
 

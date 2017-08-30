@@ -99,4 +99,6 @@
     <string name="about_thanksText">La communauté Secret World est vraiment l\'une des plus serviable parmi les MMO. L\'auteur souhaite remercier les personnes suivantes pour leur aide dans la traduction de cette application:
     \n\nKuro-Hebi (Français)</string>
 
+    <string name="error_report">Voulez-vous signaler cette erreur à l\'auteur?</string>
+
 </resources>

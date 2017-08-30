@@ -159,7 +159,7 @@ public class CategoriesFragment extends Fragment {
 
     private void startLoreActivity() {
         Intent intent = new Intent(getContext(), LoreActivity.class);
-        intent.putExtra("catNumber", spinnerCatNumber);
+//        intent.putExtra("catNumber", spinnerCatNumber);
         intent.putExtra("loreTitle", loreTitle);
 
         //FAILSAFE

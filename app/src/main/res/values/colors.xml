@@ -3,6 +3,7 @@
     <color name="colorPrimary">#58150F</color>
     <color name="colorPrimaryDark">#2D1211</color>
     <color name="colorAccent">#AF6D66</color>
+    <color name="colorAccentLighter">#D6A9A4</color>
     <color name="backgroundDarker">#202020</color>
     <color name="backgroundBase">#303030</color>
     <color name="backgroundAccent">#404040</color>
