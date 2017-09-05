@@ -1,19 +1,26 @@
 package com.sheyon.fivecats.legendslibrary;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.TextViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -31,7 +38,7 @@ import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 import java.text.Normalizer;
 import java.util.Locale;
 
-public class LoreActivity extends AppCompatActivity implements View.OnClickListener
+public class LoreActivity extends AppCompatActivity
 {
     private SQLiteDatabase db;
 
@@ -51,10 +58,6 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView favedImageView;
     private LegendsPreferences legendsPrefs;
 
-    private static class ViewHolder {
-        private LinearLayout mImageLayout;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -62,7 +65,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         legendsPrefs = LegendsPreferences.getInstance(this);
         db = LegendsDatabase.getInstance(this);
 
-        int categoryNumber = getIntent().getIntExtra("catNumber", 0);
+        //int categoryNumber = getIntent().getIntExtra("catNumber", 0);
         titleString = getIntent().getStringExtra("loreTitle");
         searchString = getIntent().getStringExtra("searchString");
 
@@ -72,6 +75,8 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         //NULL CATCH; IT SHOULD NEVER HAPPEN, BUT IT DO
+        //SOME DEVICES LOSE THIS VARIABLE; FORCE ZERO SO THE APP CAN GET THE CORRECT NUMBER
+        int categoryNumber = 0;
         if (categoryNumber == 0) {
             String [] catchArgs = { titleString, titleString };
             Cursor catchCursor = db.rawQuery(Queries.CAT_ID_CATCH, catchArgs);
@@ -90,43 +95,117 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
 
         Cursor cursor = db.rawQuery(joinedQuery, selectionArgs);
         if (cursor != null) {
-            cursor.moveToFirst();
+            try {
+                cursor.moveToFirst();
+                buzzingText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BUZZING));
+                blackSignalText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BLACK_SIGNAL));
+                categoryString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_NAME));
+                faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
 
-            buzzingText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BUZZING));
-            blackSignalText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BLACK_SIGNAL));
-            categoryString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_NAME));
-            faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
+                //FULL TITLE STRING IS FOR THE FAVE TOASTS; SAVE IT SO YOU CAN USE IT LATER
+                fullTitleString = titleString;
+                //TRUNCATES THE TITLE SO PREFIXES DON'T BREAK FAVES
+                titleString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_TITLE));
 
-            //FULL TITLE STRING IS FOR THE FAVE TOASTS; SAVE IT SO YOU CAN USE IT LATER
-            fullTitleString = titleString;
-            //TRUNCATES THE TITLE SO PREFIXES DON'T BREAK FAVES
-            titleString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_TITLE));
+                cursor.close();
+            }
+            catch (CursorIndexOutOfBoundsException e) {
+                final String errorText = titleString + " : " + categoryNumber;
+                final String stackTrace = e.fillInStackTrace().toString();
+                Log.e ("***ERROR", e.getMessage());
+                Log.e ("***ERROR", errorText);
+                buzzingText = getString(R.string.empty_error);
 
-            cursor.close();
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(R.string.error_report);
+
+                builder.setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String[] email = { "markelsmythe@gmail.com" };
+                        String userManu = Build.MANUFACTURER;
+                        String userModel = Build.MODEL;
+                        int userVersion = Build.VERSION.SDK_INT;
+
+                        Intent intent = new Intent(Intent.ACTION_SENDTO);
+                        intent.setData(Uri.parse("mailto:"));
+                        intent.putExtra(Intent.EXTRA_EMAIL, email);
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "Legends Library App");
+                        intent.putExtra(Intent.EXTRA_TEXT, stackTrace + "\n"
+                                + errorText  + "\n"
+                                + userManu + "\n"
+                                + userModel  + "\n"
+                                + userVersion);
+                        if (intent.resolveActivity(getPackageManager()) != null) {
+                            startActivity(intent);
+                        }
+                        else {
+                            Toast.makeText(getBaseContext(), R.string.toast_no_email, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
         }
 
         setContentView(R.layout.activity_lore);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.loreActivity_toolbar);
+        Toolbar toolbar = findViewById(R.id.loreActivity_toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        scrollView = (ScrollView) findViewById(R.id.loreActivity_scrollView);
+        scrollView = findViewById(R.id.loreActivity_scrollView);
 
-        TextView titleTextView = (TextView) findViewById(R.id.loreActivity_title_text_view);
-        TextView categoryTextView = (TextView) findViewById(R.id.loreActivity_category_text_view);
-        TextView buzzingTextView = (TextView) findViewById(R.id.loreActivity_buzzing_text_view);
-        favedImageView = (ImageView) findViewById(R.id.loreActivity_fave_imageView);
+        TextView titleTextView = findViewById(R.id.loreActivity_title_text_view);
+        TextView categoryTextView = findViewById(R.id.loreActivity_category_text_view);
+        TextView buzzingTextView = findViewById(R.id.loreActivity_buzzing_text_view);
+        favedImageView = findViewById(R.id.loreActivity_fave_imageView);
+        favedImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String modTitleString = "\"" + titleString + "\"";
 
-        LinearLayout blackSignalLayout = (LinearLayout) findViewById(R.id.loreActivity_BlackSignalLayout);
-        TextView blackSignalTextView = (TextView) findViewById(R.id.loreActivity_signal_text_view);
+                //EXECUTE UPDATE QUERY
+                db.execSQL(Queries.UPDATE_FAVE + modTitleString + ";");
 
-        LinearLayout faveClickable = (LinearLayout) findViewById(R.id.loreActivity_fave_clickable);
-        ViewHolder holder = new ViewHolder();
-        holder.mImageLayout = faveClickable;
-        holder.mImageLayout.setOnClickListener(this);
+                //GET UPDATED CURSOR TO SET THE NEW FAVED STATE
+                String[] selectionArgs = { titleString };
+                Cursor cursor = db.rawQuery(Queries.GET_FAVE, selectionArgs);
+                if (cursor != null) {
+                    cursor.moveToFirst();
+
+                    int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
+                    setStar(faved);
+
+                    cursor.close();
+                }
+            }
+        });
+
+        LinearLayout blackSignalLayout = findViewById(R.id.loreActivity_BlackSignalLayout);
+        TextView blackSignalTextView = findViewById(R.id.loreActivity_signal_text_view);
+
+//        FOR 1.1.14
+//        TextView locationsTextView = findViewById(R.id.loreActivity_location_text_view);
+//        locationsTextView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getBaseContext(), LocationActivity.class);
+//                intent.putExtra("loreTitle", fullTitleString);
+//                startActivity(intent);
+//            }
+//        });
 
         titleTextView.setText(fullTitleString);
         categoryTextView.setText(categoryString);
@@ -142,7 +221,7 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
         setFlavorImage(titleString);
         adjustFontSize(buzzingTextView, blackSignalTextView);
 
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.loreActivity_relativeLayout);
+        RelativeLayout relativeLayout = findViewById(R.id.loreActivity_relativeLayout);
         RotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 
         startupComplete = true;
@@ -205,20 +284,25 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setFlavorImage(String titleString) {
-        ImageView flavorImageView = (ImageView) findViewById(R.id.lore_flavor_image);
+        ImageView flavorImageView = findViewById(R.id.lore_flavor_image);
         String[] selectionArgs = { titleString };
         Cursor flavorImageCursor = db.rawQuery(Queries.GET_IMAGE, selectionArgs);
 
-        if (flavorImageCursor != null)
-        {
-            flavorImageCursor.moveToFirst();
-            String imageResource = flavorImageCursor.getString(flavorImageCursor.getColumnIndex(LoreLibrary.COLUMN_IMAGE));
+        if (flavorImageCursor != null) {
+            try {
+                flavorImageCursor.moveToFirst();
+                String imageResource = flavorImageCursor.getString(flavorImageCursor.getColumnIndex(LoreLibrary.COLUMN_IMAGE));
 
-            if (imageResource != null){
-                flavorImageView.setImageResource(getImageId(this, imageResource));
+                if (imageResource != null){
+                    flavorImageView.setImageResource(getImageId(this, imageResource));
+                }
+
+                flavorImageCursor.close();
             }
-
-            flavorImageCursor.close();
+            catch (CursorIndexOutOfBoundsException e) {
+                Log.e ("***ERROR", "Could not find image resource");
+                flavorImageView.setImageResource(R.drawable.flavor_default);
+            }
         }
 
         showFlavorImage(flavorImageView);
@@ -336,28 +420,6 @@ public class LoreActivity extends AppCompatActivity implements View.OnClickListe
             favedImageView.setImageResource(R.drawable.ic_star_white_48dp);
             if (startupComplete) {
                 Toast.makeText(this, fullTitleString + " " + getString(R.string.fave_added), Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.loreActivity_fave_clickable) {
-            String modTitleString = "\"" + titleString + "\"";
-
-            //EXECUTE UPDATE QUERY
-            db.execSQL(Queries.UPDATE_FAVE + modTitleString + ";");
-
-            //GET UPDATED CURSOR TO SET THE NEW FAVED STATE
-            String[] selectionArgs = { titleString };
-            Cursor cursor = db.rawQuery(Queries.GET_FAVE, selectionArgs);
-            if (cursor != null) {
-                cursor.moveToFirst();
-
-                int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
-                setStar(faved);
-
-                cursor.close();
             }
         }
     }

@@ -7,4 +7,5 @@
     <color name="backgroundDarker">#202020</color>
     <color name="backgroundBase">#303030</color>
     <color name="backgroundAccent">#404040</color>
+    <color name="backgroundAccentLighter">#505050</color>
 </resources>
