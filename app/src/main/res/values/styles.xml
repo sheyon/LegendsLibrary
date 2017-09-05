@@ -21,12 +21,14 @@
     </style>
 
     <!-- Base application theme. -->
-    <style name="LegendsTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="LegendsTheme" parent="Base.Theme.AppCompat">
         <!-- Customize your theme here. -->
-        <item name="windowActionBar">false</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <!-- NoActionBar Params added manually to fix preview rendering error -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
 </resources>
