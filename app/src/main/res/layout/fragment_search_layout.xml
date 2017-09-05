@@ -4,14 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--EXPERIMENTAL | WAS A CONTAINER FOR STORING A LORE FRAGMENT-->
-    <!--<LinearLayout-->
-        <!--android:id="@+id/fragment_container"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="vertical">-->
-    <!--</LinearLayout>-->
-
     <LinearLayout
         android:id="@+id/search_layout"
         android:layout_width="match_parent"
@@ -21,31 +13,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:baselineAligned="false">
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
             <SearchView
                 android:id="@+id/search_view"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:inputType="text"
-                android:queryHint="@string/search_hint"/>
+                android:queryHint="@string/search_hint" />
 
-            <LinearLayout
-                android:id="@+id/search_info_clickable"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_help_outline_white_24dp"
-                    android:alpha=".5"/>
-
-            </LinearLayout>
+            <ImageView
+                android:id="@+id/search_help_clickable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0"
+                android:alpha=".5"
+                android:padding="10dp"
+                android:src="@drawable/ic_help_outline_white_24dp" />
 
         </LinearLayout>
 
@@ -57,13 +44,6 @@
 
     </LinearLayout>
 
-    <!--<ExpandableListView-->
-        <!--android:id="@+id/search_expandable_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:groupIndicator="@android:color/transparent">-->
-    <!--</ExpandableListView>-->
-
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/search_loading_view"
         android:layout_width="match_parent"
@@ -72,11 +52,11 @@
 
         <android.support.v4.widget.ContentLoadingProgressBar
             android:id="@+id/progress_circle_search"
-            android:animationResolution="5"
+            style="@android:style/Widget.ProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            style="@android:style/Widget.ProgressBar"/>
+            android:animationResolution="5" />
 
         <TextView
             android:layout_width="wrap_content"
