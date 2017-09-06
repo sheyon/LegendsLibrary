@@ -36,20 +36,13 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/container_fave_clickable"
-        android:layout_width="60dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0">
-
-        <ImageView
-            android:id="@+id/lore_favorites_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="16dp"
-            android:src="@drawable/ic_star_border_white_48dp" />
-
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/lore_favorites_image_view"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0"
+        android:padding="12dp"
+        android:src="@drawable/ic_star_border_white_48dp" />
 
 </LinearLayout>

@@ -24,7 +24,7 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 {
     private static class ViewHolder {
         private LinearLayout mTextLayout;
-        private LinearLayout mImageLayout;
+        private ImageView mImageLayout;
     }
 
     private Context mContext;
@@ -53,7 +53,7 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
     public void bindView(View view, Context context, Cursor cursor) {
         //SET UP THE CLICKABLE LAYOUTS
         LinearLayout textLayout = view.findViewById(R.id.container_text_views);
-        LinearLayout imageLayout = view.findViewById(R.id.container_fave_clickable);
+        ImageView imageLayout = view.findViewById(R.id.lore_favorites_image_view);
 
         ViewHolder holder = new ViewHolder();
         holder.mTextLayout = textLayout;
@@ -70,10 +70,9 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 
         TextView loreTitle_TV = view.findViewById(R.id.lore_title_text_view);
         TextView loreCategory_TV = view.findViewById(R.id.lore_category_text_view);
-        ImageView loreFavorite_IV = view.findViewById(R.id.lore_favorites_image_view);
 
         //START UNFAVED
-        loreFavorite_IV.setImageResource(R.drawable.ic_star_border_white_48dp);
+        imageLayout.setImageResource(R.drawable.ic_star_border_white_48dp);
 
         String prefixText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_PREFIX));
         String titleText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
@@ -90,13 +89,13 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
         loreCategory_TV.setText(categoryText);
 
         if (faved == 1) {
-            loreFavorite_IV.setImageResource(R.drawable.ic_star_white_48dp);
+            imageLayout.setImageResource(R.drawable.ic_star_white_48dp);
         }
     }
 
     @Override
     public void onClick(View v) {
-        //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
+        //GET NEW DATABASE VARIABLE IN CASE SETTINGS WERE CHANGED
         SQLiteDatabase mDb = LegendsDatabase.getInstance(mContext);
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
@@ -111,6 +110,7 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                 TextView loreTitle_TV = v.findViewById(R.id.lore_title_text_view);
                 String clickedTitle = loreTitle_TV.getText().toString();
 
+//                STOP PASSING A CAT NUMBER; THE LORE PAGE WILL NOW FIND IT
 //                loreCategory_TV = v.findViewById(R.id.lore_category_text_view);
 //                String clickedCategory = loreCategory_TV.getText().toString();
 //
@@ -133,8 +133,8 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 
                 break;
 
-            case R.id.container_fave_clickable:
-                //IF ON THE SEARCH PAGE, PREVENT THE USER FROM CONTINUING
+            case R.id.lore_favorites_image_view:
+                //IF ON THE SEARCH PAGE, PREVENT THE USER FROM MAKING A FAVE
                 if (mFragment.getClass() == SearchFragment.class) {
                     break;
                 }
