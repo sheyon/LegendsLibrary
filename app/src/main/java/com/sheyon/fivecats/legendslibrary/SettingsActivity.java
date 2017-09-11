@@ -174,7 +174,7 @@ public class SettingsActivity extends AppCompatActivity {
         db.close();
 
         switch (legendsPrefs.getLangPref()) {
-            case 0:
+            case LegendsPreferences.LANG_EN:
                 //ENGLISH
                 LegendsHelper legendsHelper = new LegendsHelper(this);
                 try {
@@ -186,7 +186,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
                 break;
 
-            case 1:
+            case LegendsPreferences.LANG_DE:
                 //GERMAN
                 LegendsHelperDE legendsHelperDE = new LegendsHelperDE(this);
                 try {
@@ -198,7 +198,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
                 break;
 
-            case 2:
+            case LegendsPreferences.LANG_FR:
                 //FRENCH
                 LegendsHelperFR legendsHelperFR = new LegendsHelperFR(this);
                 try {
