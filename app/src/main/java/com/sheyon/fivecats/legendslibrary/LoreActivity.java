@@ -1,8 +1,6 @@
 package com.sheyon.fivecats.legendslibrary;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
@@ -10,11 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.TextViewCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
@@ -30,6 +25,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//import com.crashlytics.android.Crashlytics;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
@@ -62,6 +58,7 @@ public class LoreActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        //Crashlytics.getInstance();
         legendsPrefs = LegendsPreferences.getInstance(this);
         db = LegendsDatabase.getInstance(this);
 
@@ -75,7 +72,8 @@ public class LoreActivity extends AppCompatActivity
         }
 
         //NULL CATCH; IT SHOULD NEVER HAPPEN, BUT IT DO
-        //SOME DEVICES LOSE THIS VARIABLE; FORCE ZERO SO THE APP CAN GET THE CORRECT NUMBER
+        //SOME DEVICES ALSO LOSE THIS VARIABLE ON GetIntent; FORCE ZERO SO THE APP CAN GET THE CORRECT NUMBER
+        //FOR DEBUG, SET TO NUMBER OTHER THAN ZERO TO FORCE CursorOutOfBoundsException
         int categoryNumber = 0;
         if (categoryNumber == 0) {
             String [] catchArgs = { titleString, titleString };
@@ -95,66 +93,18 @@ public class LoreActivity extends AppCompatActivity
 
         Cursor cursor = db.rawQuery(joinedQuery, selectionArgs);
         if (cursor != null) {
-            try {
-                cursor.moveToFirst();
-                buzzingText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BUZZING));
-                blackSignalText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BLACK_SIGNAL));
-                categoryString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_NAME));
-                faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
+            cursor.moveToFirst();
+            buzzingText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BUZZING));
+            blackSignalText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BLACK_SIGNAL));
+            categoryString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_NAME));
+            faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
 
-                //FULL TITLE STRING IS FOR THE FAVE TOASTS; SAVE IT SO YOU CAN USE IT LATER
-                fullTitleString = titleString;
-                //TRUNCATES THE TITLE SO PREFIXES DON'T BREAK FAVES
-                titleString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_TITLE));
+            //FULL TITLE STRING IS FOR THE FAVE TOASTS; SAVE IT SO YOU CAN USE IT LATER
+            fullTitleString = titleString;
+            //TRUNCATES THE TITLE SO PREFIXES DON'T BREAK FAVES
+            titleString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_TITLE));
 
-                cursor.close();
-            }
-            catch (CursorIndexOutOfBoundsException e) {
-                final String errorText = titleString + " : " + categoryNumber;
-                final String stackTrace = e.fillInStackTrace().toString();
-                Log.e ("***ERROR", e.getMessage());
-                Log.e ("***ERROR", errorText);
-                buzzingText = getString(R.string.empty_error);
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage(R.string.error_report);
-
-                builder.setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        String[] email = { "markelsmythe@gmail.com" };
-                        String userManu = Build.MANUFACTURER;
-                        String userModel = Build.MODEL;
-                        int userVersion = Build.VERSION.SDK_INT;
-
-                        Intent intent = new Intent(Intent.ACTION_SENDTO);
-                        intent.setData(Uri.parse("mailto:"));
-                        intent.putExtra(Intent.EXTRA_EMAIL, email);
-                        intent.putExtra(Intent.EXTRA_SUBJECT, "Legends Library App");
-                        intent.putExtra(Intent.EXTRA_TEXT, stackTrace + "\n"
-                                + errorText  + "\n"
-                                + userManu + "\n"
-                                + userModel  + "\n"
-                                + userVersion);
-                        if (intent.resolveActivity(getPackageManager()) != null) {
-                            startActivity(intent);
-                        }
-                        else {
-                            Toast.makeText(getBaseContext(), R.string.toast_no_email, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
-                builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (dialog != null) {
-                            dialog.dismiss();
-                        }
-                    }
-                });
-
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-            }
+            cursor.close();
         }
 
         setContentView(R.layout.activity_lore);
@@ -300,7 +250,7 @@ public class LoreActivity extends AppCompatActivity
                 flavorImageCursor.close();
             }
             catch (CursorIndexOutOfBoundsException e) {
-                Log.e ("***ERROR", "Could not find image resource");
+                Log.e ("ERROR", "Could not find image resource");
                 flavorImageView.setImageResource(R.drawable.flavor_default);
             }
         }

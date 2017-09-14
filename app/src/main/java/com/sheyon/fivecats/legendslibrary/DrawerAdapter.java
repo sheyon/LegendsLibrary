@@ -26,7 +26,7 @@ class DrawerAdapter extends ArrayAdapter<String> {
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.drawer_list_item, parent, false);
         }
 
-        TextView drawerSelection = (TextView) listItemView.findViewById(R.id.drawer_selection);
+        TextView drawerSelection = listItemView.findViewById(R.id.drawer_selection);
         drawerSelection.setText(getItem(position));
         drawerSelection.setAllCaps(false);
 

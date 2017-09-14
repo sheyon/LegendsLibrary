@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/loreActivity_relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -52,7 +53,8 @@
                         android:textIsSelectable="true"
                         android:textSize="24sp"
                         android:textStyle="bold"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="@android:color/white"
+                        tools:ignore="HardcodedText" />
 
                     <TextView
                         android:id="@+id/loreActivity_category_text_view"
@@ -61,7 +63,8 @@
                         android:text="Lore Category"
                         android:textIsSelectable="true"
                         android:textSize="20sp"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="@android:color/white"
+                        tools:ignore="HardcodedText" />
 
                 </LinearLayout>
 
@@ -72,7 +75,8 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="0"
                     android:padding="12dp"
-                    android:src="@drawable/ic_star_border_white_48dp" />
+                    android:src="@drawable/ic_star_border_white_48dp"
+                    android:contentDescription="@null" />
 
             </LinearLayout>
 
@@ -96,7 +100,8 @@
                     android:id="@+id/lore_flavor_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/flavor_default" />
+                    android:src="@drawable/flavor_default"
+                    android:contentDescription="@null"/>
 
             </LinearLayout>
 
@@ -134,7 +139,8 @@
                         android:clickable="true"
                         android:padding="8dp"
                         android:scaleType="fitEnd"
-                        android:src="@drawable/lore"/>
+                        android:src="@drawable/lore"
+                        android:contentDescription="@null"/>
 
                 </LinearLayout>
 
@@ -189,7 +195,8 @@
                         android:clickable="true"
                         android:padding="8dp"
                         android:scaleType="fitEnd"
-                        android:src="@drawable/blacklore" />
+                        android:src="@drawable/blacklore"
+                        android:contentDescription="@null"/>
 
                 </LinearLayout>
 
