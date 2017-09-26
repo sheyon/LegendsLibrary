@@ -59,7 +59,7 @@ class LegendsCursorTreeAdapter extends CursorTreeAdapter
 
     @Override
     protected void bindGroupView(View view, Context context, Cursor cursor, boolean isExpanded) {
-        TextView categoryHeader = (TextView) view.findViewById(R.id.category_text_view);
+        TextView categoryHeader = view.findViewById(R.id.category_text_view);
         String categoryText;
         String prefixText;
 
@@ -102,7 +102,7 @@ class LegendsCursorTreeAdapter extends CursorTreeAdapter
         String subcategoryText;
         String prefixText;
 
-        TextView subcategoryHeader = (TextView) view.findViewById(R.id.subcategory_text_view);
+        TextView subcategoryHeader = view.findViewById(R.id.subcategory_text_view);
 
         subcategoryText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_TITLE));
         prefixText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_PREFIX));

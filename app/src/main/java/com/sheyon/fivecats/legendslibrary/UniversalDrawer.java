@@ -15,9 +15,9 @@ class UniversalDrawer extends AppCompatActivity {
     public ActionBarDrawerToggle mDrawerToggle;
 
     public void setupDrawer(final Activity activity, Toolbar toolbar){
-        final DrawerLayout mDrawerLayout = (DrawerLayout) activity.findViewById(R.id.drawer_layout);
+        final DrawerLayout mDrawerLayout = activity.findViewById(R.id.drawer_layout);
         final String[] mDrawerItems = activity.getResources().getStringArray(R.array.drawer_items);
-        final ListView mDrawerList = (ListView) activity.findViewById(R.id.left_drawer);
+        final ListView mDrawerList = activity.findViewById(R.id.left_drawer);
 
         // Set the adapter for the list view
         DrawerAdapter drawerAdapter = new DrawerAdapter(activity, R.layout.drawer_list_item, mDrawerItems);

@@ -44,14 +44,14 @@ public class SettingsActivity extends AppCompatActivity {
 
         db = LegendsDatabase.getInstance(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.settingsActivity_toolbar);
+        Toolbar toolbar = findViewById(R.id.settingsActivity_toolbar);
         setSupportActionBar(toolbar);
 
         universalDrawer = new UniversalDrawer();
         universalDrawer.setupDrawer(this, toolbar);
 
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.settingsActivity_relativeLayout);
-        ScrollView scrollView = (ScrollView) findViewById(R.id.settingsActivity_scrollView);
+        RelativeLayout relativeLayout = findViewById(R.id.settingsActivity_relativeLayout);
+        ScrollView scrollView = findViewById(R.id.settingsActivity_scrollView);
         RotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 
         legendsPrefs = LegendsPreferences.getInstance(getApplicationContext());
@@ -65,7 +65,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setupLangSpinner() {
-        Spinner langSpinner = (Spinner) findViewById(R.id.settings_lang_spinner);
+        Spinner langSpinner = findViewById(R.id.settings_lang_spinner);
 
         ArrayAdapter langSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.languages_array, android.R.layout.simple_spinner_item);
         langSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -95,27 +95,27 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setupLangCheckbox() {
-        langCheckbox = (CheckBox) findViewById(R.id.settings_lang_checkbox);
+        langCheckbox = findViewById(R.id.settings_lang_checkbox);
         langCheckbox.setChecked(legendsPrefs.getNormalizationPref());
     }
 
     private void setupSearchCheckboxes() {
-        wildcardOn = (CheckBox) findViewById(R.id.settings_search_wildcard_on);
+        wildcardOn = findViewById(R.id.settings_search_wildcard_on);
         wildcardOn.setChecked(legendsPrefs.getWildcardAlwaysOnPref());
 
-        doubleWildcard = (CheckBox) findViewById(R.id.settings_search_double_wildcard);
+        doubleWildcard = findViewById(R.id.settings_search_double_wildcard);
         doubleWildcard.setChecked(legendsPrefs.getDoubleWildcardPref());
     }
 
     private void setupMiscCheckboxes() {
-        displayImages = (CheckBox) findViewById(R.id.settings_display_images);
+        displayImages = findViewById(R.id.settings_display_images);
         displayImages.setChecked(legendsPrefs.getImagePref());
     }
 
     private void setupFontSize() {
-        Button fontDecrement = (Button) findViewById(R.id.settings_font_decrement);
-        Button fontIncrement = (Button) findViewById(R.id.settings_font_increment);
-        final TextView fontSizeTextView = (TextView) findViewById(R.id.settings_font_size);
+        Button fontDecrement = findViewById(R.id.settings_font_decrement);
+        Button fontIncrement = findViewById(R.id.settings_font_increment);
+        final TextView fontSizeTextView = findViewById(R.id.settings_font_size);
 
         //IF FONT SIZE PREFS DO NOT EXIST, CREATE THEM (DEFAULT: 0)
         if (!legendsPrefs.doesContain(LegendsPreferences.PREF_FONT_SIZE)) {
@@ -153,7 +153,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setupApplyButton() {
-        Button settingsApplyButton = (Button) findViewById(R.id.settings_lang_button);
+        Button settingsApplyButton = findViewById(R.id.settings_lang_button);
 
         settingsApplyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,7 +174,7 @@ public class SettingsActivity extends AppCompatActivity {
         db.close();
 
         switch (legendsPrefs.getLangPref()) {
-            case 0:
+            case LegendsPreferences.LANG_EN:
                 //ENGLISH
                 LegendsHelper legendsHelper = new LegendsHelper(this);
                 try {
@@ -186,7 +186,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
                 break;
 
-            case 1:
+            case LegendsPreferences.LANG_DE:
                 //GERMAN
                 LegendsHelperDE legendsHelperDE = new LegendsHelperDE(this);
                 try {
@@ -198,7 +198,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
                 break;
 
-            case 2:
+            case LegendsPreferences.LANG_FR:
                 //FRENCH
                 LegendsHelperFR legendsHelperFR = new LegendsHelperFR(this);
                 try {

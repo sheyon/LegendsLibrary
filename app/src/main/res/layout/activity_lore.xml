@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/loreActivity_relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -27,19 +28,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:padding="8dp"
             android:orientation="vertical">
 
             <LinearLayout
-
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:layout_marginBottom="8dp">
+                <!--Remove the above marginBottom for 1.1.4 -->
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
@@ -52,7 +53,8 @@
                         android:textIsSelectable="true"
                         android:textSize="24sp"
                         android:textStyle="bold"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="@android:color/white"
+                        tools:ignore="HardcodedText" />
 
                     <TextView
                         android:id="@+id/loreActivity_category_text_view"
@@ -61,27 +63,32 @@
                         android:text="Lore Category"
                         android:textIsSelectable="true"
                         android:textSize="20sp"
-                        android:textColor="@android:color/white"/>
+                        android:textColor="@android:color/white"
+                        tools:ignore="HardcodedText" />
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/loreActivity_fave_clickable"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0">
-
-                    <ImageView
-                        android:id="@+id/loreActivity_fave_imageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:padding="14dp"
-                        android:src="@drawable/ic_star_border_white_48dp" />
-
-                </LinearLayout>
+                <ImageView
+                    android:id="@+id/loreActivity_fave_imageView"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_star_border_white_48dp"
+                    android:contentDescription="@null" />
 
             </LinearLayout>
+
+            <!--For 1.1.4-->
+            <!--<TextView-->
+                <!--android:id="@+id/loreActivity_location_text_view"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="8dp"-->
+                <!--android:text="Show Locations"-->
+                <!--android:textSize="14sp"-->
+                <!--android:textColor="@color/colorAccentLighter"/>-->
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -93,7 +100,8 @@
                     android:id="@+id/lore_flavor_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/flavor_default" />
+                    android:src="@drawable/flavor_default"
+                    android:contentDescription="@null"/>
 
             </LinearLayout>
 
@@ -131,7 +139,8 @@
                         android:clickable="true"
                         android:padding="8dp"
                         android:scaleType="fitEnd"
-                        android:src="@drawable/lore"/>
+                        android:src="@drawable/lore"
+                        android:contentDescription="@null"/>
 
                 </LinearLayout>
 
@@ -186,7 +195,8 @@
                         android:clickable="true"
                         android:padding="8dp"
                         android:scaleType="fitEnd"
-                        android:src="@drawable/blacklore" />
+                        android:src="@drawable/blacklore"
+                        android:contentDescription="@null"/>
 
                 </LinearLayout>
 

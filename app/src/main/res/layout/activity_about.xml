@@ -23,14 +23,14 @@
         <ScrollView
             android:id="@+id/aboutActivity_scrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/aboutActivity_toolbar"
-            android:paddingBottom="24dp">
+            android:layout_height="match_parent"
+            android:layout_below="@id/aboutActivity_toolbar">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="24dp">
 
                 <!-- The main content view -->
 
@@ -40,7 +40,8 @@
                     android:layout_height="120dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="24dp"
-                    android:src="@drawable/logo512" />
+                    android:src="@drawable/logo512"
+                    android:contentDescription="@null" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -69,7 +70,8 @@
                         android:layout_centerInParent="true"
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
-                        android:src="@drawable/ic_keyboard_arrow_down_white_18dp" />
+                        android:src="@drawable/ic_keyboard_arrow_down_white_18dp"
+                        android:contentDescription="@null" />
 
                 </RelativeLayout>
 
@@ -115,7 +117,8 @@
                         android:layout_centerInParent="true"
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
-                        android:src="@drawable/ic_keyboard_arrow_down_white_18dp" />
+                        android:src="@drawable/ic_keyboard_arrow_down_white_18dp"
+                        android:contentDescription="@null" />
 
                 </RelativeLayout>
 
@@ -142,7 +145,8 @@
                             android:layout_height="64dp"
                             android:layout_margin="12dp"
                             android:layout_weight="1"
-                            android:src="@drawable/icon_mail" />
+                            android:src="@drawable/icon_mail"
+                            android:contentDescription="@null"/>
 
                         <ImageView
                             android:id="@+id/twitter_icon"
@@ -150,7 +154,8 @@
                             android:layout_height="64dp"
                             android:layout_margin="12dp"
                             android:layout_weight="1"
-                            android:src="@drawable/icon_twitter" />
+                            android:src="@drawable/icon_twitter"
+                            android:contentDescription="@null"/>
 
                         <ImageView
                             android:id="@+id/tumblr_icon"
@@ -158,7 +163,8 @@
                             android:layout_height="64dp"
                             android:layout_margin="12dp"
                             android:layout_weight="1"
-                            android:src="@drawable/icon_tumblr" />
+                            android:src="@drawable/icon_tumblr"
+                            android:contentDescription="@null"/>
 
                     </LinearLayout>
 
@@ -202,7 +208,8 @@
                         android:layout_centerInParent="true"
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
-                        android:src="@drawable/ic_keyboard_arrow_down_white_18dp" />
+                        android:src="@drawable/ic_keyboard_arrow_down_white_18dp"
+                        android:contentDescription="@null"/>
 
                 </RelativeLayout>
 
@@ -248,7 +255,8 @@
                         android:layout_centerInParent="true"
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
-                        android:src="@drawable/ic_keyboard_arrow_down_white_18dp" />
+                        android:src="@drawable/ic_keyboard_arrow_down_white_18dp"
+                        android:contentDescription="@null"/>
 
                 </RelativeLayout>
 
@@ -294,7 +302,8 @@
                         android:layout_centerInParent="true"
                         android:layout_marginEnd="8dp"
                         android:layout_marginRight="8dp"
-                        android:src="@drawable/ic_keyboard_arrow_down_white_18dp" />
+                        android:src="@drawable/ic_keyboard_arrow_down_white_18dp"
+                        android:contentDescription="@null"/>
 
                 </RelativeLayout>
 

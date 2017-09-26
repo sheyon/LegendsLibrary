@@ -53,7 +53,7 @@ public class FavoritesFragment extends Fragment implements FragmentVisibilityLis
         //THIS FRAGMENT REUSES THE ALPHABETICAL LAYOUT; THIS IS FINE
         View view = inflater.inflate(R.layout.fragment_alphabetical, container, false);
 
-        listView = (ListView) view.findViewById(R.id.alphabetical_list_view);
+        listView = view.findViewById(R.id.alphabetical_list_view);
         emptyView = view.findViewById(R.id.empty_view);
         loadingView = view.findViewById(R.id.loading_view);
 

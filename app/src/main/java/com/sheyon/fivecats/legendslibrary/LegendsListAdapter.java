@@ -24,7 +24,7 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 {
     private static class ViewHolder {
         private LinearLayout mTextLayout;
-        private LinearLayout mImageLayout;
+        private ImageView mImageLayout;
     }
 
     private Context mContext;
@@ -52,8 +52,8 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         //SET UP THE CLICKABLE LAYOUTS
-        LinearLayout textLayout = (LinearLayout) view.findViewById(R.id.container_text_views);
-        LinearLayout imageLayout = (LinearLayout) view.findViewById(R.id.container_fave_clickable);
+        LinearLayout textLayout = view.findViewById(R.id.container_text_views);
+        ImageView imageLayout = view.findViewById(R.id.lore_favorites_image_view);
 
         ViewHolder holder = new ViewHolder();
         holder.mTextLayout = textLayout;
@@ -68,12 +68,11 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
             imageLayout.setVisibility(View.INVISIBLE);
         }
 
-        TextView loreTitle_TV = (TextView) view.findViewById(R.id.lore_title_text_view);
-        TextView loreCategory_TV = (TextView) view.findViewById(R.id.lore_category_text_view);
-        ImageView loreFavorite_IV = (ImageView) view.findViewById(R.id.lore_favorites_image_view);
+        TextView loreTitle_TV = view.findViewById(R.id.lore_title_text_view);
+        TextView loreCategory_TV = view.findViewById(R.id.lore_category_text_view);
 
         //START UNFAVED
-        loreFavorite_IV.setImageResource(R.drawable.ic_star_border_white_48dp);
+        imageLayout.setImageResource(R.drawable.ic_star_border_white_48dp);
 
         String prefixText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_PREFIX));
         String titleText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_TITLE));
@@ -90,37 +89,40 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
         loreCategory_TV.setText(categoryText);
 
         if (faved == 1) {
-            loreFavorite_IV.setImageResource(R.drawable.ic_star_white_48dp);
+            imageLayout.setImageResource(R.drawable.ic_star_white_48dp);
         }
     }
 
     @Override
     public void onClick(View v) {
-        //GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
+        //GET NEW DATABASE VARIABLE IN CASE SETTINGS WERE CHANGED
         SQLiteDatabase mDb = LegendsDatabase.getInstance(mContext);
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         String [] union = { Queries.GET_CAT_ID_UNION_1, Queries.GET_CAT_ID_UNION_2 };
         String joinedQuery = qb.buildUnionQuery(union, null, null);
 
+        TextView loreCategory_TV;
+
         switch (v.getId())
         {
             case R.id.container_text_views:
-                TextView loreTitle_TV = (TextView) v.findViewById(R.id.lore_title_text_view);
-                TextView loreCategory_TV = (TextView) v.findViewById(R.id.lore_category_text_view);
-
+                TextView loreTitle_TV = v.findViewById(R.id.lore_title_text_view);
                 String clickedTitle = loreTitle_TV.getText().toString();
-                String clickedCategory = loreCategory_TV.getText().toString();
 
-                String[] catIdArgs = { clickedTitle, clickedCategory, clickedTitle, clickedCategory };
-                Cursor catIdCursor = mDb.rawQuery(joinedQuery, catIdArgs);
-
-                catIdCursor.moveToFirst();
-                int clickedCatId = catIdCursor.getInt(catIdCursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_ID));
-                catIdCursor.close();
+//                STOP PASSING A CAT NUMBER; THE LORE PAGE WILL NOW FIND IT
+//                loreCategory_TV = v.findViewById(R.id.lore_category_text_view);
+//                String clickedCategory = loreCategory_TV.getText().toString();
+//
+//                String[] catIdArgs = { clickedTitle, clickedCategory, clickedTitle, clickedCategory };
+//                Cursor catIdCursor = mDb.rawQuery(joinedQuery, catIdArgs);
+//
+//                catIdCursor.moveToFirst();
+//                int clickedCatId = catIdCursor.getInt(catIdCursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_ID));
+//                catIdCursor.close();
 
                 Intent intent = new Intent(mContext, LoreActivity.class);
-                intent.putExtra("catNumber", clickedCatId);
+                //intent.putExtra("catNumber", clickedCatId);
                 intent.putExtra("loreTitle", clickedTitle);
                 intent.putExtra("searchString", mSearchString);
 
@@ -131,15 +133,15 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
 
                 break;
 
-            case R.id.container_fave_clickable:
-                //IF ON THE SEARCH PAGE, PREVENT THE USER FROM CONTINUING
+            case R.id.lore_favorites_image_view:
+                //IF ON THE SEARCH PAGE, PREVENT THE USER FROM MAKING A FAVE
                 if (mFragment.getClass() == SearchFragment.class) {
                     break;
                 }
                 //GET PARENT VIEW TO CATCH THE TITLE STRING
                 View parentView = (View) v.getParent();
-                loreTitle_TV = (TextView) parentView.findViewById(R.id.lore_title_text_view);
-                loreCategory_TV = (TextView) parentView.findViewById(R.id.lore_category_text_view);
+                loreTitle_TV = parentView.findViewById(R.id.lore_title_text_view);
+                loreCategory_TV = parentView.findViewById(R.id.lore_category_text_view);
 
                 String faveTitle = loreTitle_TV.getText().toString();
                 String faveCategory = loreCategory_TV.getText().toString();
@@ -167,7 +169,7 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                 cursor.moveToFirst();
                 int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
 
-                ImageView loreFavorite_IV = (ImageView) v.findViewById(R.id.lore_favorites_image_view);
+                ImageView loreFavorite_IV = v.findViewById(R.id.lore_favorites_image_view);
 
                 //SET FAVED OR UNFAVED
                 if (faved == 0){

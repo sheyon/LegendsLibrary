@@ -8,12 +8,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/LegendsTheme">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask">
-            <!--android:screenOrientation="portrait"-->
-            <!--android:configChanges="orientation"-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -23,8 +21,11 @@
             android:name=".LoreActivity"
             android:label="@string/app_name"
             android:parentActivityName=".MainActivity" />
-            <!--android:screenOrientation="portrait"-->
-            <!--android:configChanges="orientation"-->
+        <!--For 1.1.4-->
+        <!--<activity-->
+            <!--android:name=".LocationActivity"-->
+            <!--android:label="@string/app_name"-->
+            <!--android:parentActivityName=".LoreActivity" />-->
         <activity
             android:name=".AboutActivity"
             android:label="@string/drawer_about" />

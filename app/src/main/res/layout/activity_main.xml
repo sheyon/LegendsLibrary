@@ -40,12 +40,12 @@
                 <android.support.design.widget.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:icon="@drawable/ic_format_list_bulleted_white_48dp" />
+                    android:icon="@drawable/ic_sort_by_alpha_white_48dp" />
 
                 <android.support.design.widget.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:icon="@drawable/ic_sort_by_alpha_white_48dp" />
+                    android:icon="@drawable/ic_format_list_bulleted_white_48dp" />
 
                 <android.support.design.widget.TabItem
                     android:layout_width="wrap_content"

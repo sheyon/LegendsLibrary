@@ -49,7 +49,7 @@ public class LegendsDatabase{
 
         //OPEN DATABASE
         switch (legendsPrefs.getLangPref()) {
-            case 0:
+            case LegendsPreferences.LANG_EN:
                 LegendsHelper legendsHelper = new LegendsHelper(context);
                 try {
                     legendsDB = legendsHelper.getWritableDatabase();
@@ -59,7 +59,7 @@ public class LegendsDatabase{
                 }
                 break;
 
-            case 1:
+            case LegendsPreferences.LANG_DE:
                 LegendsHelperDE legendsHelperDE = new LegendsHelperDE(context);
                 try {
                     legendsDB = legendsHelperDE.getWritableDatabase();
@@ -69,7 +69,7 @@ public class LegendsDatabase{
                 }
                 break;
 
-            case 2:
+            case LegendsPreferences.LANG_FR:
                 LegendsHelperFR legendsHelperFR = new LegendsHelperFR(context);
                 try {
                     legendsDB = legendsHelperFR.getWritableDatabase();

@@ -38,7 +38,7 @@ public class AlphabeticalFragment extends Fragment implements FragmentVisibility
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_alphabetical, container, false);
 
-        listView = (ListView) view.findViewById(R.id.alphabetical_list_view);
+        listView = view.findViewById(R.id.alphabetical_list_view);
         emptyView = view.findViewById(R.id.empty_view);
         loadingView = view.findViewById(R.id.loading_view);
 

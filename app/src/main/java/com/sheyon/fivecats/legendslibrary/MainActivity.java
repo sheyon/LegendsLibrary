@@ -12,9 +12,8 @@ import android.view.MenuItem;
 
 import com.sbrukhanda.fragmentviewpager.FragmentViewPager;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
-    private Toolbar toolbar;
     private FragmentViewPager viewPager;
     private UniversalDrawer universalDrawer;
 
@@ -27,9 +26,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
-        toolbar = (Toolbar) findViewById(R.id.mainActivity_toolbar);
+        final Toolbar toolbar = findViewById(R.id.mainActivity_toolbar);
         toolbar.setTitle(R.string.title_alphabetical);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
         setSupportActionBar(toolbar);
@@ -37,10 +37,9 @@ public class MainActivity extends AppCompatActivity {
         universalDrawer = new UniversalDrawer();
         universalDrawer.setupDrawer(this, toolbar);
 
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.mainActivity_tab_layout);
-        viewPager = (FragmentViewPager) findViewById(R.id.view_pager);
+        final TabLayout tabLayout = findViewById(R.id.mainActivity_tab_layout);
         final LegendsPagerAdapter pagerAdapter = new LegendsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-
+        viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-                setPageTitle(tab, pagerAdapter);
+                setPageTitle(tab, pagerAdapter, toolbar);
             }
 
             @Override
@@ -108,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setPageTitle(TabLayout.Tab tab, LegendsPagerAdapter pagerAdapter) {
+    private void setPageTitle(TabLayout.Tab tab, LegendsPagerAdapter pagerAdapter, Toolbar toolbar) {
         Fragment f = pagerAdapter.instantiateFragment(tab.getPosition());
 
         if (f.getClass() == CategoriesFragment.class) {

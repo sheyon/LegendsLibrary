@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -33,7 +34,7 @@ import java.util.regex.Pattern;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
-public class SearchFragment extends Fragment implements FragmentVisibilityListener, View.OnClickListener
+public class SearchFragment extends Fragment implements FragmentVisibilityListener
 {
     private LinearLayout searchLayout;
     private SearchView searchView;
@@ -51,10 +52,6 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
 
     private String modString;
     private String searchString;
-
-    private static class ViewHolder {
-        private LinearLayout mClickableLayout;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,7 +88,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     }
 
     private void setupSearchBar(View view) {
-        searchView = (SearchView) view.findViewById(R.id.search_view);
+        searchView = view.findViewById(R.id.search_view);
         searchView.setIconifiedByDefault(false);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -135,14 +132,46 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     }
 
     private void setupListView(View view) {
-        searchLayout = (LinearLayout) view.findViewById(R.id.search_layout);
-        listView = (ListView) view.findViewById(R.id.search_list_view);
+        searchLayout = view.findViewById(R.id.search_layout);
+        listView = view.findViewById(R.id.search_list_view);
         loadingView = view.findViewById(R.id.search_loading_view);
 
-        LinearLayout infoClickable = (LinearLayout) view.findViewById(R.id.search_info_clickable);
-        ViewHolder holder = new ViewHolder();
-        holder.mClickableLayout = infoClickable;
-        holder.mClickableLayout.setOnClickListener(this);
+        ImageView infoClickable = view.findViewById(R.id.search_help_clickable);
+        infoClickable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+                View popupView = inflater.inflate(R.layout.popup_search_info_layout, null);
+
+                //DUMMY VIEW TO DARKEN AND LOCK THE BACKGROUND
+                View dummyView = new View(getContext());
+                dummyView.setBackgroundColor(ContextCompat.getColor(getContext(), android.R.color.black));
+                dummyView.setAlpha(.6f);
+
+                final PopupWindow mDummyPopupWindow = new PopupWindow(dummyView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                mDummyPopupWindow.showAtLocation(listView, Gravity.CENTER, 0, 0);
+
+                final PopupWindow mPopupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                mPopupWindow.showAtLocation(listView, Gravity.CENTER, 0, 0);
+                if( Build.VERSION.SDK_INT >= 21){
+                    mPopupWindow.setElevation(5);
+                }
+                mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        mDummyPopupWindow.dismiss();
+                    }
+                });
+
+                Button closeButton = popupView.findViewById(R.id.popup_button_dismiss);
+                closeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mPopupWindow.dismiss();
+                    }
+                });
+            }
+        });
     }
 
     private void runQuery() {
@@ -313,41 +342,5 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
         listView.requestFocus();
 
         Crossfader.crossfadeView(searchLayout, loadingView);
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.search_info_clickable) {
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-            View popupView = inflater.inflate(R.layout.popup_search_info_layout, null);
-
-            //DUMMY VIEW TO DARKEN AND LOCK THE BACKGROUND
-            View dummyView = new View(getContext());
-            dummyView.setBackgroundColor(ContextCompat.getColor(getContext(), android.R.color.black));
-            dummyView.setAlpha(.6f);
-
-            final PopupWindow mDummyPopupWindow = new PopupWindow(dummyView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            mDummyPopupWindow.showAtLocation(listView, Gravity.CENTER, 0, 0);
-
-            final PopupWindow mPopupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            mPopupWindow.showAtLocation(listView, Gravity.CENTER, 0, 0);
-            if( Build.VERSION.SDK_INT >= 21){
-                mPopupWindow.setElevation(5);
-            }
-            mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                @Override
-                public void onDismiss() {
-                    mDummyPopupWindow.dismiss();
-                }
-            });
-
-            Button closeButton = (Button) popupView.findViewById(R.id.popup_button_dismiss);
-            closeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mPopupWindow.dismiss();
-                }
-            });
-        }
     }
 }

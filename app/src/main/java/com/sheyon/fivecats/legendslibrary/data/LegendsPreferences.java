@@ -1,5 +1,6 @@
 package com.sheyon.fivecats.legendslibrary.data;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -142,6 +143,7 @@ public class LegendsPreferences {
         return mPref.getBoolean(PREF_DOUBLE_WILDCARD, false);
     }
 
+    @SuppressLint("CommitPrefEdits")
     private void doEdit() {
         if (mEditor == null) {
             mEditor = mPref.edit();

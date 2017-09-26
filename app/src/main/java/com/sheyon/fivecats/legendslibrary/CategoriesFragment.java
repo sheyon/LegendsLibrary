@@ -68,7 +68,7 @@ public class CategoriesFragment extends Fragment {
     private void setupSpinner(View view)
     {
         //THE SPINNER SEEMS TO BE PRODUCING A WINDOW ALREADY FOCUSED ERROR. FIX LATER
-        spinner = (Spinner) view.findViewById(R.id.category_spinner);
+        spinner = view.findViewById(R.id.category_spinner);
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.categories_array, R.layout.spinner_custom_layout);
         spinnerAdapter.setDropDownViewResource(R.layout.spinner_custom_dropdown_text);
         spinner.setAdapter(spinnerAdapter);
@@ -119,13 +119,13 @@ public class CategoriesFragment extends Fragment {
 
     private void setupExpandableView(View view)
     {
-        legendsExpandableView = (ExpandableListView) view.findViewById(R.id.legends_expandable_list);
+        legendsExpandableView = view.findViewById(R.id.legends_expandable_list);
 
         legendsExpandableView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 LinearLayout ll = (LinearLayout) v;
-                TextView tv = (TextView) ll.findViewById(R.id.category_text_view);
+                TextView tv = ll.findViewById(R.id.category_text_view);
                 int style = tv.getTypeface().getStyle();
 
                 //IF THE TEXT STYLE IS BOLDED, EXPAND THE CATEGORY
@@ -146,7 +146,7 @@ public class CategoriesFragment extends Fragment {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 LinearLayout ll = (LinearLayout) v;
-                TextView tv = (TextView) ll.findViewById(R.id.subcategory_text_view);
+                TextView tv = ll.findViewById(R.id.subcategory_text_view);
                 loreTitle = tv.getText().toString();
 
                 groupNumber = groupPosition;
@@ -159,7 +159,7 @@ public class CategoriesFragment extends Fragment {
 
     private void startLoreActivity() {
         Intent intent = new Intent(getContext(), LoreActivity.class);
-        intent.putExtra("catNumber", spinnerCatNumber);
+//        intent.putExtra("catNumber", spinnerCatNumber);
         intent.putExtra("loreTitle", loreTitle);
 
         //FAILSAFE

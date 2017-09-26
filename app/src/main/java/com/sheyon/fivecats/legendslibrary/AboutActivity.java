@@ -1,6 +1,5 @@
 package com.sheyon.fivecats.legendslibrary;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -20,58 +19,42 @@ public class AboutActivity extends AppCompatActivity {
 
     private UniversalDrawer universalDrawer;
 
-    private TextView aboutBlurb;
-    private LinearLayout contactLayout;
-    private TextView privacyBlurb;
-    private TextView legalBlurb;
-    private TextView thanksBlurb;
-
-    private ImageView aboutExpander;
-    private ImageView contactExpander;
-    private ImageView privacyExpander;
-    private ImageView legalExpander;
-    private ImageView thanksExpander;
-
-    private Context context;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        context = this;
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.aboutActivity_toolbar);
+        Toolbar toolbar = findViewById(R.id.aboutActivity_toolbar);
         setSupportActionBar(toolbar);
 
         universalDrawer = new UniversalDrawer();
         universalDrawer.setupDrawer(this, toolbar);
 
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.aboutActivity_relativeLayout);
-        ScrollView scrollView = (ScrollView) findViewById(R.id.aboutActivity_scrollView);
+        RelativeLayout relativeLayout = findViewById(R.id.aboutActivity_relativeLayout);
+        ScrollView scrollView = findViewById(R.id.aboutActivity_scrollView);
         RotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 
-        TextView aboutHeader = (TextView) findViewById(R.id.header_about);
-        TextView contactHeader = (TextView) findViewById(R.id.header_contact);
-        TextView privacyHeader = (TextView) findViewById(R.id.header_privacy);
-        TextView legalHeader = (TextView) findViewById(R.id.header_legal);
-        TextView thanksHeader = (TextView) findViewById(R.id.header_thanks);
+        TextView aboutHeader = findViewById(R.id.header_about);
+        TextView contactHeader = findViewById(R.id.header_contact);
+        TextView privacyHeader = findViewById(R.id.header_privacy);
+        TextView legalHeader = findViewById(R.id.header_legal);
+        TextView thanksHeader = findViewById(R.id.header_thanks);
 
-        aboutBlurb = (TextView) findViewById(R.id.textView_about);
-        contactLayout = (LinearLayout) findViewById(R.id.contact_icon_layout);
-        privacyBlurb = (TextView) findViewById(R.id.textView_privacy);
-        legalBlurb = (TextView) findViewById(R.id.textView_legal);
-        thanksBlurb = (TextView) findViewById(R.id.textView_thanks);
+        final TextView aboutBlurb = findViewById(R.id.textView_about);
+        final LinearLayout contactLayout = findViewById(R.id.contact_icon_layout);
+        final TextView privacyBlurb = findViewById(R.id.textView_privacy);
+        final TextView legalBlurb = findViewById(R.id.textView_legal);
+        final TextView thanksBlurb = findViewById(R.id.textView_thanks);
 
-        aboutExpander = (ImageView) findViewById(R.id.about_expand_collapse);
-        contactExpander = (ImageView) findViewById(R.id.contact_expand_collapse);
-        privacyExpander = (ImageView) findViewById(R.id.privacy_expand_collapse);
-        legalExpander = (ImageView) findViewById(R.id.legal_expand_collapse);
-        thanksExpander = (ImageView) findViewById(R.id.thanks_expand_collapse);
+        final ImageView aboutExpander = findViewById(R.id.about_expand_collapse);
+        final ImageView contactExpander = findViewById(R.id.contact_expand_collapse);
+        final ImageView privacyExpander = findViewById(R.id.privacy_expand_collapse);
+        final ImageView legalExpander = findViewById(R.id.legal_expand_collapse);
+        final ImageView thanksExpander = findViewById(R.id.thanks_expand_collapse);
 
-        ImageView iconEmail = (ImageView) findViewById(R.id.email_icon);
-        ImageView iconTwitter = (ImageView) findViewById(R.id.twitter_icon);
-        ImageView iconTumblr = (ImageView) findViewById(R.id.tumblr_icon);
+        ImageView iconEmail = findViewById(R.id.email_icon);
+        ImageView iconTwitter = findViewById(R.id.twitter_icon);
+        ImageView iconTumblr = findViewById(R.id.tumblr_icon);
 
         aboutHeader.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,7 +138,7 @@ public class AboutActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else {
-                    Toast.makeText(context, R.string.toast_no_email, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), R.string.toast_no_email, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -167,11 +150,11 @@ public class AboutActivity extends AppCompatActivity {
                 try {
                     // get the Twitter app if possible
                     getPackageManager().getPackageInfo("com.twitter.android", 0);
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?user_id=2204276767"));
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("twitter://user?user_id=879362303623352320"));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 } catch (Exception e) {
                     // no Twitter app, revert to browser
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/MarkelSmythe"));
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/legends_library"));
                 }
                 startActivity(intent);
             }
