@@ -189,11 +189,12 @@ public final class LegendsContract
                 " where title = ?";
 
         //NULL CATCH FOR LORE ACTIVITY (ON CREATE)
-        public static final String CAT_ID_CATCH = "select lore._id AS _id, lore.categoryId AS categoryId, lore.title\n" +
+        public static final String CAT_ID_CATCH =
+                "select lore._id AS _id, lore.categoryId AS categoryId, lore.title\n" +
                 "from lore\n" +
                 "where title LIKE ?\n" +
                 "UNION\n" +
-                "select lore._id AS _id, lore.categoryId, lore.title\n" +
+                "select lore._id AS _id, lore.categoryId AS categoryId, lore.title\n" +
                 "from lore\n" +
                 "where prefix || title LIKE ?";
     }
