@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Legends Library</string>
 
-    <string-array name="categories_array">
+    <string-array name="categories_array_tsw">
         <item>[Wähle eine Kategorie:]</item>
         <item>Solomon Island</item>
         <item>Tal des Sonnengottes</item>
@@ -12,6 +12,17 @@
         <item>Das Bestiarium</item>
         <item>Veranstaltungen</item>
         <item>Ausgaben</item>
+    </string-array>
+
+    <string-array name="categories_array_swl">
+        <item>[Wähle eine Kategorie:]</item>
+        <item>Solomon Island</item>
+        <item>Tal des Sonnengottes</item>
+        <item>Transsylvanien</item>
+        <item>Tokio</item>
+        <item>Global</item>
+        <item>Das Bestiarium</item>
+        <item>Veranstaltungen</item>
     </string-array>
 
     <string-array name="languages_array">

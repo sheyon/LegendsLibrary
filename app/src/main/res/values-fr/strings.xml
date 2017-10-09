@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Legends Library</string>
 
-    <string-array name="categories_array">
+    <string-array name="categories_array_tsw">
         <item>[Choisissez une catégorie:]</item>
         <item>Solomon Island</item>
         <item>Vallée du Dieu Solaire</item>
@@ -12,6 +12,17 @@
         <item>Bestiare</item>
         <item>Évènements</item>
         <item>Épisodes</item>
+    </string-array>
+
+    <string-array name="categories_array_swl">
+        <item>[Choisissez une catégorie:]</item>
+        <item>Solomon Island</item>
+        <item>Vallée du Dieu Solaire</item>
+        <item>Transylvanie</item>
+        <item>Tokyo</item>
+        <item>Monde</item>
+        <item>Bestiare</item>
+        <item>Évènements</item>
     </string-array>
 
     <string-array name="languages_array">
@@ -61,8 +72,9 @@
     <string name="settings_checkbox_wildcardOn">Caractère générique (*) toujours activé</string>
     <string name="settings_checkbox_doubleWildcard">Caractère générique double face</string>
     <string name="settings_misc_header">Autres paramètres</string>
-    <string name="settings_checkbox_showImages">Afficher les images</string>
     <string name="settings_font_size">Taille de police: </string>
+    <string name="settings_checkbox_showImages">Afficher les images</string>
+    <string name="settings_category_sorting">Catégoriser par TSW</string>
     <string name="settings_button_apply">Appliquer</string>
 
     <string name="toast_write_db_fail">La base de données n’a pas ouvert. Vous devez peut-être libérer de l’espace disque.</string>

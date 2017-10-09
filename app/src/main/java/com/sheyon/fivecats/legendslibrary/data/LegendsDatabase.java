@@ -9,7 +9,7 @@ import com.sheyon.fivecats.legendslibrary.R;
 
 import java.util.Locale;
 
-public class LegendsDatabase{
+public class LegendsDatabase {
 
     private static SQLiteDatabase legendsDB;
 
@@ -79,5 +79,42 @@ public class LegendsDatabase{
                 }
                 break;
         }
+    }
+
+    public static void swapCategories (LegendsPreferences legendsPrefs, SQLiteDatabase db) {
+        if (legendsPrefs.getTswSorting()){
+            swapToTSW(db);
+        }
+        else {
+            swapToSWL(db);
+        }
+    }
+
+    private static void swapToTSW(SQLiteDatabase db) {
+        db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 22;");      //Nightmares in the Dream Palace
+        db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 25;");      //Reaping the Whirlwind
+        db.execSQL("UPDATE lore SET categoryId = 8, subcatId = 23 WHERE _id = 27;");        //Tale of Momotaro
+        db.execSQL("UPDATE lore SET categoryId = 8, subcatId = 23 WHERE _id = 30;");        //Abandoned
+        db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 33;");      //Black Signal
+        db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 36;");      //Call of the Nameless
+        db.execSQL("UPDATE lore SET categoryId = 8, subcatId = 23 WHERE _id = 64;");        //Tragical History of Doctor Faustus
+        db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 68;");      //Trail of Shadows
+        db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 130;");     //Breaks in Time
+        db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 131;");     //Sleepless Lullaby
+        db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 132;");     //Sinking City
+    }
+
+    private static void swapToSWL(SQLiteDatabase db) {
+        db.execSQL("UPDATE lore SET categoryId = 4, subcatId = 14 WHERE _id = 22;");
+        db.execSQL("UPDATE lore SET categoryId = 4, subcatId = 14 WHERE _id = 25;");
+        db.execSQL("UPDATE lore SET categoryId = 4, subcatId = 13 WHERE _id = 27;");
+        db.execSQL("UPDATE lore SET categoryId = 3, subcatId = 8 WHERE _id = 30;");
+        db.execSQL("UPDATE lore SET categoryId = 4, subcatId = 14 WHERE _id = 33;");
+        db.execSQL("UPDATE lore SET categoryId = 2, subcatId = 7 WHERE _id = 36;");
+        db.execSQL("UPDATE lore SET categoryId = 4, subcatId = 13 WHERE _id = 64;");
+        db.execSQL("UPDATE lore SET categoryId = 4, subcatId = 13 WHERE _id = 68;");
+        db.execSQL("UPDATE lore SET categoryId = 2, subcatId = 7 WHERE _id = 130;");
+        db.execSQL("UPDATE lore SET categoryId = 3, subcatId = 10 WHERE _id = 131;");
+        db.execSQL("UPDATE lore SET categoryId = 5, subcatId = 17 WHERE _id = 132;");
     }
 }

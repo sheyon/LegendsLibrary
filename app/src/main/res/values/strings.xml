@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Legends Library</string>
 
-    <string-array name="categories_array">
+    <string-array name="categories_array_tsw">
         <item>[Choose a category:]</item>
         <item>Solomon Island</item>
         <item>Valley of the Sun God</item>
@@ -11,6 +11,17 @@
         <item>The Bestiary</item>
         <item>Events</item>
         <item>Issues</item>
+    </string-array>
+
+    <string-array name="categories_array_swl">
+        <item>[Choose a category:]</item>
+        <item>Solomon Island</item>
+        <item>Valley of the Sun God</item>
+        <item>Transylvania</item>
+        <item>Tokyo</item>
+        <item>Global</item>
+        <item>The Bestiary</item>
+        <item>Events</item>
     </string-array>
 
     <string-array name="languages_array">
@@ -61,6 +72,7 @@
     <string name="settings_checkbox_doubleWildcard">Use double-sided wildcards</string>
     <string name="settings_misc_header">Other</string>
     <string name="settings_checkbox_showImages">Display images</string>
+    <string name="settings_category_sorting">Use TSW categorization</string>
     <string name="settings_font_size">Font Size: </string>
     <string name="settings_button_apply">Apply</string>
 

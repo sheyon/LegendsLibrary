@@ -17,7 +17,6 @@ import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -55,14 +54,14 @@ public class LoreActivity extends AppCompatActivity
     private LegendsPreferences legendsPrefs;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_lore);
+
         //Crashlytics.getInstance();
         legendsPrefs = LegendsPreferences.getInstance(this);
         db = LegendsDatabase.getInstance(this);
 
-        //int categoryNumber = getIntent().getIntExtra("catNumber", 0);
         titleString = getIntent().getStringExtra("loreTitle");
         searchString = getIntent().getStringExtra("searchString");
 
@@ -107,8 +106,7 @@ public class LoreActivity extends AppCompatActivity
             cursor.close();
         }
 
-        setContentView(R.layout.activity_lore);
-
+        RelativeLayout relativeLayout = findViewById(R.id.loreActivity_relativeLayout);
         Toolbar toolbar = findViewById(R.id.loreActivity_toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null){
@@ -116,6 +114,7 @@ public class LoreActivity extends AppCompatActivity
         }
 
         scrollView = findViewById(R.id.loreActivity_scrollView);
+        RotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 
         TextView titleTextView = findViewById(R.id.loreActivity_title_text_view);
         TextView categoryTextView = findViewById(R.id.loreActivity_category_text_view);
@@ -170,9 +169,6 @@ public class LoreActivity extends AppCompatActivity
 
         setFlavorImage(titleString);
         adjustFontSize(buzzingTextView, blackSignalTextView);
-
-        RelativeLayout relativeLayout = findViewById(R.id.loreActivity_relativeLayout);
-        RotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 
         startupComplete = true;
     }
@@ -245,6 +241,9 @@ public class LoreActivity extends AppCompatActivity
 
                 if (imageResource != null){
                     flavorImageView.setImageResource(getImageId(this, imageResource));
+                }
+                else {
+                    flavorImageView.setImageResource(R.drawable.best_akab);
                 }
 
                 flavorImageCursor.close();
@@ -383,18 +382,13 @@ public class LoreActivity extends AppCompatActivity
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        //STUPID HACKJOB. 250ms DELAY SINCE THE LAYOUT ISN'T COMPLETELY DRAWN BEFORE IT CAN SCROLL
-        scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        //STUPID HACKJOB. POST DELAY SINCE THE LAYOUT -STILL- ISN'T COMPLETELY DRAWN BEFORE IT CAN SCROLL
+        scrollView.postDelayed( new Runnable() {
             @Override
-            public void onGlobalLayout() {
-                scrollView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        scrollView.scrollTo(0, legendsPrefs.getLorePagePosition());
-                    }
-                }, 250);
+            public void run() {
+                scrollView.scrollTo(0, legendsPrefs.getLorePagePosition());
             }
-        });
+        }, 250);
     }
 
     @Override

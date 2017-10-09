@@ -25,15 +25,15 @@ public class LegendsHelperFR extends SQLiteAssetHelper
         db.execSQL("PRAGMA foreign_keys=ON;");
         db.execSQL("DROP TABLE IF EXISTS LoreSearch;");
 
+        //CHECK FOR TSW OR SWL CATEGORY PREFERENCES AND SWAP
         LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(mContext);
-        boolean normalizationOn = legendsPrefs.getNormalizationPref();
+        LegendsDatabase.swapCategories(legendsPrefs, db);
 
+        boolean normalizationOn = legendsPrefs.getNormalizationPref();
         if (normalizationOn){
             db.execSQL(LegendsContract.Queries.CREATE_ASCII_TABLE);
             db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE_FR_DE_NORMALIZED);
-        }
-
-        else {
+        } else {
             db.execSQL(LegendsContract.Queries.CREATE_DEFAULT_TABLE);
             db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE);
         }

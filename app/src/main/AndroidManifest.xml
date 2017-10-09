@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sheyon.fivecats.legendslibrary">
-
+    <!--<uses-permission android:name="android.permission.INTERNET" />-->
+    <!--For 1.1.4 - CUSTOM APPLICATION CLASS -->
+    <!--android:name=".LegendsLibraryApp"-->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,7 +23,7 @@
             android:name=".LoreActivity"
             android:label="@string/app_name"
             android:parentActivityName=".MainActivity" />
-        <!--For 1.1.4-->
+        <!--For 1.1.4 - LORE LOCATION ACTIVITY-->
         <!--<activity-->
             <!--android:name=".LocationActivity"-->
             <!--android:label="@string/app_name"-->
@@ -32,6 +34,10 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/drawer_settings" />
+        <!--For 1.1.4 - CRASHYLYTICS-->
+        <!--<meta-data-->
+            <!--android:name="io.fabric.ApiKey"-->
+            <!--android:value="f36513466ea8ea1790eab2238059ba3bbc14b979" />-->
     </application>
 
 </manifest>

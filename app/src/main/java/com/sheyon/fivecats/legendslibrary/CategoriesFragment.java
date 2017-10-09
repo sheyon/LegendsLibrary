@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
@@ -39,7 +40,6 @@ public class CategoriesFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(false);
-        legendsPreferences = LegendsPreferences.getInstance(getContext());
     }
 
     @Nullable
@@ -47,6 +47,7 @@ public class CategoriesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_categories_layout, container, false);
 
+        legendsPreferences = LegendsPreferences.getInstance(getContext());
         db = LegendsDatabase.getInstance(getContext());
 
         setupSpinner(view);
@@ -55,23 +56,10 @@ public class CategoriesFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        displayCategoryScreen();
-
-        if (groupNumber != -1) {
-            legendsExpandableView.expandGroup(groupNumber);
-        }
-    }
-
-    private void setupSpinner(View view)
-    {
+    private void setupSpinner(View view) {
         //THE SPINNER SEEMS TO BE PRODUCING A WINDOW ALREADY FOCUSED ERROR. FIX LATER
         spinner = view.findViewById(R.id.category_spinner);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.categories_array, R.layout.spinner_custom_layout);
-        spinnerAdapter.setDropDownViewResource(R.layout.spinner_custom_dropdown_text);
-        spinner.setAdapter(spinnerAdapter);
+        setupNewSpinnerAdapter();
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -103,7 +91,7 @@ public class CategoriesFragment extends Fragment {
                 if (position == 7) {
                     spinnerCatNumber = LoreLibrary.CAT_7_EVN;
                 }
-                if (position == 8) {
+                if (position == 8 && legendsPreferences.getTswSorting()) {
                     spinnerCatNumber = LoreLibrary.CAT_8_ISU;
                 }
                 legendsPreferences.setSpinnerCatNumber(spinnerCatNumber);
@@ -117,10 +105,19 @@ public class CategoriesFragment extends Fragment {
         });
     }
 
-    private void setupExpandableView(View view)
-    {
-        legendsExpandableView = view.findViewById(R.id.legends_expandable_list);
+    private void setupNewSpinnerAdapter() {
+        ArrayAdapter<CharSequence> spinnerAdapter;
+        if (legendsPreferences.getTswSorting()) {
+            spinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.categories_array_tsw, R.layout.spinner_custom_layout);
+        } else {
+            spinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.categories_array_swl, R.layout.spinner_custom_layout);
+        }
+        spinnerAdapter.setDropDownViewResource(R.layout.spinner_custom_dropdown_text);
+        spinner.setAdapter(spinnerAdapter);
+    }
 
+    private void setupExpandableView(View view) {
+        legendsExpandableView = view.findViewById(R.id.legends_expandable_list);
         legendsExpandableView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -157,9 +154,39 @@ public class CategoriesFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //THIS ENSURES THE CATEGORIES MATCH TSW OR SWL SORTING PREFERENCES
+        setupNewSpinnerAdapter();
+
+        //THIS ENSURES SWL-MODE DOESN'T CRASH PERMANENTLY
+        if (!legendsPreferences.getTswSorting() && legendsPreferences.getSpinnerCatNumber() == LoreLibrary.CAT_8_ISU) {
+            legendsPreferences.setSpinnerCatNumber(0);
+        }
+        spinner.setSelection(legendsPreferences.getSpinnerCatNumber());
+
+        if (groupNumber != -1) {
+            ViewTreeObserver vto = legendsExpandableView.getViewTreeObserver();
+            vto.addOnGlobalLayoutListener (new ViewTreeObserver.OnGlobalLayoutListener() {
+                //WTF REALLY?!
+                @Override
+                public void onGlobalLayout() {
+                    legendsExpandableView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    legendsExpandableView.post( new Runnable() {
+                        @Override
+                        public void run() {
+                            legendsExpandableView.expandGroup(groupNumber);
+                        }
+                    });
+                }
+            });
+        }
+    }
+
     private void startLoreActivity() {
         Intent intent = new Intent(getContext(), LoreActivity.class);
-//        intent.putExtra("catNumber", spinnerCatNumber);
         intent.putExtra("loreTitle", loreTitle);
 
         //FAILSAFE
@@ -174,7 +201,6 @@ public class CategoriesFragment extends Fragment {
 
         String[] selectionArgs = { Integer.toString(spinnerCatNumber), Integer.toString(spinnerCatNumber) };
         String[] mergedQuery = { Queries.UNION_1, Queries.UNION_2};
-
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         String unionQuery = qb.buildUnionQuery(mergedQuery, null, null);
 
@@ -195,6 +221,9 @@ public class CategoriesFragment extends Fragment {
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
+        if (!legendsPreferences.getTswSorting() && legendsPreferences.getSpinnerCatNumber() == LoreLibrary.CAT_8_ISU) {
+            legendsPreferences.setSpinnerCatNumber(0);
+        }
         spinner.setSelection(legendsPreferences.getSpinnerCatNumber());
     }
 

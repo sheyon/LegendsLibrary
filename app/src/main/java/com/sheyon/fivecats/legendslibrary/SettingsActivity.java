@@ -33,6 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
     private CheckBox wildcardOn;
     private CheckBox doubleWildcard;
     private CheckBox displayImages;
+    private CheckBox tswSorting;
     private int fontSize;
     private int langSelection;
     private LegendsPreferences legendsPrefs;
@@ -110,6 +111,13 @@ public class SettingsActivity extends AppCompatActivity {
     private void setupMiscCheckboxes() {
         displayImages = findViewById(R.id.settings_display_images);
         displayImages.setChecked(legendsPrefs.getImagePref());
+
+        //IF TSW SORTING PREFS DO NOT EXIST, CREATE THEM (DEFAULT: FALSE)
+        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_TSW_SORTING)) {
+            legendsPrefs.setTswSorting(false);
+        }
+        tswSorting = findViewById(R.id.settings_categories);
+        tswSorting.setChecked(legendsPrefs.getTswSorting());
     }
 
     private void setupFontSize() {
@@ -163,8 +171,13 @@ public class SettingsActivity extends AppCompatActivity {
                 legendsPrefs.setNormalizationPref(langCheckbox.isChecked());
                 legendsPrefs.setWildcardAlwaysOnPref(wildcardOn.isChecked());
                 legendsPrefs.setDoubleWildcardPref(doubleWildcard.isChecked());
-                legendsPrefs.setImagePref(displayImages.isChecked());
                 legendsPrefs.setFontSizePref(fontSize);
+                legendsPrefs.setImagePref(displayImages.isChecked());
+
+                //RESET THE SPINNER CAT NUMBER TO KEEP THE ARRAY FROM PERMANENTLY CRASHING
+                legendsPrefs.setTswSorting(tswSorting.isChecked());
+                legendsPrefs.setSpinnerCatNumber(0);
+
                 restartDatabase();
             }
         });
@@ -179,6 +192,7 @@ public class SettingsActivity extends AppCompatActivity {
                 LegendsHelper legendsHelper = new LegendsHelper(this);
                 try {
                     db = legendsHelper.getWritableDatabase();
+                    LegendsDatabase.swapCategories(legendsPrefs, db);
                     Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
                 } catch (SQLiteException e) {
                     db = legendsHelper.getReadableDatabase();
@@ -191,6 +205,8 @@ public class SettingsActivity extends AppCompatActivity {
                 LegendsHelperDE legendsHelperDE = new LegendsHelperDE(this);
                 try {
                     db = legendsHelperDE.getWritableDatabase();
+                    LegendsDatabase.swapCategories(legendsPrefs, db);
+                    //new LegendsCategorySwapper(getApplicationContext(), db);
                     Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
                 } catch (SQLiteException e) {
                     db = legendsHelperDE.getReadableDatabase();
@@ -203,6 +219,7 @@ public class SettingsActivity extends AppCompatActivity {
                 LegendsHelperFR legendsHelperFR = new LegendsHelperFR(this);
                 try {
                     db = legendsHelperFR.getWritableDatabase();
+                    LegendsDatabase.swapCategories(legendsPrefs, db);
                     Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
                 } catch (SQLiteException e) {
                     db = legendsHelperFR.getReadableDatabase();
