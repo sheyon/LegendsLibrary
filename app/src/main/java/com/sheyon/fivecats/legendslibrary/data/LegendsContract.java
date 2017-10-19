@@ -51,20 +51,38 @@ public final class LegendsContract
     }
 
     public static final class Queries {
-        //UNION 1 and UNION 2 returns Uncategorized Lore and Unique Subcats to populate the Expandable View
-        public static final String UNION_1 = "select lore._id AS _id, lore.categoryId, title, prefix, subcatName, lore.subcatId AS subcatId\n" +
+
+        //THIS REPLACES UNION 1+2 to return Uncategorized Lore and Unique Subcats to populate the Expandable View
+        public static final String THIS_FUCKIN_QUERY = "select * from\n" +
+                "( select lore._id AS _id, lore.categoryId, title, prefix, subcatName, lore.subcatId AS subcatId\n" +
                 "from lore\n" +
                 "left outer join subcat\n" +
                 "on lore.subcatId = subcat.subcatId\n" +
                 "where lore.subcatId IS NOT NULL and lore.categoryId = ?\n" +
-                "group by lore.subcatId";
-
-        public static final String UNION_2 = "select lore._id AS _id, lore.categoryId, title, prefix, subcatName, lore.subcatId AS subcatId\n" +
+                "group by lore.subcatId\n" +
+                "UNION\n" +
+                "select lore._id AS _id, lore.categoryId, title, prefix, subcatName, lore.subcatId AS subcatId\n" +
                 "from lore\n" +
                 "left outer join subcat\n" +
                 "on lore.subcatId = subcat.subcatId\n" +
                 "where lore.subcatId IS NULL AND lore.categoryId = ?\n" +
-                "order by lore.categoryId;";
+                "group by title )\n" +
+                "order by subcatId is null, subcatId asc, title";
+
+        //UNION 1 and UNION 2 returns Uncategorized Lore and Unique Subcats to populate the Expandable View
+//        public static final String UNION_1 = "select lore._id AS _id, lore.categoryId, title, prefix, subcatName, lore.subcatId AS subcatId\n" +
+//                "from lore\n" +
+//                "left outer join subcat\n" +
+//                "on lore.subcatId = subcat.subcatId\n" +
+//                "where lore.subcatId IS NOT NULL and lore.categoryId = ?\n" +
+//                "group by lore.subcatId";
+//
+//        public static final String UNION_2 = "select lore._id AS _id, lore.categoryId, title, prefix, subcatName, lore.subcatId AS subcatId\n" +
+//                "from lore\n" +
+//                "left outer join subcat\n" +
+//                "on lore.subcatId = subcat.subcatId\n" +
+//                "where lore.subcatId IS NULL AND lore.categoryId = ?\n" +
+//                "order by lore.categoryId, title;";
 
         //Returns all other lore
         public static final String LORES = "select lore._id as _id, title, prefix, lore.categoryId, subcatName, lore.subcatId\n" +
@@ -72,7 +90,7 @@ public final class LegendsContract
                 "join subcat\n" +
                 "on lore.subcatId = subcat.subcatId\n" +
                 "where lore.subcatId = ?\n" +
-                "order by lore.subcatId";
+                "order by title asc";
 
         //Returns CatID given a Title and a Category Name Part 1
         public static final String GET_CAT_ID_UNION_1 = "select lore._id AS _id, title, lore.categoryId, category.categoryName\n" +
@@ -101,13 +119,6 @@ public final class LegendsContract
                 "join category\n" +
                 "on lore.categoryId = category.categoryId\n" +
                 "where lore.categoryId = ? and prefix || title LIKE ?";
-
-//        Returns results from the SearchView
-//        public static final String SEARCH = "select lore._id AS _id, lore.categoryId, category.categoryName, lore.title, lore.legend, lore.blackLore, lore.faved\n" +
-//                "from lore\n" +
-//                "join category\n" +
-//                "on lore.categoryId = category.categoryId\n" +
-//                "where (lore.title like ?) or (lore.legend like ?) or (lore.blackLore like ?)";
 
         //Returns dropdown results for the Search ExpandableViewList
         public static final String SEARCH_CHILD_TABLE = "select lore._id AS _id, category.categoryName, lore.Title, lore.legend, lore.blackLore\n" +

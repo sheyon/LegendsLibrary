@@ -102,6 +102,8 @@ public class LegendsDatabase {
         db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 130;");     //Breaks in Time
         db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 131;");     //Sleepless Lullaby
         db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 132;");     //Sinking City
+        db.execSQL("UPDATE lore SET title = \"Samhain 2012\" WHERE title = \"Samhain 2017\"");
+        db.execSQL("UPDATE image SET title = \"Samhain 2012\" WHERE title = \"Samhain 2017\"");
     }
 
     private static void swapToSWL(SQLiteDatabase db) {
@@ -116,5 +118,7 @@ public class LegendsDatabase {
         db.execSQL("UPDATE lore SET categoryId = 2, subcatId = 7 WHERE _id = 130;");
         db.execSQL("UPDATE lore SET categoryId = 3, subcatId = 10 WHERE _id = 131;");
         db.execSQL("UPDATE lore SET categoryId = 5, subcatId = 17 WHERE _id = 132;");
+        db.execSQL("UPDATE lore SET title = \"Samhain 2017\" WHERE title = \"Samhain 2012\"");
+        db.execSQL("UPDATE image SET title = \"Samhain 2017\" WHERE title = \"Samhain 2012\"");
     }
 }

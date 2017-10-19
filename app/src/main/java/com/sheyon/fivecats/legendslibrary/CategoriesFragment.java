@@ -200,13 +200,13 @@ public class CategoriesFragment extends Fragment {
         closeCursor();
 
         String[] selectionArgs = { Integer.toString(spinnerCatNumber), Integer.toString(spinnerCatNumber) };
-        String[] mergedQuery = { Queries.UNION_1, Queries.UNION_2};
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        String unionQuery = qb.buildUnionQuery(mergedQuery, null, null);
+//        String[] mergedQuery = { Queries.UNION_1, Queries.UNION_2};
+//        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+//        String unionQuery = qb.buildUnionQuery(mergedQuery, null, null);
 
         //ALWAYS GET NEW DATABASE VARIABLE IN CASE SETTINGS WERE CHANGED
         db = LegendsDatabase.getInstance(getContext());
-        cursor = db.rawQuery(unionQuery, selectionArgs);
+        cursor = db.rawQuery(Queries.THIS_FUCKIN_QUERY, selectionArgs);
 
         LegendsCursorTreeAdapter legendsCursorTreeAdapter = new LegendsCursorTreeAdapter(cursor, getContext());
         legendsExpandableView.setAdapter(legendsCursorTreeAdapter);
