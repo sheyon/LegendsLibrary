@@ -67,7 +67,8 @@ public final class LegendsContract
                 "on lore.subcatId = subcat.subcatId\n" +
                 "where lore.subcatId IS NULL AND lore.categoryId = ?\n" +
                 "group by title )\n" +
-                "order by subcatId is null, subcatId asc, title";
+                "order by subcatId is null, subcatId asc, title\n" +
+                "collate nocase";
 
         //UNION 1 and UNION 2 returns Uncategorized Lore and Unique Subcats to populate the Expandable View
 //        public static final String UNION_1 = "select lore._id AS _id, lore.categoryId, title, prefix, subcatName, lore.subcatId AS subcatId\n" +
@@ -90,7 +91,8 @@ public final class LegendsContract
                 "join subcat\n" +
                 "on lore.subcatId = subcat.subcatId\n" +
                 "where lore.subcatId = ?\n" +
-                "order by title asc";
+                "order by title\n" +
+                "collate nocase";
 
         //Returns CatID given a Title and a Category Name Part 1
         public static final String GET_CAT_ID_UNION_1 = "select lore._id AS _id, title, lore.categoryId, category.categoryName\n" +
