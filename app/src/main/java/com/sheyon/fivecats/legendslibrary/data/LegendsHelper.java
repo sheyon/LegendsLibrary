@@ -8,12 +8,13 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 public class LegendsHelper extends SQLiteAssetHelper
 {
     private static final String DATABASE_NAME = "lore_library.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     private Context mContext;
 
     //VERSION 2 = 1.1.1
     //VERSION 3 = 1.1.2
+    //VERSION 4 = 1.1.4 - Samhain lore 2012 TSW/2017 SWL corrected; FR is one version behind EN and DE.
 
     public LegendsHelper(Context context)
     {

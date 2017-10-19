@@ -8,7 +8,7 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 public class LegendsHelperDE extends SQLiteAssetHelper
 {
     private static final String DATABASE_NAME = "lore_library_DE.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     private Context mContext;
 
