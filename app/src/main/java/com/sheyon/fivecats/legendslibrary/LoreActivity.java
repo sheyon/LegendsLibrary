@@ -67,11 +67,11 @@ public class LoreActivity extends AppCompatActivity
 
         //NULL CATCH; IT SHOULD NEVER HAPPEN, BUT IT DO
         if (titleString == null) {
+            Log.w("WARNING", "TitleString null! Using backup.");
             titleString = legendsPrefs.getLoreTitle();
         }
 
         //NULL CATCH; IT SHOULD NEVER HAPPEN, BUT IT DO
-        //SOME DEVICES ALSO LOSE THIS VARIABLE ON GetIntent; FORCE ZERO SO THE APP CAN GET THE CORRECT NUMBER
         //FOR DEBUG, SET TO NUMBER OTHER THAN ZERO TO FORCE CursorOutOfBoundsException
         int categoryNumber = 0;
         if (categoryNumber == 0) {
@@ -241,9 +241,6 @@ public class LoreActivity extends AppCompatActivity
 
                 if (imageResource != null){
                     flavorImageView.setImageResource(getImageId(this, imageResource));
-                }
-                else {
-                    flavorImageView.setImageResource(R.drawable.best_akab);
                 }
 
                 flavorImageCursor.close();

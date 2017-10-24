@@ -74,7 +74,7 @@
     <string name="settings_misc_header">Autres paramètres</string>
     <string name="settings_font_size">Taille de police: </string>
     <string name="settings_checkbox_showImages">Afficher les images</string>
-    <string name="settings_category_sorting">Catégoriser par TSW</string>
+    <string name="settings_category_sorting">Utiliser les catégories d\'héritage</string>
     <string name="settings_button_apply">Appliquer</string>
 
     <string name="toast_write_db_fail">La base de données n’a pas ouvert. Vous devez peut-être libérer de l’espace disque.</string>
