@@ -391,7 +391,7 @@ public class LoreActivity extends AppCompatActivity
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
-        return super.onSupportNavigateUp();
+        return true;
     }
 
     @Override
