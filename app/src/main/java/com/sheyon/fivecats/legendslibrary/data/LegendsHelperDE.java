@@ -8,21 +8,19 @@ import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 public class LegendsHelperDE extends SQLiteAssetHelper
 {
     private static final String DATABASE_NAME = "lore_library_DE.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     private Context mContext;
 
-    public LegendsHelperDE (Context context)
-    {
+    LegendsHelperDE (Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        setForcedUpgrade(DATABASE_VERSION);
         mContext = context;
     }
 
     @Override
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
-        db.execSQL("PRAGMA foreign_keys=ON;");
+        db.execSQL("PRAGMA foreign_keys=1;");
         db.execSQL("DROP TABLE IF EXISTS LoreSearch;");
 
         //CHECK FOR TSW OR SWL CATEGORY PREFERENCES AND SWAP
@@ -41,6 +39,10 @@ public class LegendsHelperDE extends SQLiteAssetHelper
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        switch (oldVersion) {
+            case 4:
+                LegendsDatabase.setBestiary(db);
+                break;
+        }
     }
 }

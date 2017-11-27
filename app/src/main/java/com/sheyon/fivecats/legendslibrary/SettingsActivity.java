@@ -2,7 +2,6 @@ package com.sheyon.fivecats.legendslibrary;
 
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,9 +19,6 @@ import android.widget.Toast;
 
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
-import com.sheyon.fivecats.legendslibrary.data.LegendsHelper;
-import com.sheyon.fivecats.legendslibrary.data.LegendsHelperDE;
-import com.sheyon.fivecats.legendslibrary.data.LegendsHelperFR;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -186,47 +182,8 @@ public class SettingsActivity extends AppCompatActivity {
     private void restartDatabase() {
         db.close();
 
-        switch (legendsPrefs.getLangPref()) {
-            case LegendsPreferences.LANG_EN:
-                //ENGLISH
-                LegendsHelper legendsHelper = new LegendsHelper(this);
-                try {
-                    db = legendsHelper.getWritableDatabase();
-                    LegendsDatabase.swapCategories(legendsPrefs, db);
-                    Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
-                } catch (SQLiteException e) {
-                    db = legendsHelper.getReadableDatabase();
-                    Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
-                }
-                break;
-
-            case LegendsPreferences.LANG_DE:
-                //GERMAN
-                LegendsHelperDE legendsHelperDE = new LegendsHelperDE(this);
-                try {
-                    db = legendsHelperDE.getWritableDatabase();
-                    LegendsDatabase.swapCategories(legendsPrefs, db);
-                    //new LegendsCategorySwapper(getApplicationContext(), db);
-                    Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
-                } catch (SQLiteException e) {
-                    db = legendsHelperDE.getReadableDatabase();
-                    Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
-                }
-                break;
-
-            case LegendsPreferences.LANG_FR:
-                //FRENCH
-                LegendsHelperFR legendsHelperFR = new LegendsHelperFR(this);
-                try {
-                    db = legendsHelperFR.getWritableDatabase();
-                    LegendsDatabase.swapCategories(legendsPrefs, db);
-                    Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
-                } catch (SQLiteException e) {
-                    db = legendsHelperFR.getReadableDatabase();
-                    Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
-                }
-                break;
-        }
+        db = LegendsDatabase.getInstance(this);
+        Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
     }
 
     @Override
