@@ -78,7 +78,9 @@ public class LoreActivity extends AppCompatActivity
             String [] catchArgs = { titleString, titleString };
             Cursor catchCursor = db.rawQuery(Queries.CAT_ID_CATCH, catchArgs);
             if (catchCursor != null) {
-                catchCursor.moveToFirst();
+                if (!catchCursor.moveToFirst()) {
+                    catchCursor.moveToFirst();
+                }
                 categoryNumber = catchCursor.getInt(catchCursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_ID));
                 catchCursor.close();
             }
