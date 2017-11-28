@@ -146,6 +146,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_checkbox_showImages"
+                    android:layout_marginBottom="0dp" />
+
+                <CheckBox
+                    android:id="@+id/settings_categories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_category_sorting"
                     android:layout_marginBottom="16dp" />
 
                 <Button

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sheyon.fivecats.legendslibrary">
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,11 +20,6 @@
             android:name=".LoreActivity"
             android:label="@string/app_name"
             android:parentActivityName=".MainActivity" />
-        <!--For 1.1.4-->
-        <!--<activity-->
-            <!--android:name=".LocationActivity"-->
-            <!--android:label="@string/app_name"-->
-            <!--android:parentActivityName=".LoreActivity" />-->
         <activity
             android:name=".AboutActivity"
             android:label="@string/drawer_about" />
@@ -33,5 +27,4 @@
             android:name=".SettingsActivity"
             android:label="@string/drawer_settings" />
     </application>
-
 </manifest>

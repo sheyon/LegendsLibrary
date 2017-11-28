@@ -15,6 +15,7 @@ public class LegendsPreferences {
     public static final String PREF_DOUBLE_WILDCARD = "DOUBLE_WILDCARD_PREFS";
     public static final String PREF_SHOW_IMAGES = "SHOW_IMAGES_PREF";
     public static final String PREF_FONT_SIZE = "FONT_SIZE_PREF";
+    public static final String PREF_TSW_SORTING = "TSW_SORTING_PREF";
 
     public static final String ALPHABETICAL_POSITION = "ALPHABETICAL_POSITION";
     public static final String LORE_TITLE = "LORE_TITLE";
@@ -38,6 +39,16 @@ public class LegendsPreferences {
 
     private LegendsPreferences (Context context) {
         mPref = context.getSharedPreferences(PREFS_FILE_KEY, Context.MODE_PRIVATE);
+    }
+
+    /*-------
+    SETTERS
+    -------*/
+
+    public void setTswSorting(boolean val) {
+        doEdit();
+        mEditor.putBoolean(PREF_TSW_SORTING, val);
+        doCommit();
     }
 
     public void setSpinnerCatNumber(int val) {
@@ -105,6 +116,14 @@ public class LegendsPreferences {
         return mPref.contains(prefKey);
     }
 
+    /*-------
+    GETTERS
+    -------*/
+
+    public boolean getTswSorting() {
+        return mPref.getBoolean(PREF_TSW_SORTING, false);
+    }
+
     public int getSpinnerCatNumber() {
         return mPref.getInt(SPINNER_CAT_NUMBER, 0);
     }
@@ -117,7 +136,9 @@ public class LegendsPreferences {
         return mPref.getString(LORE_TITLE, "Lilith");
     }
 
-    public int getAlphabeticalPosition() { return mPref.getInt(ALPHABETICAL_POSITION, 0); }
+    public int getAlphabeticalPosition() {
+        return mPref.getInt(ALPHABETICAL_POSITION, 0);
+    }
 
     public int getFontSizePref() {
         return mPref.getInt(PREF_FONT_SIZE, 0);

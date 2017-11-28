@@ -17,7 +17,6 @@ import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -55,31 +54,33 @@ public class LoreActivity extends AppCompatActivity
     private LegendsPreferences legendsPrefs;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_lore);
+
         //Crashlytics.getInstance();
         legendsPrefs = LegendsPreferences.getInstance(this);
         db = LegendsDatabase.getInstance(this);
 
-        //int categoryNumber = getIntent().getIntExtra("catNumber", 0);
         titleString = getIntent().getStringExtra("loreTitle");
         searchString = getIntent().getStringExtra("searchString");
 
         //NULL CATCH; IT SHOULD NEVER HAPPEN, BUT IT DO
         if (titleString == null) {
+            Log.w("WARNING", "TitleString null! Using backup.");
             titleString = legendsPrefs.getLoreTitle();
         }
 
         //NULL CATCH; IT SHOULD NEVER HAPPEN, BUT IT DO
-        //SOME DEVICES ALSO LOSE THIS VARIABLE ON GetIntent; FORCE ZERO SO THE APP CAN GET THE CORRECT NUMBER
         //FOR DEBUG, SET TO NUMBER OTHER THAN ZERO TO FORCE CursorOutOfBoundsException
         int categoryNumber = 0;
         if (categoryNumber == 0) {
             String [] catchArgs = { titleString, titleString };
             Cursor catchCursor = db.rawQuery(Queries.CAT_ID_CATCH, catchArgs);
             if (catchCursor != null) {
-                catchCursor.moveToFirst();
+                if (!catchCursor.moveToFirst()) {
+                    catchCursor.moveToFirst();
+                }
                 categoryNumber = catchCursor.getInt(catchCursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_ID));
                 catchCursor.close();
             }
@@ -107,8 +108,7 @@ public class LoreActivity extends AppCompatActivity
             cursor.close();
         }
 
-        setContentView(R.layout.activity_lore);
-
+        RelativeLayout relativeLayout = findViewById(R.id.loreActivity_relativeLayout);
         Toolbar toolbar = findViewById(R.id.loreActivity_toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null){
@@ -116,6 +116,7 @@ public class LoreActivity extends AppCompatActivity
         }
 
         scrollView = findViewById(R.id.loreActivity_scrollView);
+        RotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 
         TextView titleTextView = findViewById(R.id.loreActivity_title_text_view);
         TextView categoryTextView = findViewById(R.id.loreActivity_category_text_view);
@@ -170,9 +171,6 @@ public class LoreActivity extends AppCompatActivity
 
         setFlavorImage(titleString);
         adjustFontSize(buzzingTextView, blackSignalTextView);
-
-        RelativeLayout relativeLayout = findViewById(R.id.loreActivity_relativeLayout);
-        RotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 
         startupComplete = true;
     }
@@ -383,24 +381,19 @@ public class LoreActivity extends AppCompatActivity
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        //STUPID HACKJOB. 250ms DELAY SINCE THE LAYOUT ISN'T COMPLETELY DRAWN BEFORE IT CAN SCROLL
-        scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        //STUPID HACKJOB. POST DELAY SINCE THE LAYOUT -STILL- ISN'T COMPLETELY DRAWN BEFORE IT CAN SCROLL
+        scrollView.postDelayed( new Runnable() {
             @Override
-            public void onGlobalLayout() {
-                scrollView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        scrollView.scrollTo(0, legendsPrefs.getLorePagePosition());
-                    }
-                }, 250);
+            public void run() {
+                scrollView.scrollTo(0, legendsPrefs.getLorePagePosition());
             }
-        });
+        }, 250);
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
-        return super.onSupportNavigateUp();
+        return true;
     }
 
     @Override
