@@ -2,6 +2,8 @@ package com.sheyon.fivecats.legendslibrary.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.util.Log;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -25,22 +27,33 @@ public class LegendsHelper extends SQLiteAssetHelper
     @Override
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
-        db.execSQL("PRAGMA foreign_keys=1;");
 
-        //CREATE TABLE FOR FULL-TEXT-SEARCH
-        db.execSQL("DROP TABLE IF EXISTS LoreSearch;");
-        db.execSQL(LegendsContract.Queries.CREATE_DEFAULT_TABLE);
-        db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE);
+        try {
+            db.execSQL("PRAGMA foreign_keys=1;");
+            //CREATE TABLE FOR FULL-TEXT-SEARCH
+            db.execSQL("DROP TABLE IF EXISTS LoreSearch;");
+            db.execSQL(LegendsContract.Queries.CREATE_DEFAULT_TABLE);
+            db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE);
 
-        //CHECK FOR TSW OR SWL CATEGORY PREFERENCES AND SWAP
-        LegendsDatabase.swapCategories(LegendsPreferences.getInstance(mContext), db);
+            //CHECK FOR TSW OR SWL CATEGORY PREFERENCES AND SWAP
+            LegendsDatabase.swapCategories(LegendsPreferences.getInstance(mContext), db);
+        }
+        catch (SQLiteException e) {
+            Log.w ("WARNING!", e);
+        }
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         switch (oldVersion) {
             case 4:
-                LegendsDatabase.setBestiary(db);
+                try {
+                    LegendsDatabase.setBestiary(db);
+                } catch (SQLiteException e) {
+                    Log.w ("WARNING!", "Unable to add Bestiary! " + e);
+                    this.setForcedUpgrade();
+                }
                 break;
         }
     }

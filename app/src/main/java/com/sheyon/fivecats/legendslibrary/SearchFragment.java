@@ -2,11 +2,13 @@ package com.sheyon.fivecats.legendslibrary;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -119,7 +121,13 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
                     Toast.makeText(getContext(), R.string.toast_no_articles, Toast.LENGTH_SHORT).show();
                 }
                 else  {
-                    runQuery();
+                    try {
+                        runQuery();
+                    }
+                    catch (SQLiteException e) {
+                        Log.w ("WARNING!", e);
+                        Toast.makeText(getContext(), R.string.toast_cannot_search, Toast.LENGTH_LONG).show();
+                    }
                 }
                 return false;
             }

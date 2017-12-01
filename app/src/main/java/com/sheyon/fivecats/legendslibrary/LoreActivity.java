@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -125,38 +126,33 @@ public class LoreActivity extends AppCompatActivity
         favedImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String modTitleString = "\"" + titleString + "\"";
+                try {
+                    String modTitleString = "\"" + titleString + "\"";
 
-                //EXECUTE UPDATE QUERY
-                db.execSQL(Queries.UPDATE_FAVE + modTitleString + ";");
+                    //EXECUTE UPDATE QUERY
+                    db.execSQL(Queries.UPDATE_FAVE + modTitleString + ";");
 
-                //GET UPDATED CURSOR TO SET THE NEW FAVED STATE
-                String[] selectionArgs = { titleString };
-                Cursor cursor = db.rawQuery(Queries.GET_FAVE, selectionArgs);
-                if (cursor != null) {
-                    cursor.moveToFirst();
+                    //GET UPDATED CURSOR TO SET THE NEW FAVED STATE
+                    String[] selectionArgs = { titleString };
+                    Cursor cursor = db.rawQuery(Queries.GET_FAVE, selectionArgs);
+                    if (cursor != null) {
+                        cursor.moveToFirst();
 
-                    int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
-                    setStar(faved);
+                        int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
+                        setStar(faved);
 
-                    cursor.close();
+                        cursor.close();
+                    }
+                }
+                catch (SQLiteException e) {
+                    Log.w("WARNING!", "Unable to update fave! " + e);
+                    Toast.makeText(getBaseContext(), R.string.toast_cannot_favorite, Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
         LinearLayout blackSignalLayout = findViewById(R.id.loreActivity_BlackSignalLayout);
         TextView blackSignalTextView = findViewById(R.id.loreActivity_signal_text_view);
-
-//        FOR 1.1.14
-//        TextView locationsTextView = findViewById(R.id.loreActivity_location_text_view);
-//        locationsTextView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(getBaseContext(), LocationActivity.class);
-//                intent.putExtra("loreTitle", fullTitleString);
-//                startActivity(intent);
-//            }
-//        });
 
         titleTextView.setText(fullTitleString);
         categoryTextView.setText(categoryString);

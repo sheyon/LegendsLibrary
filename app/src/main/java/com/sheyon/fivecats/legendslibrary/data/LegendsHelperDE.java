@@ -2,6 +2,8 @@ package com.sheyon.fivecats.legendslibrary.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.util.Log;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -20,20 +22,26 @@ public class LegendsHelperDE extends SQLiteAssetHelper
     @Override
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
-        db.execSQL("PRAGMA foreign_keys=1;");
-        db.execSQL("DROP TABLE IF EXISTS LoreSearch;");
 
-        //CHECK FOR TSW OR SWL CATEGORY PREFERENCES AND SWAP
-        LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(mContext);
-        LegendsDatabase.swapCategories(legendsPrefs, db);
+        try {
+            db.execSQL("PRAGMA foreign_keys=1;");
+            db.execSQL("DROP TABLE IF EXISTS LoreSearch;");
 
-        boolean normalizationOn = legendsPrefs.getNormalizationPref();
-        if (normalizationOn) {
-            db.execSQL(LegendsContract.Queries.CREATE_ASCII_TABLE);
-            db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE_FR_DE_NORMALIZED);
-        } else {
-            db.execSQL(LegendsContract.Queries.CREATE_DEFAULT_TABLE);
-            db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE);
+            //CHECK FOR TSW OR SWL CATEGORY PREFERENCES AND SWAP
+            LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(mContext);
+            LegendsDatabase.swapCategories(legendsPrefs, db);
+
+            boolean normalizationOn = legendsPrefs.getNormalizationPref();
+            if (normalizationOn) {
+                db.execSQL(LegendsContract.Queries.CREATE_ASCII_TABLE);
+                db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE_FR_DE_NORMALIZED);
+            } else {
+                db.execSQL(LegendsContract.Queries.CREATE_DEFAULT_TABLE);
+                db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE);
+            }
+        }
+        catch (SQLiteException e) {
+            Log.w ("WARNING!", e);
         }
     }
 
@@ -41,8 +49,12 @@ public class LegendsHelperDE extends SQLiteAssetHelper
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         switch (oldVersion) {
             case 4:
-                LegendsDatabase.setBestiary(db);
-                break;
+                try {
+                    LegendsDatabase.setBestiary(db);
+                } catch (SQLiteException e) {
+                    Log.w ("WARNING!", "Unable to add Bestiary! " + e);
+                    this.setForcedUpgrade();
+                }
         }
     }
 }

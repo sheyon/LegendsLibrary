@@ -183,7 +183,12 @@ public class SettingsActivity extends AppCompatActivity {
         db.close();
 
         db = LegendsDatabase.getInstance(this);
-        Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
+        if (db.isReadOnly()) {
+            Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
