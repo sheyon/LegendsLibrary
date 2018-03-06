@@ -76,7 +76,9 @@
     <string name="settings_font_size">Font Size: </string>
     <string name="settings_button_apply">Apply</string>
 
-    <string name="toast_write_db_fail">Database failed to open. You may need to clear some disk space.</string>
+    <string name="toast_write_db_fail">The database is in read-only mode. Some things may not work. You may need to clear some disk space.</string>
+    <string name="toast_cannot_search">Cannot run query. The database is in read-only mode.</string>
+    <string name="toast_cannot_favorite">Cannot update favorite. The database is in read-only mode.</string>
     <string name="toast_no_quotes">Please omit quotation marks from your queries.</string>
     <string name="toast_three_chars">Queries must have a length of at least 3 characters.</string>
     <string name="toast_no_articles">Please omit articles from the beginning of your query.</string>

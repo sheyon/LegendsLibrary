@@ -77,7 +77,9 @@
     <string name="settings_category_sorting">Utiliser les catégories d\'héritage</string>
     <string name="settings_button_apply">Appliquer</string>
 
-    <string name="toast_write_db_fail">La base de données n’a pas ouvert. Vous devez peut-être libérer de l’espace disque.</string>
+    <string name="toast_write_db_fail">La base de données est en lecture seule. Certaines choses peuvent ne pas fonctionner. Vous devez peut-être libérer de l’espace disque.</string>
+    <string name="toast_cannot_search">Impossible d\'exécuter la requête. La base de données est en lecture seule.</string>
+    <string name="toast_cannot_favorite">Mise à jour impossible.  La base de données est en lecture seule.</string>
     <string name="toast_no_quotes">S’il vous plaît, veuillez omettre les guillemets dans votre requête de recherche. </string>
     <string name="toast_three_chars">Les requêtes doivent avoir une longueur d\'au moins 3 caractères.</string>
     <string name="toast_no_articles">S’il vous plaît, supprimez les articles au début de votre requête.</string>

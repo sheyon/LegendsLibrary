@@ -110,19 +110,7 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                 TextView loreTitle_TV = v.findViewById(R.id.lore_title_text_view);
                 String clickedTitle = loreTitle_TV.getText().toString();
 
-//                STOP PASSING A CAT NUMBER; THE LORE PAGE WILL NOW FIND IT
-//                loreCategory_TV = v.findViewById(R.id.lore_category_text_view);
-//                String clickedCategory = loreCategory_TV.getText().toString();
-//
-//                String[] catIdArgs = { clickedTitle, clickedCategory, clickedTitle, clickedCategory };
-//                Cursor catIdCursor = mDb.rawQuery(joinedQuery, catIdArgs);
-//
-//                catIdCursor.moveToFirst();
-//                int clickedCatId = catIdCursor.getInt(catIdCursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_ID));
-//                catIdCursor.close();
-
                 Intent intent = new Intent(mContext, LoreActivity.class);
-                //intent.putExtra("catNumber", clickedCatId);
                 intent.putExtra("loreTitle", clickedTitle);
                 intent.putExtra("searchString", mSearchString);
 
@@ -134,8 +122,11 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
                 break;
 
             case R.id.lore_favorites_image_view:
-                //IF ON THE SEARCH PAGE, PREVENT THE USER FROM MAKING A FAVE
-                if (mFragment.getClass() == SearchFragment.class) {
+                //IF ON THE SEARCH PAGE OR DB IS READ-ONLY, PREVENT THE USER FROM MAKING A FAVE
+                if (mFragment.getClass() == SearchFragment.class || mDb.isReadOnly()) {
+                    if (mDb.isReadOnly()) {
+                        Toast.makeText(mContext, R.string.toast_cannot_favorite, Toast.LENGTH_SHORT).show();
+                    }
                     break;
                 }
                 //GET PARENT VIEW TO CATCH THE TITLE STRING
