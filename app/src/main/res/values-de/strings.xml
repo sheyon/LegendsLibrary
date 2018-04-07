@@ -3,26 +3,28 @@
     <string name="app_name">Legends Library</string>
 
     <string-array name="categories_array_tsw">
-        <item>[Wähle eine Kategorie:]</item>
-        <item>Solomon Island</item>
-        <item>Tal des Sonnengottes</item>
-        <item>Transsylvanien</item>
-        <item>Tokio</item>
-        <item>Global</item>
-        <item>Das Bestiarium</item>
-        <item>Veranstaltungen</item>
-        <item>Ausgaben</item>
+        <item>@string/spinner_choose</item>
+        <item>@string/spinner_solomon</item>
+        <item>@string/spinner_egypt</item>
+        <item>@string/spinner_trans</item>
+        <item>@string/spinner_tokyo</item>
+        <item>@string/spinner_africa</item>
+        <item>@string/spinner_global</item>
+        <item>@string/spinner_bestiary</item>
+        <item>@string/spinner_events</item>
+        <item>@string/spinner_issues</item>
     </string-array>
 
     <string-array name="categories_array_swl">
-        <item>[Wähle eine Kategorie:]</item>
-        <item>Solomon Island</item>
-        <item>Tal des Sonnengottes</item>
-        <item>Transsylvanien</item>
-        <item>Tokio</item>
-        <item>Global</item>
-        <item>Das Bestiarium</item>
-        <item>Veranstaltungen</item>
+        <item>@string/spinner_choose</item>
+        <item>@string/spinner_solomon</item>
+        <item>@string/spinner_egypt</item>
+        <item>@string/spinner_trans</item>
+        <item>@string/spinner_tokyo</item>
+        <item>@string/spinner_africa</item>
+        <item>@string/spinner_global</item>
+        <item>@string/spinner_bestiary</item>
+        <item>@string/spinner_events</item>
     </string-array>
 
     <string-array name="languages_array">
@@ -30,6 +32,17 @@
         <item>Deutsch</item>
         <item>Français</item>
     </string-array>
+
+    <string name="spinner_choose">[Wähle eine Kategorie:]</string>
+    <string name="spinner_solomon">Solomon Island</string>
+    <string name="spinner_egypt">Tal des Sonnengottes</string>
+    <string name="spinner_trans">Transsylvanien</string>
+    <string name="spinner_tokyo">Tokio</string>
+    <string name="spinner_africa">Südafrika</string>
+    <string name="spinner_global">Global</string>
+    <string name="spinner_bestiary">Das Bestiarium</string>
+    <string name="spinner_events">Veranstaltungen</string>
+    <string name="spinner_issues">Ausgaben</string>
 
     <string name="lore_header_buzzing">Das Summen</string>
     <string name="lore_header_blackSignal">Das schwarze Sign</string>

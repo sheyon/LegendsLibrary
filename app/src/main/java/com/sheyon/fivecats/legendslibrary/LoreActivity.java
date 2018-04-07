@@ -25,7 +25,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import com.crashlytics.android.Crashlytics;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
@@ -59,7 +58,6 @@ public class LoreActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lore);
 
-        //Crashlytics.getInstance();
         legendsPrefs = LegendsPreferences.getInstance(this);
         db = LegendsDatabase.getInstance(this);
 
@@ -244,7 +242,7 @@ public class LoreActivity extends AppCompatActivity
                 flavorImageCursor.close();
             }
             catch (CursorIndexOutOfBoundsException e) {
-                Log.e ("ERROR", "Could not find image resource");
+                Log.w ("WARNING", "Could not find image resource, using default");
                 flavorImageView.setImageResource(R.drawable.flavor_default);
             }
         }

@@ -32,7 +32,9 @@ public final class LegendsContract
         public static final String COLUMN_BLACK_SIGNAL = "blackLore";
         public static final String COLUMN_FAVED = "faved";
         public static final String COLUMN_IMAGE = "resourceLink";
+    }
 
+    public static final class Categories {
         //VALUES FOR SPINNER SELECTION
         public static final int CAT_0 = 0;
         public static final int CAT_1_SOL = 1;
@@ -43,7 +45,10 @@ public final class LegendsContract
         public static final int CAT_6_BES = 6;
         public static final int CAT_7_EVN = 7;
         public static final int CAT_8_ISU = 8;
+        public static final int CAT_9_AFR = 9;
+    }
 
+    public static final class Languages {
         //VALUES FOR LANGUAGE SPINNER
         public static final int LANG_EN = 0;
         public static final int LANG_DE = 1;

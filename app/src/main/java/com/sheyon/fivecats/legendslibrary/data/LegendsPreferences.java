@@ -20,7 +20,7 @@ public class LegendsPreferences {
     public static final String ALPHABETICAL_POSITION = "ALPHABETICAL_POSITION";
     public static final String LORE_TITLE = "LORE_TITLE";
     public static final String LORE_PAGE_POSITION = "LORE_PAGE_POSITION";
-    public static final String SPINNER_CAT_NUMBER = "SPINNER_CAT_NUMBER";
+    public static final String SPINNER_POSITION = "SPINNER_POSITION";
 
     public static final int LANG_EN = 0;
     public static final int LANG_DE = 1;
@@ -51,9 +51,9 @@ public class LegendsPreferences {
         doCommit();
     }
 
-    public void setSpinnerCatNumber(int val) {
+    public void setSpinnerPosition(int val) {
         doEdit();
-        mEditor.putInt(SPINNER_CAT_NUMBER, val);
+        mEditor.putInt(SPINNER_POSITION, val);
         doCommit();
     }
 
@@ -124,8 +124,8 @@ public class LegendsPreferences {
         return mPref.getBoolean(PREF_TSW_SORTING, false);
     }
 
-    public int getSpinnerCatNumber() {
-        return mPref.getInt(SPINNER_CAT_NUMBER, 0);
+    public int getSpinnerPosition() {
+        return mPref.getInt(SPINNER_POSITION, 0);
     }
 
     public int getLorePagePosition() {

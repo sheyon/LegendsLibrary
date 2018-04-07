@@ -3,26 +3,28 @@
     <string name="app_name">Legends Library</string>
 
     <string-array name="categories_array_tsw">
-        <item>[Choisissez une catégorie:]</item>
-        <item>Solomon Island</item>
-        <item>Vallée du Dieu Solaire</item>
-        <item>Transylvanie</item>
-        <item>Tokyo</item>
-        <item>Monde</item>
-        <item>Bestiare</item>
-        <item>Évènements</item>
-        <item>Épisodes</item>
+        <item>@string/spinner_choose</item>
+        <item>@string/spinner_solomon</item>
+        <item>@string/spinner_egypt</item>
+        <item>@string/spinner_trans</item>
+        <item>@string/spinner_tokyo</item>
+        <item>@string/spinner_africa</item>
+        <item>@string/spinner_global</item>
+        <item>@string/spinner_bestiary</item>
+        <item>@string/spinner_events</item>
+        <item>@string/spinner_issues</item>
     </string-array>
 
     <string-array name="categories_array_swl">
-        <item>[Choisissez une catégorie:]</item>
-        <item>Solomon Island</item>
-        <item>Vallée du Dieu Solaire</item>
-        <item>Transylvanie</item>
-        <item>Tokyo</item>
-        <item>Monde</item>
-        <item>Bestiare</item>
-        <item>Évènements</item>
+        <item>@string/spinner_choose</item>
+        <item>@string/spinner_solomon</item>
+        <item>@string/spinner_egypt</item>
+        <item>@string/spinner_trans</item>
+        <item>@string/spinner_tokyo</item>
+        <item>@string/spinner_africa</item>
+        <item>@string/spinner_global</item>
+        <item>@string/spinner_bestiary</item>
+        <item>@string/spinner_events</item>
     </string-array>
 
     <string-array name="languages_array">
@@ -36,6 +38,17 @@
         <item>@string/drawer_settings</item>
         <item>@string/drawer_about</item>
     </string-array>
+
+    <string name="spinner_choose">[Choisissez une catégorie:]</string>
+    <string name="spinner_solomon">Solomon Island</string>
+    <string name="spinner_egypt">Vallée du Dieu Solaire</string>
+    <string name="spinner_trans">Transylvanie</string>
+    <string name="spinner_tokyo">Tokyo</string>
+    <string name="spinner_africa">Afrique du Sud</string>
+    <string name="spinner_global">Monde</string>
+    <string name="spinner_bestiary">Bestiare</string>
+    <string name="spinner_events">Évènements</string>
+    <string name="spinner_issues">Épisodes</string>
 
     <string name="lore_header_buzzing">Le bourdonnement</string>
     <string name="lore_header_blackSignal">Le Signal Noir</string>

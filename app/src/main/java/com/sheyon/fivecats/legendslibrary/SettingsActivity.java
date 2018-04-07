@@ -17,7 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
+import com.sheyon.fivecats.legendslibrary.data.LegendsContract;
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
@@ -72,19 +72,19 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getItemAtPosition(position).equals("English")) {
-                    langSelection = LoreLibrary.LANG_EN;
+                    langSelection = LegendsContract.Languages.LANG_EN;
                 }
                 if (parent.getItemAtPosition(position).equals("Deutsch")) {
-                    langSelection = LoreLibrary.LANG_DE;
+                    langSelection = LegendsContract.Languages.LANG_DE;
                 }
                 if (parent.getItemAtPosition(position).equals("Français")) {
-                    langSelection = LoreLibrary.LANG_FR;
+                    langSelection = LegendsContract.Languages.LANG_FR;
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                langSelection = LoreLibrary.LANG_EN;
+                langSelection = LegendsContract.Languages.LANG_EN;
             }
         });
 
@@ -172,7 +172,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 //RESET THE SPINNER CAT NUMBER TO KEEP THE ARRAY FROM PERMANENTLY CRASHING
                 legendsPrefs.setTswSorting(tswSorting.isChecked());
-                legendsPrefs.setSpinnerCatNumber(0);
+                legendsPrefs.setSpinnerPosition(0);
 
                 restartDatabase();
             }
