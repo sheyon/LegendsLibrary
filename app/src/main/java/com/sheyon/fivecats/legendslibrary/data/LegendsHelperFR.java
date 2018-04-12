@@ -22,7 +22,7 @@ class LegendsHelperFR extends SQLiteAssetHelper
         LegendsPreferences pref = LegendsPreferences.getInstance(context);
         if (!pref.getUpgradeCompletedFR()) {
             setForcedUpgrade();
-            LegendsPreferences.getInstance(mContext).setDbUPgradeCompletedFR(true);
+            pref.setDbUPgradeCompletedFR(true);
         }
     }
 

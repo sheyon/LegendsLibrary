@@ -28,7 +28,7 @@ public class LegendsHelper extends SQLiteAssetHelper
         LegendsPreferences pref = LegendsPreferences.getInstance(context);
         if (!pref.getUpgradeCompleted()) {
             setForcedUpgrade();
-            LegendsPreferences.getInstance(mContext).setDbUpgradeCompleted(true);
+            pref.setDbUpgradeCompleted(true);
         }
     }
 
