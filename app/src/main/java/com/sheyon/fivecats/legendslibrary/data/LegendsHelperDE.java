@@ -7,16 +7,28 @@ import android.util.Log;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
-public class LegendsHelperDE extends SQLiteAssetHelper
+class LegendsHelperDE extends SQLiteAssetHelper
 {
     private static final String DATABASE_NAME = "lore_library_DE.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     private Context mContext;
 
     LegendsHelperDE (Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mContext = context;
+
+        //DO ONCE; ALL PREVIOUS DB UPGRADES DEPRECATED
+        LegendsPreferences pref = LegendsPreferences.getInstance(context);
+        if (!pref.getUpgradeCompletedDE()) {
+            setForcedUpgrade();
+            LegendsPreferences.getInstance(mContext).setDbUpgradeCompletedDE(true);
+        }
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
     }
 
     @Override
@@ -24,7 +36,11 @@ public class LegendsHelperDE extends SQLiteAssetHelper
         super.onOpen(db);
 
         try {
-            db.execSQL("PRAGMA foreign_keys=1;");
+            //PRAGMAS
+            db.execSQL("PRAGMA auto_vacuum = 0;");
+
+            //VACUUM TO PREVENT BLOAT CAUSED BY THE VIRTUAL TABLE
+            db.execSQL("VACUUM;");
             db.execSQL("DROP TABLE IF EXISTS LoreSearch;");
 
             //CHECK FOR TSW OR SWL CATEGORY PREFERENCES AND SWAP
@@ -42,19 +58,6 @@ public class LegendsHelperDE extends SQLiteAssetHelper
         }
         catch (SQLiteException e) {
             Log.w ("WARNING!", e);
-        }
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        switch (oldVersion) {
-            case 4:
-                try {
-                    LegendsDatabase.setBestiary(db);
-                } catch (SQLiteException e) {
-                    Log.w ("WARNING!", "Unable to add Bestiary! " + e);
-                    this.setForcedUpgrade();
-                }
         }
     }
 }
