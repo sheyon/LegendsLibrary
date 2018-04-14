@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ public class AlphabeticalFragment extends Fragment implements FragmentVisibility
     private View loadingView;
 
     private LegendsListAdapter adapter;
+
+    boolean haveExitedOnce = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,18 +95,22 @@ public class AlphabeticalFragment extends Fragment implements FragmentVisibility
         listView.setVisibility(View.GONE);
         emptyView.setVisibility(View.GONE);
         loadingView.setAlpha(1f);
+        haveExitedOnce = true;
     }
 
     @Override
     public void onFragmentVisible() {
-        //ALWAYS GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
-        db = LegendsDatabase.getInstance(getContext());
+        //TO ENSURE THIS BLOCK NEVER FIRES ON START-UP; CAUSES LAYOUT SPAM
+        if (haveExitedOnce) {
+            //ALWAYS GET NEW DATABASE IN CASE SETTINGS WERE CHANGED
+            db = LegendsDatabase.getInstance(getContext());
 
-        refreshCursor();
+            refreshCursor();
 
-        Crossfader.crossfadeView(listView, loadingView);
+            Crossfader.crossfadeView(listView, loadingView);
 
-        //JUMP TO LAST SAVED POSITION; PERSISTS AFTER APP CLOSE
-        listView.setSelection(LegendsPreferences.getInstance(getContext()).getAlphabeticalPosition());
+            //JUMP TO LAST SAVED POSITION; PERSISTS AFTER APP CLOSE
+            listView.setSelection(LegendsPreferences.getInstance(getContext()).getAlphabeticalPosition());
+        }
     }
 }
