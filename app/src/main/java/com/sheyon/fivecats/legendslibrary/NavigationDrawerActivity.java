@@ -15,9 +15,9 @@ import android.widget.ListView;
 
 abstract class NavigationDrawerActivity extends AppCompatActivity {
 
-    public ActionBarDrawerToggle mDrawerToggle;
+    ActionBarDrawerToggle mDrawerToggle;
 
-    public void setupDrawer(final Activity activity, Toolbar toolbar){
+    void setupDrawer(final Activity activity, Toolbar toolbar){
         final DrawerLayout mDrawerLayout = activity.findViewById(R.id.drawer_layout);
         final String[] mDrawerItems = activity.getResources().getStringArray(R.array.drawer_items);
         final ListView mDrawerList = activity.findViewById(R.id.left_drawer);
