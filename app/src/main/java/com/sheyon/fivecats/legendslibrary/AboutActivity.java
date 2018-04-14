@@ -1,12 +1,9 @@
 package com.sheyon.fivecats.legendslibrary;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,9 +12,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AboutActivity extends AppCompatActivity {
-
-    private UniversalDrawer universalDrawer;
+public class AboutActivity extends NavigationDrawerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +22,7 @@ public class AboutActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.aboutActivity_toolbar);
         setSupportActionBar(toolbar);
 
-        universalDrawer = new UniversalDrawer();
-        universalDrawer.setupDrawer(this, toolbar);
+        setupDrawer(this, toolbar);
 
         RelativeLayout relativeLayout = findViewById(R.id.aboutActivity_relativeLayout);
         ScrollView scrollView = findViewById(R.id.aboutActivity_scrollView);
@@ -176,29 +170,5 @@ public class AboutActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        universalDrawer.mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        universalDrawer.mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
-        if (universalDrawer.mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        // Handle your other action bar items...
-        return super.onOptionsItemSelected(item);
     }
 }

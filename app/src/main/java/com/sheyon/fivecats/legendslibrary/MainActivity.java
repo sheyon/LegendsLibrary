@@ -1,21 +1,17 @@
 package com.sheyon.fivecats.legendslibrary;
 
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import com.sbrukhanda.fragmentviewpager.FragmentViewPager;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends NavigationDrawerActivity {
 
     private FragmentViewPager viewPager;
-    private UniversalDrawer universalDrawer;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -34,8 +30,7 @@ public class MainActivity extends AppCompatActivity{
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
         setSupportActionBar(toolbar);
 
-        universalDrawer = new UniversalDrawer();
-        universalDrawer.setupDrawer(this, toolbar);
+        setupDrawer(this, toolbar);
 
         final TabLayout tabLayout = findViewById(R.id.mainActivity_tab_layout);
         final LegendsPagerAdapter pagerAdapter = new LegendsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
@@ -63,30 +58,6 @@ public class MainActivity extends AppCompatActivity{
                 //DO NOTHING
             }
         });
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        universalDrawer.mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        universalDrawer.mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
-        if (universalDrawer.mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        // Handle your other action bar items...
-        return super.onOptionsItemSelected(item);
     }
 
     private void setupIcons(TabLayout tabLayout){
@@ -122,7 +93,7 @@ public class MainActivity extends AppCompatActivity{
         if (f.getClass() == SearchFragment.class) {
             toolbar.setTitle(R.string.title_search);
         }
-        universalDrawer.mDrawerToggle.syncState();
+        mDrawerToggle.syncState();
     }
 
     @Override

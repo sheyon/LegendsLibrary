@@ -20,9 +20,9 @@ class LegendsHelperFR extends SQLiteAssetHelper
 
         //DO ONCE; ALL PREVIOUS DB UPGRADES DEPRECATED
         LegendsPreferences pref = LegendsPreferences.getInstance(context);
-        if (!pref.getUpgradeCompletedFR()) {
+        if (!pref.isUpgradeCompletedFR()) {
             setForcedUpgrade();
-            pref.setDbUPgradeCompletedFR(true);
+            pref.setDBUpgradeCompletedFR(true);
         }
     }
 
@@ -47,7 +47,7 @@ class LegendsHelperFR extends SQLiteAssetHelper
             LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(mContext);
             LegendsDatabase.swapCategories(legendsPrefs, db);
 
-            boolean normalizationOn = legendsPrefs.getNormalizationPref();
+            boolean normalizationOn = legendsPrefs.usingNormalization();
             if (normalizationOn){
                 db.execSQL(LegendsContract.Queries.CREATE_ASCII_TABLE);
                 db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE_FR_DE_NORMALIZED);

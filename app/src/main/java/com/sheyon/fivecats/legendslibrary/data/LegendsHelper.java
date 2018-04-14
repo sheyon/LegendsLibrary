@@ -26,7 +26,7 @@ public class LegendsHelper extends SQLiteAssetHelper
 
         //DO ONCE; ALL PREVIOUS DB UPGRADES DEPRECATED
         LegendsPreferences pref = LegendsPreferences.getInstance(context);
-        if (!pref.getUpgradeCompleted()) {
+        if (!pref.isUpgradeCompleted()) {
             setForcedUpgrade();
             pref.setDbUpgradeCompleted(true);
         }

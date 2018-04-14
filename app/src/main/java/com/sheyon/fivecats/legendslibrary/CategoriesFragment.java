@@ -109,7 +109,7 @@ public class CategoriesFragment extends Fragment {
 
     private void setupNewSpinnerAdapter() {
         ArrayAdapter<CharSequence> spinnerAdapter;
-        if (legendsPreferences.getTswSorting()) {
+        if (legendsPreferences.usingTswSorting()) {
             spinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.categories_array_tsw, R.layout.spinner_custom_layout);
         } else {
             spinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.categories_array_swl, R.layout.spinner_custom_layout);
@@ -212,7 +212,7 @@ public class CategoriesFragment extends Fragment {
     }
 
     private void resetSpinnerPosition() {
-        if (!legendsPreferences.getTswSorting() && legendsPreferences.getSpinnerPosition() == Categories.CAT_8_ISU) {
+        if (!legendsPreferences.usingTswSorting() && legendsPreferences.getSpinnerPosition() == Categories.CAT_8_ISU) {
             legendsPreferences.setSpinnerPosition(0);
         }
         spinner.setSelection(legendsPreferences.getSpinnerPosition());

@@ -3,7 +3,6 @@ package com.sheyon.fivecats.legendslibrary;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,10 +20,9 @@ import com.sheyon.fivecats.legendslibrary.data.LegendsContract;
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends NavigationDrawerActivity {
 
     private SQLiteDatabase db;
-    private UniversalDrawer universalDrawer;
     private CheckBox langCheckbox;
     private CheckBox wildcardOn;
     private CheckBox doubleWildcard;
@@ -44,8 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.settingsActivity_toolbar);
         setSupportActionBar(toolbar);
 
-        universalDrawer = new UniversalDrawer();
-        universalDrawer.setupDrawer(this, toolbar);
+        setupDrawer(this, toolbar);
 
         RelativeLayout relativeLayout = findViewById(R.id.settingsActivity_relativeLayout);
         ScrollView scrollView = findViewById(R.id.settingsActivity_scrollView);
@@ -93,15 +90,15 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void setupLangCheckbox() {
         langCheckbox = findViewById(R.id.settings_lang_checkbox);
-        langCheckbox.setChecked(legendsPrefs.getNormalizationPref());
+        langCheckbox.setChecked(legendsPrefs.usingNormalization());
     }
 
     private void setupSearchCheckboxes() {
         wildcardOn = findViewById(R.id.settings_search_wildcard_on);
-        wildcardOn.setChecked(legendsPrefs.getWildcardAlwaysOnPref());
+        wildcardOn.setChecked(legendsPrefs.usingWildcards());
 
         doubleWildcard = findViewById(R.id.settings_search_double_wildcard);
-        doubleWildcard.setChecked(legendsPrefs.getDoubleWildcardPref());
+        doubleWildcard.setChecked(legendsPrefs.usingDoubleWildcards());
     }
 
     private void setupMiscCheckboxes() {
@@ -110,10 +107,10 @@ public class SettingsActivity extends AppCompatActivity {
 
         //IF TSW SORTING PREFS DO NOT EXIST, CREATE THEM (DEFAULT: FALSE)
         if (!legendsPrefs.doesContain(LegendsPreferences.PREF_TSW_SORTING)) {
-            legendsPrefs.setTswSorting(false);
+            legendsPrefs.useTswSorting(false);
         }
         tswSorting = findViewById(R.id.settings_categories);
-        tswSorting.setChecked(legendsPrefs.getTswSorting());
+        tswSorting.setChecked(legendsPrefs.usingTswSorting());
     }
 
     private void setupFontSize() {
@@ -171,7 +168,7 @@ public class SettingsActivity extends AppCompatActivity {
                 legendsPrefs.setImagePref(displayImages.isChecked());
 
                 //RESET THE SPINNER CAT NUMBER TO KEEP THE ARRAY FROM PERMANENTLY CRASHING
-                legendsPrefs.setTswSorting(tswSorting.isChecked());
+                legendsPrefs.useTswSorting(tswSorting.isChecked());
                 legendsPrefs.setSpinnerPosition(0);
 
                 restartDatabase();
@@ -189,29 +186,5 @@ public class SettingsActivity extends AppCompatActivity {
         else {
             Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        universalDrawer.mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        universalDrawer.mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
-        if (universalDrawer.mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        // Handle your other action bar items...
-        return super.onOptionsItemSelected(item);
     }
 }

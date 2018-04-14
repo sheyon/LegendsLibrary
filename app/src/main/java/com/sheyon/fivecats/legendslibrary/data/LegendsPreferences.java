@@ -61,13 +61,13 @@ public class LegendsPreferences {
         doCommit();
     }
 
-    public void setDbUPgradeCompletedFR(boolean val) {
+    public void setDBUpgradeCompletedFR(boolean val) {
         doEdit();
         mEditor.putBoolean(DB_UPGRADE_COMPLETED_FR, val);
         doCommit();
     }
 
-    public void setTswSorting(boolean val) {
+    public void useTswSorting(boolean val) {
         doEdit();
         mEditor.putBoolean(PREF_TSW_SORTING, val);
         doCommit();
@@ -142,19 +142,19 @@ public class LegendsPreferences {
     GETTERS
     -------*/
 
-    public boolean getUpgradeCompleted() {
+    public boolean isUpgradeCompleted() {
         return mPref.getBoolean(DB_UPGRADE_COMPLETED, false);
     }
 
-    public boolean getUpgradeCompletedDE() {
+    public boolean isUpgradeCompletedDE() {
         return mPref.getBoolean(DB_UPGRADE_COMPLETED_DE, false);
     }
 
-    public boolean getUpgradeCompletedFR() {
+    public boolean isUpgradeCompletedFR() {
         return mPref.getBoolean(DB_UPGRADE_COMPLETED_FR, false);
     }
 
-    public boolean getTswSorting() {
+    public boolean usingTswSorting() {
         return mPref.getBoolean(PREF_TSW_SORTING, false);
     }
 
@@ -186,15 +186,15 @@ public class LegendsPreferences {
         return mPref.getInt(PREF_LANG, 0);
     }
 
-    public boolean getNormalizationPref() {
+    public boolean usingNormalization() {
         return mPref.getBoolean(PREF_NORMALIZATION, true);
     }
 
-    public boolean getWildcardAlwaysOnPref() {
+    public boolean usingWildcards() {
         return mPref.getBoolean(PREF_WILDCARD_ON, false);
     }
 
-    public boolean getDoubleWildcardPref() {
+    public boolean usingDoubleWildcards() {
         return mPref.getBoolean(PREF_DOUBLE_WILDCARD, false);
     }
 

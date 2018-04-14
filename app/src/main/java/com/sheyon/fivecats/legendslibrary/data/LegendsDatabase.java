@@ -98,7 +98,7 @@ public class LegendsDatabase {
     }
 
     static void swapCategories(LegendsPreferences legendsPrefs, SQLiteDatabase db) {
-        if (legendsPrefs.getTswSorting()){
+        if (legendsPrefs.usingTswSorting()){
             swapToTSW(db);
         }
         else {
@@ -146,49 +146,5 @@ public class LegendsDatabase {
         catch (SQLiteException e) {
             Log.w ("WARNING!", "Unable to swap! " + e);
         }
-    }
-
-    static void setBestiary (SQLiteDatabase db) {
-        db.execSQL("UPDATE image SET resourceLink = \"best_akab\" WHERE _id = 82;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_arthropods\" WHERE _id = 83;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_blajini\" WHERE _id = 84;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_boogeyman\" WHERE _id = 85;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_cultists\" WHERE _id = 86;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_deathless\" WHERE _id = 87;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_draug_deep1s\" WHERE _id = 88;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_draug_drones\" WHERE _id = 89;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_draug_lords\" WHERE _id = 90;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_familiars\" WHERE _id = 91;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_fauns\" WHERE _id = 92;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_filth_humans\" WHERE _id = 93;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_filth_nature\" WHERE _id = 94;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_filth_guardians\" WHERE _id = 95;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_ghouls\" WHERE _id = 96;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_golems\" WHERE _id = 97;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_jinn\" WHERE _id = 98;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_kyonshi\" WHERE _id = 99;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_little1s\" WHERE _id = 100;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_mummies\" WHERE _id = 101;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_namahage\" WHERE _id = 102;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_oni\" WHERE _id = 103;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_orochi_tech\" WHERE _id = 104;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_padurii\" WHERE _id = 105;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_rakshasa\" WHERE _id = 106;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_revenants\" WHERE _id = 107;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_sasquatch\" WHERE _id = 108;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_scarecrows\" WHERE _id = 109;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_hell_soldiers\" WHERE _id = 110;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_spectres\" WHERE _id = 111;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_fire_spirits\" WHERE _id = 112;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_incubii\" WHERE _id = 113;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_vampire_masters\" WHERE _id = 114;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_vampire_ss\" WHERE _id = 115;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_vampires\" WHERE _id = 116;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_wendigo\" WHERE _id = 117;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_werewolves\" WHERE _id = 118;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_wisps\" WHERE _id = 119;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_zmei\" WHERE _id = 120;");
-        db.execSQL("UPDATE image SET resourceLink = \"best_zombies\" WHERE _id = 121;");
-        Log.i("INFO", "Bestiary added");
     }
 }
