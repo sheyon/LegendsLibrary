@@ -88,15 +88,15 @@ public class SettingsActivity extends NavigationDrawerActivity {
 
     private void setupLangCheckbox() {
         langCheckbox = findViewById(R.id.settings_lang_checkbox);
-        langCheckbox.setChecked(legendsPrefs.usingNormalization());
+        langCheckbox.setChecked(legendsPrefs.isUsingNormalization());
     }
 
     private void setupSearchCheckboxes() {
         wildcardOn = findViewById(R.id.settings_search_wildcard_on);
-        wildcardOn.setChecked(legendsPrefs.usingWildcards());
+        wildcardOn.setChecked(legendsPrefs.isUsingWildcards());
 
         doubleWildcard = findViewById(R.id.settings_search_double_wildcard);
-        doubleWildcard.setChecked(legendsPrefs.usingDoubleWildcards());
+        doubleWildcard.setChecked(legendsPrefs.isUsingDoubleWildcards());
     }
 
     private void setupMiscCheckboxes() {
@@ -105,10 +105,10 @@ public class SettingsActivity extends NavigationDrawerActivity {
 
         //IF TSW SORTING PREFS DO NOT EXIST, CREATE THEM (DEFAULT: FALSE)
         if (!legendsPrefs.doesContain(LegendsPreferences.PREF_TSW_SORTING)) {
-            legendsPrefs.useTswSorting(false);
+            legendsPrefs.setTswSorting(false);
         }
         tswSorting = findViewById(R.id.settings_categories);
-        tswSorting.setChecked(legendsPrefs.usingTswSorting());
+        tswSorting.setChecked(legendsPrefs.isUsingTswSorting());
     }
 
     private void setupFontSize() {
@@ -166,7 +166,7 @@ public class SettingsActivity extends NavigationDrawerActivity {
                 legendsPrefs.setImagePref(displayImages.isChecked());
 
                 //RESET THE SPINNER CAT NUMBER TO KEEP THE ARRAY FROM PERMANENTLY CRASHING
-                legendsPrefs.useTswSorting(tswSorting.isChecked());
+                legendsPrefs.setTswSorting(tswSorting.isChecked());
                 legendsPrefs.setSpinnerPosition(0);
 
                 restartDatabase();

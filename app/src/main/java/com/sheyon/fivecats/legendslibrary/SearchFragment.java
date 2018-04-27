@@ -85,8 +85,8 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
     private void getPrefs(){
         LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(getContext());
         prefsLang = legendsPrefs.getLangPref();
-        prefsNormalization = legendsPrefs.usingNormalization();
-        prefsWildcardOn = legendsPrefs.usingWildcards();
+        prefsNormalization = legendsPrefs.isUsingNormalization();
+        prefsWildcardOn = legendsPrefs.isUsingWildcards();
     }
 
     private void setupSearchBar(View view) {

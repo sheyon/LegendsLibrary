@@ -47,7 +47,7 @@ class LegendsHelperFR extends SQLiteAssetHelper
             LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(mContext);
             LegendsDatabase.swapCategories(legendsPrefs, db);
 
-            boolean normalizationOn = legendsPrefs.usingNormalization();
+            boolean normalizationOn = legendsPrefs.isUsingNormalization();
             if (normalizationOn){
                 db.execSQL(LegendsContract.Queries.CREATE_ASCII_TABLE);
                 db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE_FR_DE_NORMALIZED);

@@ -8,6 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
 import com.sbrukhanda.fragmentviewpager.FragmentViewPager;
+import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
+
+import java.util.Locale;
 
 public class MainActivity extends NavigationDrawerActivity {
 
@@ -24,6 +27,8 @@ public class MainActivity extends NavigationDrawerActivity {
         super.onCreate(savedInstanceState);
         //Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
+
+        createOrConfirmPrefs();
 
         final Toolbar toolbar = findViewById(R.id.mainActivity_toolbar);
         toolbar.setTitle(R.string.title_alphabetical);
@@ -94,6 +99,33 @@ public class MainActivity extends NavigationDrawerActivity {
             toolbar.setTitle(R.string.title_search);
         }
         mDrawerToggle.syncState();
+    }
+
+    private void createOrConfirmPrefs() {
+        //IF LANG PREFS DO NOT EXIST, CREATE THEM (DEFAULT: ENGLISH)
+        LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(this);
+        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_LANG)) {
+            String lang = Locale.getDefault().getLanguage();
+            switch (lang) {
+                case "en":
+                    legendsPrefs.setLangPref(LegendsPreferences.LANG_EN);
+                    break;
+                case "de":
+                    legendsPrefs.setLangPref(LegendsPreferences.LANG_DE);
+                    break;
+                case "fr":
+                    legendsPrefs.setLangPref(LegendsPreferences.LANG_FR);
+                    break;
+                default:
+                    legendsPrefs.setLangPref(LegendsPreferences.LANG_EN);
+                    break;
+            }
+        }
+
+        //IF NORMALIZATION PREFS DO NOT EXIST, CREATE THEM (DEFAULT: NORMALIZED)
+        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_NORMALIZATION)) {
+            legendsPrefs.setNormalizationPref(true);
+        }
     }
 
     @Override

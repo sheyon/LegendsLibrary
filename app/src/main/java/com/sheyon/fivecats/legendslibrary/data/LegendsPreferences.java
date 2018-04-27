@@ -67,7 +67,7 @@ public class LegendsPreferences {
         doCommit();
     }
 
-    public void useTswSorting(boolean val) {
+    public void setTswSorting(boolean val) {
         doEdit();
         mEditor.putBoolean(PREF_TSW_SORTING, val);
         doCommit();
@@ -154,7 +154,7 @@ public class LegendsPreferences {
         return mPref.getBoolean(DB_UPGRADE_COMPLETED_FR, false);
     }
 
-    public boolean usingTswSorting() {
+    public boolean isUsingTswSorting() {
         return mPref.getBoolean(PREF_TSW_SORTING, false);
     }
 
@@ -186,15 +186,15 @@ public class LegendsPreferences {
         return mPref.getInt(PREF_LANG, 0);
     }
 
-    public boolean usingNormalization() {
+    public boolean isUsingNormalization() {
         return mPref.getBoolean(PREF_NORMALIZATION, true);
     }
 
-    public boolean usingWildcards() {
+    public boolean isUsingWildcards() {
         return mPref.getBoolean(PREF_WILDCARD_ON, false);
     }
 
-    public boolean usingDoubleWildcards() {
+    public boolean isUsingDoubleWildcards() {
         return mPref.getBoolean(PREF_DOUBLE_WILDCARD, false);
     }
 

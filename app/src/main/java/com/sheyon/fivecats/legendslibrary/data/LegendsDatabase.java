@@ -9,8 +9,6 @@ import android.widget.Toast;
 
 import com.sheyon.fivecats.legendslibrary.R;
 
-import java.util.Locale;
-
 public class LegendsDatabase {
 
     private static SQLiteDatabase legendsDB;
@@ -23,32 +21,6 @@ public class LegendsDatabase {
     }
 
     private static void openDatabase(Context context) {
-        LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(context);
-
-        //IF LANG PREFS DO NOT EXIST, CREATE THEM (DEFAULT: ENGLISH)
-        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_LANG)) {
-            String lang = Locale.getDefault().getLanguage();
-            switch (lang) {
-                case "en":
-                    legendsPrefs.setLangPref(LegendsPreferences.LANG_EN);
-                    break;
-                case "de":
-                    legendsPrefs.setLangPref(LegendsPreferences.LANG_DE);
-                    break;
-                case "fr":
-                    legendsPrefs.setLangPref(LegendsPreferences.LANG_FR);
-                    break;
-                default:
-                    legendsPrefs.setLangPref(LegendsPreferences.LANG_EN);
-                    break;
-            }
-        }
-
-        //IF NORMALIZATION PREFS DO NOT EXIST, CREATE THEM (DEFAULT: NORMALIZED)
-        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_NORMALIZATION)) {
-            legendsPrefs.setNormalizationPref(true);
-        }
-
 //        boolean DEBUG = true;
 //
 //        if (DEBUG) {
@@ -65,6 +37,7 @@ public class LegendsDatabase {
 //        }
 
         //OPEN DATABASE
+        LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(context);
         switch (legendsPrefs.getLangPref()) {
             case LegendsPreferences.LANG_EN:
                 LegendsHelper legendsHelper = new LegendsHelper(context);
@@ -116,7 +89,7 @@ public class LegendsDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                if (sLegendsPrefs.usingTswSorting()){
+                if (sLegendsPrefs.isUsingTswSorting()){
                     sDb.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 22;");      //Nightmares in the Dream Palace
                     sDb.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 25;");      //Reaping the Whirlwind
                     sDb.execSQL("UPDATE lore SET categoryId = 8, subcatId = 23 WHERE _id = 27;");        //Tale of Momotaro
@@ -130,6 +103,7 @@ public class LegendsDatabase {
                     sDb.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 132;");     //Sinking City
                     sDb.execSQL("UPDATE lore SET title = \"Samhain 2012\" WHERE title = \"Samhain 2017\"");
                     sDb.execSQL("UPDATE image SET title = \"Samhain 2012\" WHERE title = \"Samhain 2017\"");
+                    Log.i ("INFO", "Categories set to TSW");
                 } else {
                     sDb.execSQL("UPDATE lore SET categoryId = 4, subcatId = 14 WHERE _id = 22;");
                     sDb.execSQL("UPDATE lore SET categoryId = 4, subcatId = 14 WHERE _id = 25;");
@@ -144,6 +118,7 @@ public class LegendsDatabase {
                     sDb.execSQL("UPDATE lore SET categoryId = 5, subcatId = 17 WHERE _id = 132;");
                     sDb.execSQL("UPDATE lore SET title = \"Samhain 2017\" WHERE title = \"Samhain 2012\"");
                     sDb.execSQL("UPDATE image SET title = \"Samhain 2017\" WHERE title = \"Samhain 2012\"");
+                    Log.i ("INFO", "Categories set to SWL");
                 }
             }
             catch (SQLiteException e) {

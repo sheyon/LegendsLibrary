@@ -267,7 +267,7 @@ public class LoreActivity extends AppCompatActivity
     }
 
     private CharSequence highlight(String originalText, TextView textView) {
-        Boolean normalize = legendsPrefs.usingNormalization();
+        Boolean normalize = legendsPrefs.isUsingNormalization();
 
         //IF ROMANIAN CHARACTERS FOUND, OVERRIDE NORMALIZATION (ENGLISH ONLY)
         if ( legendsPrefs.getLangPref() == 0 &&
@@ -330,7 +330,7 @@ public class LoreActivity extends AppCompatActivity
                 }
                 else {
                     //DOUBLE WILDCARDS WILL RETURN *RESULT, *RESULT*, and RESULT*
-                    if (legendsPrefs.usingDoubleWildcards()) {
+                    if (legendsPrefs.isUsingDoubleWildcards()) {
                         textView.setText(highlighted);
                     }
                     else {
