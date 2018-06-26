@@ -3,6 +3,7 @@ package com.sheyon.fivecats.legendslibrary;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -41,18 +42,18 @@ public class CategoriesFragment extends Fragment {
         setHasOptionsMenu(false);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_categories_layout, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_categories_layout, container, false);
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         legendsPreferences = LegendsPreferences.getInstance(getContext());
         db = LegendsDatabase.getInstance(getContext());
 
         setupSpinner(view);
         setupExpandableView(view);
-
-        return view;
     }
 
     private void setupSpinner(View view) {

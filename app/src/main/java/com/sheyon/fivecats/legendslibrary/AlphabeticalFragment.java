@@ -3,6 +3,7 @@ package com.sheyon.fivecats.legendslibrary;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -35,11 +36,13 @@ public class AlphabeticalFragment extends Fragment implements FragmentVisibility
         setHasOptionsMenu(false);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_alphabetical, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_alphabetical, container, false);
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         listView = view.findViewById(R.id.alphabetical_list_view);
         emptyView = view.findViewById(R.id.empty_view);
         loadingView = view.findViewById(R.id.loading_view);
@@ -54,8 +57,6 @@ public class AlphabeticalFragment extends Fragment implements FragmentVisibility
 
         listView.setAdapter(adapter);
         listView.setVerticalScrollbarPosition(LegendsPreferences.getInstance(getContext()).getAlphabeticalPosition());
-
-        return view;
     }
 
     public void refreshCursor() {
