@@ -171,7 +171,7 @@ public class LoreActivity extends AppCompatActivity
 
     private void adjustFontSize(TextView buzzingTextView, TextView blackSignalTextView){
         //IF FONT SIZE PREFS DO NOT EXIST, CREATE THEM (DEFAULT: 0)
-        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_FONT_SIZE)) {
+        if (legendsPrefs.doesNotContain(LegendsPreferences.PREF_FONT_SIZE)) {
             legendsPrefs.setFontSizePref(0);
         }
 
@@ -256,7 +256,7 @@ public class LoreActivity extends AppCompatActivity
 
     private void showFlavorImage(ImageView imageView) {
         //IF PREFS DON'T EXIST, CREATE THEM. (DEFAULT: SHOW IMAGES)
-        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_SHOW_IMAGES)) {
+        if (legendsPrefs.doesNotContain(LegendsPreferences.PREF_SHOW_IMAGES)) {
             legendsPrefs.setImagePref(true);
         }
 

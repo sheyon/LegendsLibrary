@@ -36,6 +36,7 @@ public class SettingsActivity extends NavigationDrawerActivity {
         setContentView(R.layout.activity_settings);
 
         db = LegendsDatabase.getInstance(this);
+        legendsPrefs = LegendsPreferences.getInstance(this);
 
         Toolbar toolbar = findViewById(R.id.settingsActivity_toolbar);
         setSupportActionBar(toolbar);
@@ -45,8 +46,6 @@ public class SettingsActivity extends NavigationDrawerActivity {
         RelativeLayout relativeLayout = findViewById(R.id.settingsActivity_relativeLayout);
         ScrollView scrollView = findViewById(R.id.settingsActivity_scrollView);
         RotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
-
-        legendsPrefs = LegendsPreferences.getInstance(getApplicationContext());
 
         setupLangSpinner();
         setupLangCheckbox();
@@ -104,7 +103,7 @@ public class SettingsActivity extends NavigationDrawerActivity {
         displayImages.setChecked(legendsPrefs.getImagePref());
 
         //IF TSW SORTING PREFS DO NOT EXIST, CREATE THEM (DEFAULT: FALSE)
-        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_TSW_SORTING)) {
+        if (legendsPrefs.doesNotContain(LegendsPreferences.PREF_TSW_SORTING)) {
             legendsPrefs.setTswSorting(false);
         }
         tswSorting = findViewById(R.id.settings_categories);
@@ -117,7 +116,7 @@ public class SettingsActivity extends NavigationDrawerActivity {
         final TextView fontSizeTextView = findViewById(R.id.settings_font_size);
 
         //IF FONT SIZE PREFS DO NOT EXIST, CREATE THEM (DEFAULT: 0)
-        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_FONT_SIZE)) {
+        if (legendsPrefs.doesNotContain(LegendsPreferences.PREF_FONT_SIZE)) {
             legendsPrefs.setFontSizePref(0);
         }
 
