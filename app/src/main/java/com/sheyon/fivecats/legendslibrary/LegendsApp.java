@@ -6,13 +6,9 @@ import android.database.sqlite.SQLiteException;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 import com.sheyon.fivecats.legendslibrary.data.LegendsConstants;
 import com.sheyon.fivecats.legendslibrary.data.LegendsOpenHelper;
-import com.sheyon.fivecats.legendslibrary.data.LegendsOpenHelperDE;
-import com.sheyon.fivecats.legendslibrary.data.LegendsOpenHelperFR;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
-import com.sheyon.fivecats.legendslibrary.data.LegendsUpgradeHelper;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -59,21 +55,21 @@ public class LegendsApp extends Application {
     }
 
     private void initiateUpgrade() {
-        LegendsUpgradeHelper upgradeHelper;
+        LegendsOpenHelper upgradeHelper;
 
         //DETERMINE IF THE DB NEEDS TO BE UPGRADED; IF SO, SAVE FAVORITES
         switch (legendsPrefs.getLangPref()) {
             case LegendsPreferences.LANG_EN:
-                upgradeHelper = new LegendsUpgradeHelper(this, LegendsConstants.DB_EN);
+                upgradeHelper = new LegendsOpenHelper(this, LegendsConstants.DB_EN);
                 break;
             case LegendsPreferences.LANG_DE:
-                upgradeHelper = new LegendsUpgradeHelper(this, LegendsConstants.DB_DE);
+                upgradeHelper = new LegendsOpenHelper(this, LegendsConstants.DB_DE);
                 break;
             case LegendsPreferences.LANG_FR:
-                upgradeHelper = new LegendsUpgradeHelper(this, LegendsConstants.DB_FR);
+                upgradeHelper = new LegendsOpenHelper(this, LegendsConstants.DB_FR);
                 break;
             default:
-                upgradeHelper = new LegendsUpgradeHelper(this, LegendsConstants.DB_EN);
+                upgradeHelper = new LegendsOpenHelper(this, LegendsConstants.DB_EN);
         }
 
         db = upgradeHelper.getReadableDatabase();
@@ -83,19 +79,19 @@ public class LegendsApp extends Application {
 
     private void transferFavorites() {
         if (!oldFavorites.isEmpty()) {
-            SQLiteAssetHelper legendsOpenHelper;
+            LegendsOpenHelper legendsOpenHelper;
             switch (legendsPrefs.getLangPref()) {
                 case LegendsPreferences.LANG_EN:
-                    legendsOpenHelper = new LegendsOpenHelper(this, true);
+                    legendsOpenHelper = new LegendsOpenHelper(this, LegendsConstants.DB_EN, true);
                     break;
                 case LegendsPreferences.LANG_DE:
-                    legendsOpenHelper = new LegendsOpenHelperDE(this, true);
+                    legendsOpenHelper = new LegendsOpenHelper(this, LegendsConstants.DB_DE, true);
                     break;
                 case LegendsPreferences.LANG_FR:
-                    legendsOpenHelper = new LegendsOpenHelperFR(this, true);
+                    legendsOpenHelper = new LegendsOpenHelper(this, LegendsConstants.DB_FR, true);
                     break;
                 default:
-                    legendsOpenHelper = new LegendsOpenHelper(this, true);
+                    legendsOpenHelper = new LegendsOpenHelper(this, LegendsConstants.DB_EN, true);
                     break;
             }
 
