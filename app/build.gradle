@@ -9,7 +9,7 @@ android {
         multiDexEnabled true
         targetSdkVersion 28
         versionCode 10
-        versionName '1.6.1'
+        versionName '1.7'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     lintOptions {

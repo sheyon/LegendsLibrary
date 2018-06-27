@@ -1,5 +1,8 @@
 package com.sheyon.fivecats.legendslibrary.data;
 
+//MAYBE SOME DAY I'LL MERGE ALL THE DATABASE HELPERS
+//FOR NOW THIS IS FINE WITH ME :P
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -7,34 +10,35 @@ import android.util.Log;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
-public class LegendsHelper extends SQLiteAssetHelper
+public class LegendsOpenHelper extends SQLiteAssetHelper
 {
-    private static final String DATABASE_NAME = "lore_library.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final String DATABASE_NAME = LegendsConstants.DB_EN;
+    private static final int DATABASE_VERSION = LegendsConstants.DATABASE_VERSION;
 
     private Context mContext;
 
-    //VERSION 2 = 1.1.1
-    //VERSION 3 = 1.1.2
-    //VERSION 4 = 1.1.4 - Samhain lore 2012 TSW/2017 SWL corrected; FR is one version behind EN and DE.
-    //VERSION 5 = 1.1.5 - Bestiary image entries added; FR version synced
     //VERSION 6 = 1.6 - South Africa lore added
+    //VERSION 7 = 1.7 - Anniversary lore added
 
-    LegendsHelper (Context context) {
+    LegendsOpenHelper (Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        mContext = context;
+    }
+
+    //THIS SHOULD ONLY BE CALLED BY APPLICATION CLASS
+    //USED TO HELP TRANSFER OLD FAVORITES
+    //BOOLEAN IS JUST TO DIFFERENTIATE THE NEW CONSTRUCTOR, ANY VALUE WORKS
+    public LegendsOpenHelper (Context context, boolean forceUpgrade) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mContext = context;
 
-        //DO ONCE; ALL PREVIOUS DB UPGRADES DEPRECATED
-        LegendsPreferences pref = LegendsPreferences.getInstance(context);
-        if (!pref.isUpgradeCompleted()) {
-            setForcedUpgrade();
-            pref.setDbUpgradeCompleted(true);
-        }
+        setForcedUpgrade();
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //UPGRADE HAPPENS BEFORE OPENING
+        //onUpgrade FIRES BEFORE onOpen
+
     }
 
     @Override
@@ -50,8 +54,8 @@ public class LegendsHelper extends SQLiteAssetHelper
 
             //CREATE TABLE FOR FULL-TEXT-SEARCH
             db.execSQL("DROP TABLE IF EXISTS LoreSearch;");
-            db.execSQL(LegendsContract.Queries.CREATE_DEFAULT_TABLE);
-            db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE);
+            db.execSQL(LegendsConstants.Queries.CREATE_DEFAULT_TABLE);
+            db.execSQL(LegendsConstants.Queries.POPULATE_VIRTUAL_TABLE);
 
             //CHECK FOR TSW OR SWL CATEGORY PREFERENCES AND SWAP
             LegendsDatabase.swapCategories(LegendsPreferences.getInstance(mContext), db);

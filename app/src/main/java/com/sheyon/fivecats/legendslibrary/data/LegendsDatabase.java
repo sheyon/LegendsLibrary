@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 import com.sheyon.fivecats.legendslibrary.R;
 
 public class LegendsDatabase {
@@ -20,7 +21,7 @@ public class LegendsDatabase {
         return legendsDB;
     }
 
-    private static void openDatabase(Context context) {
+    private synchronized static void openDatabase(Context context) {
 //        boolean DEBUG = true;
 //
 //        if (DEBUG) {
@@ -38,36 +39,28 @@ public class LegendsDatabase {
 
         //OPEN DATABASE
         LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(context);
+        SQLiteAssetHelper legendsOpenHelper;
+
         switch (legendsPrefs.getLangPref()) {
             case LegendsPreferences.LANG_EN:
-                LegendsHelper legendsHelper = new LegendsHelper(context);
-                try {
-                    legendsDB = legendsHelper.getWritableDatabase();
-                } catch (SQLiteException e) {
-                    legendsDB = legendsHelper.getReadableDatabase();
-                    Toast.makeText(context, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
-                }
+                legendsOpenHelper = new LegendsOpenHelper(context);
                 break;
-
             case LegendsPreferences.LANG_DE:
-                LegendsHelperDE legendsHelperDE = new LegendsHelperDE(context);
-                try {
-                    legendsDB = legendsHelperDE.getWritableDatabase();
-                } catch (SQLiteException e) {
-                    legendsDB = legendsHelperDE.getReadableDatabase();
-                    Toast.makeText(context, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
-                }
+                legendsOpenHelper = new LegendsOpenHelperDE(context);
                 break;
-
             case LegendsPreferences.LANG_FR:
-                LegendsHelperFR legendsHelperFR = new LegendsHelperFR(context);
-                try {
-                    legendsDB = legendsHelperFR.getWritableDatabase();
-                } catch (SQLiteException e) {
-                    legendsDB = legendsHelperFR.getReadableDatabase();
-                    Toast.makeText(context, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
-                }
+                legendsOpenHelper = new LegendsOpenHelperFR(context);
                 break;
+            default:
+                legendsOpenHelper = new LegendsOpenHelper(context);
+                break;
+        }
+
+        try {
+            legendsDB = legendsOpenHelper.getWritableDatabase();
+        } catch (SQLiteException e) {
+            legendsDB = legendsOpenHelper.getReadableDatabase();
+            Toast.makeText(context, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
         }
     }
 

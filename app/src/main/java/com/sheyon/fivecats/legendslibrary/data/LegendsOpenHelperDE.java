@@ -7,28 +7,28 @@ import android.util.Log;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
-class LegendsHelperDE extends SQLiteAssetHelper
+public class LegendsOpenHelperDE extends SQLiteAssetHelper
 {
-    private static final String DATABASE_NAME = "lore_library_DE.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final String DATABASE_NAME = LegendsConstants.DB_DE;
+    private static final int DATABASE_VERSION = LegendsConstants.DATABASE_VERSION;
 
     private Context mContext;
 
-    LegendsHelperDE (Context context) {
+    LegendsOpenHelperDE (Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        mContext = context;
+    }
+
+    public LegendsOpenHelperDE (Context context, boolean forceUpgrade) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mContext = context;
 
-        //DO ONCE; ALL PREVIOUS DB UPGRADES DEPRECATED
-        LegendsPreferences pref = LegendsPreferences.getInstance(context);
-        if (!pref.isUpgradeCompletedDE()) {
-            setForcedUpgrade();
-            pref.setDbUpgradeCompletedDE(true);
-        }
+        setForcedUpgrade();
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        //onUpgrade FIRES BEFORE onOpen
     }
 
     @Override
@@ -49,11 +49,11 @@ class LegendsHelperDE extends SQLiteAssetHelper
 
             boolean normalizationOn = legendsPrefs.isUsingNormalization();
             if (normalizationOn) {
-                db.execSQL(LegendsContract.Queries.CREATE_ASCII_TABLE);
-                db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE_FR_DE_NORMALIZED);
+                db.execSQL(LegendsConstants.Queries.CREATE_ASCII_TABLE);
+                db.execSQL(LegendsConstants.Queries.POPULATE_VIRTUAL_TABLE_FR_DE_NORMALIZED);
             } else {
-                db.execSQL(LegendsContract.Queries.CREATE_DEFAULT_TABLE);
-                db.execSQL(LegendsContract.Queries.POPULATE_VIRTUAL_TABLE);
+                db.execSQL(LegendsConstants.Queries.CREATE_DEFAULT_TABLE);
+                db.execSQL(LegendsConstants.Queries.POPULATE_VIRTUAL_TABLE);
             }
         }
         catch (SQLiteException e) {
