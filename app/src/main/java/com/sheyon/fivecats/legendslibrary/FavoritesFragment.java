@@ -18,8 +18,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.sbrukhanda.fragmentviewpager.FragmentVisibilityListener;
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.LoreLibrary;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 
 public class FavoritesFragment extends Fragment implements FragmentVisibilityListener

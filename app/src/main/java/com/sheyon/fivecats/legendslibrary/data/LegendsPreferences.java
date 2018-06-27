@@ -9,10 +9,6 @@ public class LegendsPreferences {
     private static LegendsPreferences legendsPrefs;
     private static final String PREFS_FILE_KEY = "com.sheyon.fivecats.legendslibrary.PREFS_FILE_KEY";
 
-    public static final String DB_UPGRADE_COMPLETED = "UPGRADE_COMPLETED";
-    public static final String DB_UPGRADE_COMPLETED_DE = "UPGRADE_COMPLETED_DE";
-    public static final String DB_UPGRADE_COMPLETED_FR = "UPGRADE_COMPLETED_FR";
-
     public static final String PREF_LANG = "LANG_PREFS";
     public static final String PREF_NORMALIZATION = "NORMALIZATION_PREFS";
     public static final String PREF_WILDCARD_ON = "WILDCARD_ON_PREFS";
@@ -48,24 +44,6 @@ public class LegendsPreferences {
     /*-------
     SETTERS
     -------*/
-
-    public void setDbUpgradeCompleted(boolean val) {
-        doEdit();
-        mEditor.putBoolean(DB_UPGRADE_COMPLETED, val);
-        doCommit();
-    }
-
-    public void setDbUpgradeCompletedDE(boolean val) {
-        doEdit();
-        mEditor.putBoolean(DB_UPGRADE_COMPLETED_DE, val);
-        doCommit();
-    }
-
-    public void setDBUpgradeCompletedFR(boolean val) {
-        doEdit();
-        mEditor.putBoolean(DB_UPGRADE_COMPLETED_FR, val);
-        doCommit();
-    }
 
     public void setTswSorting(boolean val) {
         doEdit();
@@ -133,7 +111,7 @@ public class LegendsPreferences {
         doCommit();
     }
 
-    public boolean doesContain(String prefKey){
+    public boolean doesNotContain(String prefKey){
         doEdit();
         return mPref.contains(prefKey);
     }
@@ -141,18 +119,6 @@ public class LegendsPreferences {
     /*-------
     GETTERS
     -------*/
-
-    public boolean isUpgradeCompleted() {
-        return mPref.getBoolean(DB_UPGRADE_COMPLETED, false);
-    }
-
-    public boolean isUpgradeCompletedDE() {
-        return mPref.getBoolean(DB_UPGRADE_COMPLETED_DE, false);
-    }
-
-    public boolean isUpgradeCompletedFR() {
-        return mPref.getBoolean(DB_UPGRADE_COMPLETED_FR, false);
-    }
 
     public boolean isUsingTswSorting() {
         return mPref.getBoolean(PREF_TSW_SORTING, false);

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.sbrukhanda.fragmentviewpager.FragmentVisibilityListener;
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 

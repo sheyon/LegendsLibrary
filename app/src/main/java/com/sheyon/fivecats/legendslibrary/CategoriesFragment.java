@@ -18,8 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Categories;
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.Categories;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 

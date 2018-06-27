@@ -2,9 +2,15 @@ package com.sheyon.fivecats.legendslibrary.data;
 
 import android.provider.BaseColumns;
 
-public final class LegendsContract
+public final class LegendsConstants
 {
-    private LegendsContract() {
+    //Version 7 = App Version 1.7
+    public static final int DATABASE_VERSION = 7;
+    public static final String DB_EN = "lore_library.db";
+    public static final String DB_DE = "lore_library_DE.db";
+    public static final String DB_FR = "lore_library_FR.db";
+
+    private LegendsConstants() {
         //do nothing
     }
 
@@ -34,8 +40,8 @@ public final class LegendsContract
         public static final String COLUMN_IMAGE = "resourceLink";
     }
 
+    //VALUES FOR SPINNER SELECTION
     public static final class Categories {
-        //VALUES FOR SPINNER SELECTION
         public static final int CAT_0 = 0;
         public static final int CAT_1_SOL = 1;
         public static final int CAT_2_EGY = 2;
@@ -48,8 +54,8 @@ public final class LegendsContract
         public static final int CAT_9_AFR = 9;
     }
 
+    //VALUES FOR LANGUAGE SPINNER
     public static final class Languages {
-        //VALUES FOR LANGUAGE SPINNER
         public static final int LANG_EN = 0;
         public static final int LANG_DE = 1;
         public static final int LANG_FR = 2;

@@ -14,7 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.Languages;
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
@@ -66,19 +66,19 @@ public class SettingsActivity extends NavigationDrawerActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getItemAtPosition(position).equals("English")) {
-                    langSelection = LegendsContract.Languages.LANG_EN;
+                    langSelection = Languages.LANG_EN;
                 }
                 if (parent.getItemAtPosition(position).equals("Deutsch")) {
-                    langSelection = LegendsContract.Languages.LANG_DE;
+                    langSelection = Languages.LANG_DE;
                 }
                 if (parent.getItemAtPosition(position).equals("Français")) {
-                    langSelection = LegendsContract.Languages.LANG_FR;
+                    langSelection = Languages.LANG_FR;
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                langSelection = LegendsContract.Languages.LANG_EN;
+                langSelection = Languages.LANG_EN;
             }
         });
 

@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.CursorTreeAdapter;
 import android.widget.TextView;
 
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.Queries;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 
 class LegendsCursorTreeAdapter extends CursorTreeAdapter

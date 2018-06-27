@@ -25,8 +25,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.Queries;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
