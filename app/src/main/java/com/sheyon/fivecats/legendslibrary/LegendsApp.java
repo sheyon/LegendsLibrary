@@ -47,11 +47,6 @@ public class LegendsApp extends Application {
                     break;
             }
         }
-
-        //IF NORMALIZATION PREFS DO NOT EXIST, CREATE THEM (DEFAULT: NORMALIZED)
-        if (legendsPrefs.doesNotContain(LegendsPreferences.PREF_NORMALIZATION)) {
-            legendsPrefs.setNormalizationPref(true);
-        }
     }
 
     private void initiateUpgrade() {

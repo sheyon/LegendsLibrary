@@ -3,6 +3,7 @@ package com.sheyon.fivecats.legendslibrary;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -47,15 +48,13 @@ public class SettingsActivity extends NavigationDrawerActivity {
         ScrollView scrollView = findViewById(R.id.settingsActivity_scrollView);
         RotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 
-        setupLangSpinner();
-        setupLangCheckbox();
+        setupSpinner();
+        setupCheckboxes();
         setupApplyButton();
-        setupSearchCheckboxes();
-        setupMiscCheckboxes();
         setupFontSize();
     }
 
-    private void setupLangSpinner() {
+    private void setupSpinner() {
         Spinner langSpinner = findViewById(R.id.settings_lang_spinner);
 
         ArrayAdapter langSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.languages_array, android.R.layout.simple_spinner_item);
@@ -85,40 +84,30 @@ public class SettingsActivity extends NavigationDrawerActivity {
         langSpinner.setSelection(legendsPrefs.getLangPref());
     }
 
-    private void setupLangCheckbox() {
+    private void setupCheckboxes() {
         langCheckbox = findViewById(R.id.settings_lang_checkbox);
-        langCheckbox.setChecked(legendsPrefs.isUsingNormalization());
-    }
-
-    private void setupSearchCheckboxes() {
         wildcardOn = findViewById(R.id.settings_search_wildcard_on);
-        wildcardOn.setChecked(legendsPrefs.isUsingWildcards());
-
         doubleWildcard = findViewById(R.id.settings_search_double_wildcard);
-        doubleWildcard.setChecked(legendsPrefs.isUsingDoubleWildcards());
-    }
-
-    private void setupMiscCheckboxes() {
         displayImages = findViewById(R.id.settings_display_images);
-        displayImages.setChecked(legendsPrefs.getImagePref());
-
-        //IF TSW SORTING PREFS DO NOT EXIST, CREATE THEM (DEFAULT: FALSE)
-        if (legendsPrefs.doesNotContain(LegendsPreferences.PREF_TSW_SORTING)) {
-            legendsPrefs.setTswSorting(false);
-        }
         tswSorting = findViewById(R.id.settings_categories);
+
+        langCheckbox.setChecked(legendsPrefs.isUsingNormalization());
+        wildcardOn.setChecked(legendsPrefs.isUsingWildcards());
+        doubleWildcard.setChecked(legendsPrefs.isUsingDoubleWildcards());
+        displayImages.setChecked(legendsPrefs.getImagePref());
         tswSorting.setChecked(legendsPrefs.isUsingTswSorting());
+        if (legendsPrefs.isUsingTswSorting()) {
+            Log.d ("DEBUG", "I AM CHECKED!");
+        }
+        else {
+            Log.d ("DEBUG", "I AM UNCHECKED!");
+        }
     }
 
     private void setupFontSize() {
         Button fontDecrement = findViewById(R.id.settings_font_decrement);
         Button fontIncrement = findViewById(R.id.settings_font_increment);
         final TextView fontSizeTextView = findViewById(R.id.settings_font_size);
-
-        //IF FONT SIZE PREFS DO NOT EXIST, CREATE THEM (DEFAULT: 0)
-        if (legendsPrefs.doesNotContain(LegendsPreferences.PREF_FONT_SIZE)) {
-            legendsPrefs.setFontSizePref(0);
-        }
 
         fontSize = legendsPrefs.getFontSizePref();
         updateFontSize(fontSizeTextView);

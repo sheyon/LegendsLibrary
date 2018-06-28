@@ -170,11 +170,6 @@ public class LoreActivity extends AppCompatActivity
     }
 
     private void adjustFontSize(TextView buzzingTextView, TextView blackSignalTextView){
-        //IF FONT SIZE PREFS DO NOT EXIST, CREATE THEM (DEFAULT: 0)
-        if (legendsPrefs.doesNotContain(LegendsPreferences.PREF_FONT_SIZE)) {
-            legendsPrefs.setFontSizePref(0);
-        }
-
         switch (legendsPrefs.getFontSizePref()) {
             //SetLineSpacingMultiplier does not seem to work from the Styles.XML; SET PROGRAMATICALLY!
             case 0:
@@ -255,11 +250,6 @@ public class LoreActivity extends AppCompatActivity
     }
 
     private void showFlavorImage(ImageView imageView) {
-        //IF PREFS DON'T EXIST, CREATE THEM. (DEFAULT: SHOW IMAGES)
-        if (legendsPrefs.doesNotContain(LegendsPreferences.PREF_SHOW_IMAGES)) {
-            legendsPrefs.setImagePref(true);
-        }
-
         //HIDE IMAGE IF NEEDED
         if (!legendsPrefs.getImagePref()) {
             imageView.setVisibility(View.GONE);

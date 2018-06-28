@@ -77,8 +77,22 @@ public class LegendsDatabase {
                 db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 130;");     //Breaks in Time
                 db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 131;");     //Sleepless Lullaby
                 db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 132;");     //Sinking City
-                db.execSQL("UPDATE lore SET title = \"Samhain 2012\" WHERE title = \"Samhain 2017\"");
-                db.execSQL("UPDATE image SET title = \"Samhain 2012\" WHERE title = \"Samhain 2017\"");
+                db.execSQL("UPDATE lore SET title = \"Samhain 2012\" WHERE _id = 76;");
+                db.execSQL("UPDATE image SET title = \"Samhain 2012\" WHERE _id = 76;");
+                switch (legendsPrefs.getLangPref()) {
+                    case LegendsPreferences.LANG_EN:
+                        db.execSQL("UPDATE lore SET title = \"Guardians of Gaia\", categoryId = 7, subcatId = NULL WHERE _id = 74;");
+                        db.execSQL("UPDATE image SET title = \"Guardians of Gaia\" WHERE _id = 74;");
+                        break;
+                    case LegendsPreferences.LANG_DE:
+                        db.execSQL("UPDATE lore SET title = \"Bewacher von Gaia\", categoryId = 7, subcatId = NULL WHERE _id = 74;");
+                        db.execSQL("UPDATE image SET title = \"Bewacher von Gaia\" WHERE _id = 74;");
+                        break;
+                    case LegendsPreferences.LANG_FR:
+                        db.execSQL("UPDATE lore SET title = \"Gardiens de Gaia\", prefix = NULL, categoryId = 7, subcatId = NULL WHERE _id = 74;");
+                        db.execSQL("UPDATE image SET title = \"Gardiens de Gaia\" WHERE _id = 74;");
+                        break;
+                }
                 Log.i ("INFO", "Categories set to TSW");
             } else {
                 db.execSQL("UPDATE lore SET categoryId = 4, subcatId = 14 WHERE _id = 22;");
@@ -92,8 +106,22 @@ public class LegendsDatabase {
                 db.execSQL("UPDATE lore SET categoryId = 2, subcatId = 7 WHERE _id = 130;");
                 db.execSQL("UPDATE lore SET categoryId = 3, subcatId = 10 WHERE _id = 131;");
                 db.execSQL("UPDATE lore SET categoryId = 5, subcatId = 17 WHERE _id = 132;");
-                db.execSQL("UPDATE lore SET title = \"Samhain 2017\" WHERE title = \"Samhain 2012\"");
-                db.execSQL("UPDATE image SET title = \"Samhain 2017\" WHERE title = \"Samhain 2012\"");
+                db.execSQL("UPDATE lore SET title = \"Samhain 2017\" WHERE _id = 76;");
+                db.execSQL("UPDATE image SET title = \"Samhain 2017\" WHERE _id = 76;");
+                switch (legendsPrefs.getLangPref()) {
+                    case LegendsPreferences.LANG_EN:
+                        db.execSQL("UPDATE lore SET title = \"Golems and the Fourth Age\", categoryId = 5, subcatId = 15 WHERE _id = 74;");
+                        db.execSQL("UPDATE image SET title = \"Golems and the Fourth Age\" WHERE _id = 74;");
+                        break;
+                    case LegendsPreferences.LANG_DE:
+                        db.execSQL("UPDATE lore SET title = \"Golems und das Vierte Zeitalter\", categoryId = 5, subcatId = 15 WHERE _id = 74;");
+                        db.execSQL("UPDATE image SET title = \"Golems und das Vierte Zeitalter\" WHERE _id = 74;");
+                        break;
+                    case LegendsPreferences.LANG_FR:
+                        db.execSQL("UPDATE lore SET title = \"golems et le Quatrième Âge\", prefix = \"Les \", categoryId = 5, subcatId = 15 WHERE _id = 74;");
+                        db.execSQL("UPDATE image SET title = \"golems et le Quatrième Âge\" WHERE _id = 74;");
+                        break;
+                }
                 Log.i ("INFO", "Categories set to SWL");
             }
         }

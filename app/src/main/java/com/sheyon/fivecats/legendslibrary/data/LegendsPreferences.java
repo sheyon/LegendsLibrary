@@ -113,7 +113,7 @@ public class LegendsPreferences {
 
     public boolean doesNotContain(String prefKey){
         doEdit();
-        return mPref.contains(prefKey);
+        return !mPref.contains(prefKey);
     }
 
     /*-------
