@@ -3,7 +3,6 @@ package com.sheyon.fivecats.legendslibrary.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -101,63 +100,6 @@ public class LegendsDatabase {
         catch (SQLiteException e) {
             e.printStackTrace();
             Log.w ("WARNING!", "Unable to swap categories!");
-        }
-
-
-//        SwapperAsyncTask swapper = new SwapperAsyncTask();
-//        swapper.pushVars(legendsPrefs, db);
-//        swapper.execute();
-    }
-
-    private static class SwapperAsyncTask extends AsyncTask <Void, Void, Void> {
-        LegendsPreferences sLegendsPrefs;
-        SQLiteDatabase sDb;
-
-        void pushVars(LegendsPreferences prefs, SQLiteDatabase db) {
-            sLegendsPrefs = prefs;
-            sDb = db;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                if (sLegendsPrefs.isUsingTswSorting()){
-                    sDb.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 22;");      //Nightmares in the Dream Palace
-                    sDb.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 25;");      //Reaping the Whirlwind
-                    sDb.execSQL("UPDATE lore SET categoryId = 8, subcatId = 23 WHERE _id = 27;");        //Tale of Momotaro
-                    sDb.execSQL("UPDATE lore SET categoryId = 8, subcatId = 23 WHERE _id = 30;");        //Abandoned
-                    sDb.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 33;");      //Black Signal
-                    sDb.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 36;");      //Call of the Nameless
-                    sDb.execSQL("UPDATE lore SET categoryId = 8, subcatId = 23 WHERE _id = 64;");        //Tragical History of Doctor Faustus
-                    sDb.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 68;");      //Trail of Shadows
-                    sDb.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 130;");     //Breaks in Time
-                    sDb.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 131;");     //Sleepless Lullaby
-                    sDb.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 132;");     //Sinking City
-                    sDb.execSQL("UPDATE lore SET title = \"Samhain 2012\" WHERE title = \"Samhain 2017\"");
-                    sDb.execSQL("UPDATE image SET title = \"Samhain 2012\" WHERE title = \"Samhain 2017\"");
-                    Log.i ("INFO", "Categories set to TSW");
-                } else {
-                    sDb.execSQL("UPDATE lore SET categoryId = 4, subcatId = 14 WHERE _id = 22;");
-                    sDb.execSQL("UPDATE lore SET categoryId = 4, subcatId = 14 WHERE _id = 25;");
-                    sDb.execSQL("UPDATE lore SET categoryId = 4, subcatId = 13 WHERE _id = 27;");
-                    sDb.execSQL("UPDATE lore SET categoryId = 3, subcatId = 8 WHERE _id = 30;");
-                    sDb.execSQL("UPDATE lore SET categoryId = 4, subcatId = 14 WHERE _id = 33;");
-                    sDb.execSQL("UPDATE lore SET categoryId = 2, subcatId = 7 WHERE _id = 36;");
-                    sDb.execSQL("UPDATE lore SET categoryId = 4, subcatId = 13 WHERE _id = 64;");
-                    sDb.execSQL("UPDATE lore SET categoryId = 4, subcatId = 13 WHERE _id = 68;");
-                    sDb.execSQL("UPDATE lore SET categoryId = 2, subcatId = 7 WHERE _id = 130;");
-                    sDb.execSQL("UPDATE lore SET categoryId = 3, subcatId = 10 WHERE _id = 131;");
-                    sDb.execSQL("UPDATE lore SET categoryId = 5, subcatId = 17 WHERE _id = 132;");
-                    sDb.execSQL("UPDATE lore SET title = \"Samhain 2017\" WHERE title = \"Samhain 2012\"");
-                    sDb.execSQL("UPDATE image SET title = \"Samhain 2017\" WHERE title = \"Samhain 2012\"");
-                    Log.i ("INFO", "Categories set to SWL");
-                }
-            }
-            catch (SQLiteException e) {
-                e.printStackTrace();
-                Log.w ("WARNING!", "Unable to swap categories!");
-            }
-            return null;
         }
     }
 }
