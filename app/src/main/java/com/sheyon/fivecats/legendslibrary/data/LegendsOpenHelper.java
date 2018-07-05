@@ -19,28 +19,17 @@ public class LegendsOpenHelper extends SQLiteAssetHelper
     private Context mContext;
     private ArrayList<Integer> favesList = new ArrayList<>();
 
-    public LegendsOpenHelper (Context context, String databaseName) {
+    LegendsOpenHelper (Context context, String databaseName) {
         super(context, databaseName, null, DATABASE_VERSION);
         mContext = context;
         DATABASE_NAME = databaseName;
-    }
-
-    //THIS SHOULD ONLY BE CALLED BY APPLICATION CLASS
-    //USED TO HELP TRANSFER OLD FAVORITES
-    //BOOLEAN IS JUST TO DIFFERENTIATE THE NEW CONSTRUCTOR, ANY VALUE WORKS
-    public LegendsOpenHelper (Context context, String databaseName, boolean forceUpgrade) {
-        super(context, databaseName, null, DATABASE_VERSION);
-        mContext = context;
-        DATABASE_NAME = databaseName;
-
-        setForcedUpgrade();
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //onUpgrade FIRES BEFORE onOpen
-        if (db.needUpgrade(LegendsConstants.DATABASE_VERSION)) {
-            //LOG OLD FAVORITES TO AN ARRAYLIST
+        //LOG OLD FAVORITES TO AN ARRAYLIST
+        try {
             Cursor faves = db.rawQuery("SELECT _id FROM lore WHERE faved = 1", null);
             if (faves != null && faves.moveToFirst()) {
                 int i = 0;
@@ -51,21 +40,38 @@ public class LegendsOpenHelper extends SQLiteAssetHelper
                 while (faves.moveToNext());
                 faves.close();
             }
+        } catch (SQLiteException e) {
+            Log.w ("WARNING!", "" + e);
         }
     }
 
     @Override
     public void onOpen(SQLiteDatabase db) {
-        super.onOpen(db);
+        LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(mContext);
 
         try {
-            LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(mContext);
+            //IF DB NEEDS AN UPGRADE, SKIP
+            if (DATABASE_NAME.equals(LegendsConstants.DB_EN)) {
+                if (!legendsPrefs.isUpgradeCompleted()) {
+                    return;
+                }
+            }
+            if (DATABASE_NAME.equals(LegendsConstants.DB_DE)) {
+                if (!legendsPrefs.isUpgradeCompletedDE()) {
+                    return;
+                }
+            }
+            if (DATABASE_NAME.equals(LegendsConstants.DB_FR)) {
+                if (!legendsPrefs.isUpgradeCompletedFR()) {
+                    return;
+                }
+            }
 
             //PRAGMAS
             db.execSQL("PRAGMA auto_vacuum = 0;");
             //VACUUM TO PREVENT BLOAT CAUSED BY THE VIRTUAL TABLE
-            db.execSQL("VACUUM;");
             db.execSQL("DROP TABLE IF EXISTS LoreSearch;");
+            db.execSQL("VACUUM;");
 
             switch (DATABASE_NAME) {
                 case LegendsConstants.DB_EN:

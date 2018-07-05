@@ -9,6 +9,8 @@ import android.widget.Toast;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 import com.sheyon.fivecats.legendslibrary.R;
 
+import java.util.ArrayList;
+
 public class LegendsDatabase {
 
     private static SQLiteDatabase legendsDB;
@@ -128,6 +130,85 @@ public class LegendsDatabase {
         catch (SQLiteException e) {
             e.printStackTrace();
             Log.w ("WARNING!", "Unable to swap categories!");
+        }
+    }
+
+    public synchronized static void initiateUpgrade(Context context, LegendsPreferences legendsPrefs) {
+        LegendsOpenHelper upgradeHelper;
+
+        //DETERMINE IF THE DB NEEDS TO BE UPGRADED; IF SO, SAVE FAVORITES
+        switch (legendsPrefs.getLangPref()) {
+            case LegendsPreferences.LANG_EN:
+                if (legendsPrefs.isUpgradeCompleted()) {
+                    return;
+                } else {
+                    upgradeHelper = new LegendsOpenHelper(context, LegendsConstants.DB_EN);
+                }
+                break;
+            case LegendsPreferences.LANG_DE:
+                if (legendsPrefs.isUpgradeCompletedDE()) {
+                    return;
+                } else {
+                    upgradeHelper = new LegendsOpenHelper(context, LegendsConstants.DB_DE);
+                }
+                break;
+            case LegendsPreferences.LANG_FR:
+                if (legendsPrefs.isUpgradeCompletedFR()) {
+                    return;
+                } else {
+                    upgradeHelper = new LegendsOpenHelper(context, LegendsConstants.DB_FR);
+                }
+                break;
+            default:
+                if (legendsPrefs.isUpgradeCompleted()) {
+                    return;
+                } else {
+                    upgradeHelper = new LegendsOpenHelper(context, LegendsConstants.DB_EN);
+                }
+                break;
+        }
+
+        SQLiteDatabase db = upgradeHelper.getWritableDatabase();
+        ArrayList<Integer> oldFavorites = upgradeHelper.getFavesList();
+
+        //AssetHelper AUTOMATICALLY INCREMENTS THE DATABASE IF VERSIONS DO NOT MATCH, UNDO THAT CHANGE SO THE DATABASE CAN FORCE UPGRADE
+        db.setVersion(LegendsConstants.DATABASE_VERSION - 1);
+        upgradeHelper.setForcedUpgrade(LegendsConstants.DATABASE_VERSION);
+        db.close();
+
+        try {
+            db = upgradeHelper.getWritableDatabase();
+            if (!oldFavorites.isEmpty()) {
+                for (int i = 0; i < oldFavorites.size(); i++) {
+                    String updateQuery = "UPDATE lore SET faved = 1 WHERE _id = " + oldFavorites.get(i);
+                    db.execSQL(updateQuery);
+                }
+                Log.i("INFO", "Old favorites transferred.");
+            }
+        } catch (SQLiteException e) {
+            Log.e ("ERROR", "" + e);
+            db = upgradeHelper.getReadableDatabase();
+            Toast.makeText(context, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
+        }
+
+        db.close();
+        setUpgradeComplete(legendsPrefs);
+    }
+
+    private static void setUpgradeComplete(LegendsPreferences legendsPrefs) {
+        switch (legendsPrefs.getLangPref()) {
+            case LegendsPreferences.LANG_EN:
+                legendsPrefs.setDbUpgradeCompleted(true);
+                break;
+            case LegendsPreferences.LANG_DE:
+                legendsPrefs.setDbUpgradeCompletedDE(true);
+                break;
+            case LegendsPreferences.LANG_FR:
+                legendsPrefs.setDBUpgradeCompletedFR(true);
+                break;
+            default:
+                legendsPrefs.setDbUpgradeCompleted(true);
+                break;
         }
     }
 }

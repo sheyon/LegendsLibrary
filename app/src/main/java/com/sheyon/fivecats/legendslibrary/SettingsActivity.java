@@ -3,7 +3,6 @@ package com.sheyon.fivecats.legendslibrary;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -96,12 +95,6 @@ public class SettingsActivity extends NavigationDrawerActivity {
         doubleWildcard.setChecked(legendsPrefs.isUsingDoubleWildcards());
         displayImages.setChecked(legendsPrefs.getImagePref());
         tswSorting.setChecked(legendsPrefs.isUsingTswSorting());
-        if (legendsPrefs.isUsingTswSorting()) {
-            Log.d ("DEBUG", "I AM CHECKED!");
-        }
-        else {
-            Log.d ("DEBUG", "I AM UNCHECKED!");
-        }
     }
 
     private void setupFontSize() {
@@ -165,11 +158,13 @@ public class SettingsActivity extends NavigationDrawerActivity {
     private void restartDatabase() {
         db.close();
 
+        //WHEN SWITCHING LANGUAGES, MAKE SURE THE DATABASES ARE UPGRADED TO THE LATEST VERSION
+        LegendsDatabase.initiateUpgrade(this, legendsPrefs);
+
         db = LegendsDatabase.getInstance(this);
         if (db.isReadOnly()) {
             Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
-        }
-        else {
+        } else {
             Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
         }
     }
