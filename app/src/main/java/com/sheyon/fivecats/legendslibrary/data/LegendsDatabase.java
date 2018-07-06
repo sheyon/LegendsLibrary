@@ -15,7 +15,7 @@ public class LegendsDatabase {
 
     private static SQLiteDatabase legendsDB;
 
-    public static SQLiteDatabase getInstance (Context context) {
+    public static SQLiteDatabase getInstance(Context context) {
         if (legendsDB == null || !legendsDB.isOpen()) {
             openDatabase(context);
         }
@@ -67,7 +67,7 @@ public class LegendsDatabase {
 
     static void swapCategories(LegendsPreferences legendsPrefs, SQLiteDatabase db) {
         try {
-            if (legendsPrefs.isUsingTswSorting()){
+            if (legendsPrefs.isUsingTswSorting()) {
                 db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 22;");      //Nightmares in the Dream Palace
                 db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 25;");      //Reaping the Whirlwind
                 db.execSQL("UPDATE lore SET categoryId = 8, subcatId = 23 WHERE _id = 27;");        //Tale of Momotaro
@@ -95,7 +95,7 @@ public class LegendsDatabase {
                         db.execSQL("UPDATE image SET title = \"Gardiens de Gaia\" WHERE _id = 74;");
                         break;
                 }
-                Log.i ("INFO", "Categories set to TSW");
+                Log.i("INFO", "Categories set to TSW");
             } else {
                 db.execSQL("UPDATE lore SET categoryId = 4, subcatId = 14 WHERE _id = 22;");
                 db.execSQL("UPDATE lore SET categoryId = 4, subcatId = 14 WHERE _id = 25;");
@@ -124,17 +124,17 @@ public class LegendsDatabase {
                         db.execSQL("UPDATE image SET title = \"golems et le Quatrième Âge\" WHERE _id = 74;");
                         break;
                 }
-                Log.i ("INFO", "Categories set to SWL");
+                Log.i("INFO", "Categories set to SWL");
             }
-        }
-        catch (SQLiteException e) {
+        } catch (SQLiteException e) {
             e.printStackTrace();
-            Log.w ("WARNING!", "Unable to swap categories!");
+            Log.w("WARNING!", "Unable to swap categories!");
         }
     }
 
     public synchronized static void initiateUpgrade(Context context, LegendsPreferences legendsPrefs) {
         LegendsOpenHelper upgradeHelper;
+        SQLiteDatabase db;
 
         //DETERMINE IF THE DB NEEDS TO BE UPGRADED; IF SO, SAVE FAVORITES
         switch (legendsPrefs.getLangPref()) {
@@ -168,15 +168,15 @@ public class LegendsDatabase {
                 break;
         }
 
-        SQLiteDatabase db = upgradeHelper.getWritableDatabase();
-        ArrayList<Integer> oldFavorites = upgradeHelper.getFavesList();
-
-        //AssetHelper AUTOMATICALLY INCREMENTS THE DATABASE IF VERSIONS DO NOT MATCH, UNDO THAT CHANGE SO THE DATABASE CAN FORCE UPGRADE
-        db.setVersion(LegendsConstants.DATABASE_VERSION - 1);
-        upgradeHelper.setForcedUpgrade(LegendsConstants.DATABASE_VERSION);
-        db.close();
-
         try {
+            db = upgradeHelper.getWritableDatabase();
+            ArrayList<Integer> oldFavorites = upgradeHelper.getFavesList();
+
+            //AssetHelper AUTOMATICALLY INCREMENTS THE DATABASE IF VERSIONS DO NOT MATCH, UNDO THAT CHANGE SO THE DATABASE CAN FORCE UPGRADE
+            db.setVersion(LegendsConstants.DATABASE_VERSION - 1);
+            upgradeHelper.setForcedUpgrade(LegendsConstants.DATABASE_VERSION);
+            db.close();
+
             db = upgradeHelper.getWritableDatabase();
             if (!oldFavorites.isEmpty()) {
                 for (int i = 0; i < oldFavorites.size(); i++) {
@@ -185,14 +185,13 @@ public class LegendsDatabase {
                 }
                 Log.i("INFO", "Old favorites transferred.");
             }
+            setUpgradeComplete(legendsPrefs);
         } catch (SQLiteException e) {
-            Log.e ("ERROR", "" + e);
+            Log.e("ERROR", "" + e);
             db = upgradeHelper.getReadableDatabase();
             Toast.makeText(context, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
         }
-
         db.close();
-        setUpgradeComplete(legendsPrefs);
     }
 
     private static void setUpgradeComplete(LegendsPreferences legendsPrefs) {
