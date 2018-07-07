@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteException;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 import com.sheyon.fivecats.legendslibrary.R;
 
 import java.util.ArrayList;
@@ -40,27 +39,18 @@ public class LegendsDatabase {
 
         //OPEN DATABASE
         LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(context);
-        SQLiteAssetHelper legendsOpenHelper;
+        final LegendsOpenHelper[] legendsOpenHelper = new LegendsOpenHelper[1];
 
-        switch (legendsPrefs.getLangPref()) {
-            case LegendsPreferences.LANG_EN:
-                legendsOpenHelper = new LegendsOpenHelper(context, LegendsConstants.DB_EN);
-                break;
-            case LegendsPreferences.LANG_DE:
-                legendsOpenHelper = new LegendsOpenHelper(context, LegendsConstants.DB_DE);
-                break;
-            case LegendsPreferences.LANG_FR:
-                legendsOpenHelper = new LegendsOpenHelper(context, LegendsConstants.DB_FR);
-                break;
-            default:
-                legendsOpenHelper = new LegendsOpenHelper(context, LegendsConstants.DB_EN);
-                break;
-        }
+        LanguageAction enOpenHelper = () -> legendsOpenHelper[0] = new LegendsOpenHelper(context, LegendsConstants.DB_EN);
+        LanguageAction deOpenHelper = () -> legendsOpenHelper[0] = new LegendsOpenHelper(context, LegendsConstants.DB_DE);
+        LanguageAction frOpenHelper = () -> legendsOpenHelper[0] = new LegendsOpenHelper(context, LegendsConstants.DB_FR);
+
+        languageSwitch(legendsPrefs, enOpenHelper, deOpenHelper, frOpenHelper);
 
         try {
-            legendsDB = legendsOpenHelper.getWritableDatabase();
+            legendsDB = legendsOpenHelper[0].getWritableDatabase();
         } catch (SQLiteException e) {
-            legendsDB = legendsOpenHelper.getReadableDatabase();
+            legendsDB = legendsOpenHelper[0].getReadableDatabase();
             Toast.makeText(context, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
         }
     }
@@ -81,20 +71,21 @@ public class LegendsDatabase {
                 db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 132;");     //Sinking City
                 db.execSQL("UPDATE lore SET title = \"Samhain 2012\" WHERE _id = 76;");
                 db.execSQL("UPDATE image SET title = \"Samhain 2012\" WHERE _id = 76;");
-                switch (legendsPrefs.getLangPref()) {
-                    case LegendsPreferences.LANG_EN:
-                        db.execSQL("UPDATE lore SET title = \"Guardians of Gaia\", categoryId = 7, subcatId = NULL WHERE _id = 74;");
-                        db.execSQL("UPDATE image SET title = \"Guardians of Gaia\" WHERE _id = 74;");
-                        break;
-                    case LegendsPreferences.LANG_DE:
-                        db.execSQL("UPDATE lore SET title = \"Bewacher von Gaia\", categoryId = 7, subcatId = NULL WHERE _id = 74;");
-                        db.execSQL("UPDATE image SET title = \"Bewacher von Gaia\" WHERE _id = 74;");
-                        break;
-                    case LegendsPreferences.LANG_FR:
-                        db.execSQL("UPDATE lore SET title = \"Gardiens de Gaia\", prefix = NULL, categoryId = 7, subcatId = NULL WHERE _id = 74;");
-                        db.execSQL("UPDATE image SET title = \"Gardiens de Gaia\" WHERE _id = 74;");
-                        break;
-                }
+
+                LanguageAction lore2TswEn = () -> {
+                    db.execSQL("UPDATE lore SET title = \"Guardians of Gaia\", categoryId = 7, subcatId = NULL WHERE _id = 74;");
+                    db.execSQL("UPDATE image SET title = \"Guardians of Gaia\" WHERE _id = 74;");
+                };
+                LanguageAction lore2TswDe = () -> {
+                    db.execSQL("UPDATE lore SET title = \"Bewacher von Gaia\", categoryId = 7, subcatId = NULL WHERE _id = 74;");
+                    db.execSQL("UPDATE image SET title = \"Bewacher von Gaia\" WHERE _id = 74;");
+                };
+                LanguageAction lore2TswFr = () -> {
+                    db.execSQL("UPDATE lore SET title = \"Gardiens de Gaia\", prefix = NULL, categoryId = 7, subcatId = NULL WHERE _id = 74;");
+                    db.execSQL("UPDATE image SET title = \"Gardiens de Gaia\" WHERE _id = 74;");
+                };
+                languageSwitch(legendsPrefs, lore2TswEn, lore2TswDe, lore2TswFr);
+
                 Log.i("INFO", "Categories set to TSW");
             } else {
                 db.execSQL("UPDATE lore SET categoryId = 4, subcatId = 14 WHERE _id = 22;");
@@ -110,20 +101,21 @@ public class LegendsDatabase {
                 db.execSQL("UPDATE lore SET categoryId = 5, subcatId = 17 WHERE _id = 132;");
                 db.execSQL("UPDATE lore SET title = \"Samhain 2017\" WHERE _id = 76;");
                 db.execSQL("UPDATE image SET title = \"Samhain 2017\" WHERE _id = 76;");
-                switch (legendsPrefs.getLangPref()) {
-                    case LegendsPreferences.LANG_EN:
-                        db.execSQL("UPDATE lore SET title = \"Golems and the Fourth Age\", categoryId = 5, subcatId = 15 WHERE _id = 74;");
-                        db.execSQL("UPDATE image SET title = \"Golems and the Fourth Age\" WHERE _id = 74;");
-                        break;
-                    case LegendsPreferences.LANG_DE:
-                        db.execSQL("UPDATE lore SET title = \"Golems und das Vierte Zeitalter\", categoryId = 5, subcatId = 15 WHERE _id = 74;");
-                        db.execSQL("UPDATE image SET title = \"Golems und das Vierte Zeitalter\" WHERE _id = 74;");
-                        break;
-                    case LegendsPreferences.LANG_FR:
-                        db.execSQL("UPDATE lore SET title = \"golems et le Quatrième Âge\", prefix = \"Les \", categoryId = 5, subcatId = 15 WHERE _id = 74;");
-                        db.execSQL("UPDATE image SET title = \"golems et le Quatrième Âge\" WHERE _id = 74;");
-                        break;
-                }
+
+                LanguageAction lore2SwlEn = () -> {
+                    db.execSQL("UPDATE lore SET title = \"Golems and the Fourth Age\", categoryId = 5, subcatId = 15 WHERE _id = 74;");
+                    db.execSQL("UPDATE image SET title = \"Golems and the Fourth Age\" WHERE _id = 74;");
+                };
+                LanguageAction lore2SwlDe = () -> {
+                    db.execSQL("UPDATE lore SET title = \"Golems und das Vierte Zeitalter\", categoryId = 5, subcatId = 15 WHERE _id = 74;");
+                    db.execSQL("UPDATE image SET title = \"Golems und das Vierte Zeitalter\" WHERE _id = 74;");
+                };
+                LanguageAction lore2SwlFr = () -> {
+                    db.execSQL("UPDATE lore SET title = \"golems et le Quatrième Âge\", prefix = \"Les \", categoryId = 5, subcatId = 15 WHERE _id = 74;");
+                    db.execSQL("UPDATE image SET title = \"golems et le Quatrième Âge\" WHERE _id = 74;");
+                };
+                languageSwitch(legendsPrefs, lore2SwlEn, lore2SwlDe, lore2SwlFr);
+
                 Log.i("INFO", "Categories set to SWL");
             }
         } catch (SQLiteException e) {
@@ -133,51 +125,36 @@ public class LegendsDatabase {
     }
 
     public synchronized static void initiateUpgrade(Context context, LegendsPreferences legendsPrefs) {
-        LegendsOpenHelper upgradeHelper;
+        final LegendsOpenHelper[] upgradeHelper = new LegendsOpenHelper[1];
         SQLiteDatabase db;
 
-        //DETERMINE IF THE DB NEEDS TO BE UPGRADED; IF SO, SAVE FAVORITES
-        switch (legendsPrefs.getLangPref()) {
-            case LegendsPreferences.LANG_EN:
-                if (legendsPrefs.isUpgradeCompleted()) {
-                    return;
-                } else {
-                    upgradeHelper = new LegendsOpenHelper(context, LegendsConstants.DB_EN);
-                }
-                break;
-            case LegendsPreferences.LANG_DE:
-                if (legendsPrefs.isUpgradeCompletedDE()) {
-                    return;
-                } else {
-                    upgradeHelper = new LegendsOpenHelper(context, LegendsConstants.DB_DE);
-                }
-                break;
-            case LegendsPreferences.LANG_FR:
-                if (legendsPrefs.isUpgradeCompletedFR()) {
-                    return;
-                } else {
-                    upgradeHelper = new LegendsOpenHelper(context, LegendsConstants.DB_FR);
-                }
-                break;
-            default:
-                if (legendsPrefs.isUpgradeCompleted()) {
-                    return;
-                } else {
-                    upgradeHelper = new LegendsOpenHelper(context, LegendsConstants.DB_EN);
-                }
-                break;
+        LanguageAction enUpgradeHelper = () -> {
+            if (!legendsPrefs.isUpgradeCompleted()) { upgradeHelper[0] = new LegendsOpenHelper(context, LegendsConstants.DB_EN); }
+        };
+        LanguageAction deUpgradeHelper = () -> {
+            if (!legendsPrefs.isUpgradeCompletedDE()) { upgradeHelper[0] = new LegendsOpenHelper(context, LegendsConstants.DB_DE); }
+        };
+        LanguageAction frUpgradeHelper = () -> {
+            if (!legendsPrefs.isUpgradeCompletedFR()) { upgradeHelper[0] = new LegendsOpenHelper(context, LegendsConstants.DB_FR); }
+        };
+
+        languageSwitch(legendsPrefs, enUpgradeHelper, deUpgradeHelper, frUpgradeHelper);
+
+        //ABORT THE REST OF THE BLOCK IF UPGRADE IS NOT NEEDED
+        if (upgradeHelper[0] == null ) {
+            return;
         }
 
         try {
-            db = upgradeHelper.getWritableDatabase();
-            ArrayList<Integer> oldFavorites = upgradeHelper.getFavesList();
+            db = upgradeHelper[0].getWritableDatabase();
+            ArrayList<Integer> oldFavorites = upgradeHelper[0].getFavesList();
 
             //AssetHelper AUTOMATICALLY INCREMENTS THE DATABASE IF VERSIONS DO NOT MATCH, UNDO THAT CHANGE SO THE DATABASE CAN FORCE UPGRADE
             db.setVersion(LegendsConstants.DATABASE_VERSION - 1);
-            upgradeHelper.setForcedUpgrade(LegendsConstants.DATABASE_VERSION);
+            upgradeHelper[0].setForcedUpgrade(LegendsConstants.DATABASE_VERSION);
             db.close();
 
-            db = upgradeHelper.getWritableDatabase();
+            db = upgradeHelper[0].getWritableDatabase();
             if (!oldFavorites.isEmpty()) {
                 for (int i = 0; i < oldFavorites.size(); i++) {
                     String updateQuery = "UPDATE lore SET faved = 1 WHERE _id = " + oldFavorites.get(i);
@@ -188,26 +165,39 @@ public class LegendsDatabase {
             setUpgradeComplete(legendsPrefs);
         } catch (SQLiteException e) {
             Log.e("ERROR", "" + e);
-            db = upgradeHelper.getReadableDatabase();
+            db = upgradeHelper[0].getReadableDatabase();
             Toast.makeText(context, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
         }
         db.close();
     }
 
     private static void setUpgradeComplete(LegendsPreferences legendsPrefs) {
+        LanguageAction DbCompleteEn = () -> legendsPrefs.setDbUpgradeCompleted(true);
+        LanguageAction DbCompleteDe = () -> legendsPrefs.setDbUpgradeCompletedDE(true);
+        LanguageAction DbCompleteFr = () -> legendsPrefs.setDBUpgradeCompletedFR(true);
+
+        languageSwitch(legendsPrefs, DbCompleteEn, DbCompleteDe, DbCompleteFr);
+    }
+
+    private static void languageSwitch(LegendsPreferences legendsPrefs, LanguageAction a, LanguageAction b, LanguageAction c) {
         switch (legendsPrefs.getLangPref()) {
             case LegendsPreferences.LANG_EN:
-                legendsPrefs.setDbUpgradeCompleted(true);
+                a.execute();
                 break;
             case LegendsPreferences.LANG_DE:
-                legendsPrefs.setDbUpgradeCompletedDE(true);
+                b.execute();
                 break;
             case LegendsPreferences.LANG_FR:
-                legendsPrefs.setDBUpgradeCompletedFR(true);
+                c.execute();
                 break;
             default:
-                legendsPrefs.setDbUpgradeCompleted(true);
+                a.execute();
                 break;
         }
+    }
+
+    @FunctionalInterface
+    interface LanguageAction {
+        void execute();
     }
 }
