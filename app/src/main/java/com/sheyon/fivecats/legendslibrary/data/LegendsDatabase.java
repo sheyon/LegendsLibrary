@@ -179,19 +179,19 @@ public class LegendsDatabase {
         languageSwitch(legendsPrefs, DbCompleteEn, DbCompleteDe, DbCompleteFr);
     }
 
-    private static void languageSwitch(LegendsPreferences legendsPrefs, LanguageAction a, LanguageAction b, LanguageAction c) {
+    private static void languageSwitch(LegendsPreferences legendsPrefs, LanguageAction en, LanguageAction de, LanguageAction fr) {
         switch (legendsPrefs.getLangPref()) {
             case LegendsPreferences.LANG_EN:
-                a.execute();
+                en.execute();
                 break;
             case LegendsPreferences.LANG_DE:
-                b.execute();
+                de.execute();
                 break;
             case LegendsPreferences.LANG_FR:
-                c.execute();
+                fr.execute();
                 break;
             default:
-                a.execute();
+                en.execute();
                 break;
         }
     }
