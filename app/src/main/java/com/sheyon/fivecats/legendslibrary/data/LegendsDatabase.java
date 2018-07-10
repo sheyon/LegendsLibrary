@@ -162,21 +162,18 @@ public class LegendsDatabase {
                 }
                 Log.i("INFO", "Old favorites transferred.");
             }
-            setUpgradeComplete(legendsPrefs);
+            //SET AS COMPLETED SO THIS WILL NEVER LAUNCH AGAIN FOR THIS VERSION
+            LanguageAction DbCompleteEn = () -> legendsPrefs.setDbUpgradeCompleted(true);
+            LanguageAction DbCompleteDe = () -> legendsPrefs.setDbUpgradeCompletedDE(true);
+            LanguageAction DbCompleteFr = () -> legendsPrefs.setDBUpgradeCompletedFR(true);
+            languageSwitch(legendsPrefs, DbCompleteEn, DbCompleteDe, DbCompleteFr);
+
         } catch (SQLiteException e) {
             Log.e("ERROR", "" + e);
             db = upgradeHelper[0].getReadableDatabase();
             Toast.makeText(context, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
         }
         db.close();
-    }
-
-    private static void setUpgradeComplete(LegendsPreferences legendsPrefs) {
-        LanguageAction DbCompleteEn = () -> legendsPrefs.setDbUpgradeCompleted(true);
-        LanguageAction DbCompleteDe = () -> legendsPrefs.setDbUpgradeCompletedDE(true);
-        LanguageAction DbCompleteFr = () -> legendsPrefs.setDBUpgradeCompletedFR(true);
-
-        languageSwitch(legendsPrefs, DbCompleteEn, DbCompleteDe, DbCompleteFr);
     }
 
     private static void languageSwitch(LegendsPreferences legendsPrefs, LanguageAction en, LanguageAction de, LanguageAction fr) {
