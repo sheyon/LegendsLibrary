@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 abstract class NavigationDrawerActivity extends AppCompatActivity {
@@ -35,29 +34,26 @@ abstract class NavigationDrawerActivity extends AppCompatActivity {
             }
         };
 
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mDrawerItems[position].equals(activity.getString(R.string.drawer_legends))) {
-                    Intent intent = new Intent(activity, MainActivity.class);
-                    if (activity.getClass() != MainActivity.class) {
-                        activity.startActivity(intent);
-                        mDrawerLayout.closeDrawer(mDrawerList);
-                    }
+        mDrawerList.setOnItemClickListener((parent, view, position, id) -> {
+            if (mDrawerItems[position].equals(activity.getString(R.string.drawer_legends))) {
+                Intent intent = new Intent(activity, MainActivity.class);
+                if (activity.getClass() != MainActivity.class) {
+                    activity.startActivity(intent);
+                    mDrawerLayout.closeDrawer(mDrawerList);
                 }
-                if (mDrawerItems[position].equals(activity.getString(R.string.drawer_settings))) {
-                    Intent intent = new Intent(activity, SettingsActivity.class);
-                    if (activity.getClass() != SettingsActivity.class) {
-                        activity.startActivity(intent);
-                        mDrawerLayout.closeDrawer(mDrawerList);
-                    }
+            }
+            if (mDrawerItems[position].equals(activity.getString(R.string.drawer_settings))) {
+                Intent intent = new Intent(activity, SettingsActivity.class);
+                if (activity.getClass() != SettingsActivity.class) {
+                    activity.startActivity(intent);
+                    mDrawerLayout.closeDrawer(mDrawerList);
                 }
-                if (mDrawerItems[position].equals(activity.getString(R.string.drawer_about))) {
-                    Intent intent = new Intent(activity, AboutActivity.class);
-                    if (activity.getClass() != AboutActivity.class) {
-                        activity.startActivity(intent);
-                        mDrawerLayout.closeDrawer(mDrawerList);
-                    }
+            }
+            if (mDrawerItems[position].equals(activity.getString(R.string.drawer_about))) {
+                Intent intent = new Intent(activity, AboutActivity.class);
+                if (activity.getClass() != AboutActivity.class) {
+                    activity.startActivity(intent);
+                    mDrawerLayout.closeDrawer(mDrawerList);
                 }
             }
         });

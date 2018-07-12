@@ -121,39 +121,33 @@ public class CategoriesFragment extends Fragment {
 
     private void setupExpandableView(View view) {
         legendsExpandableView = view.findViewById(R.id.legends_expandable_list);
-        legendsExpandableView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                LinearLayout ll = (LinearLayout) v;
-                TextView tv = ll.findViewById(R.id.category_text_view);
-                int style = tv.getTypeface().getStyle();
+        legendsExpandableView.setOnGroupClickListener((parent, v, groupPosition, id) -> {
+            LinearLayout ll = (LinearLayout) v;
+            TextView tv = ll.findViewById(R.id.category_text_view);
+            int style = tv.getTypeface().getStyle();
 
-                //IF THE TEXT STYLE IS BOLDED, EXPAND THE CATEGORY
-                if ( style == 1 ) {
-                    groupNumber = groupPosition;
-                    return false;
-                }
-                //IF NOT, LAUNCH THE LORE PAGE
-                else {
-                    loreTitle = tv.getText().toString();
-                    startLoreActivity();
-                    return true;
-                }
+            //IF THE TEXT STYLE IS BOLDED, EXPAND THE CATEGORY
+            if ( style == 1 ) {
+                groupNumber = groupPosition;
+                return false;
+            }
+            //IF NOT, LAUNCH THE LORE PAGE
+            else {
+                loreTitle = tv.getText().toString();
+                startLoreActivity();
+                return true;
             }
         });
 
-        legendsExpandableView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                LinearLayout ll = (LinearLayout) v;
-                TextView tv = ll.findViewById(R.id.subcategory_text_view);
-                loreTitle = tv.getText().toString();
+        legendsExpandableView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
+            LinearLayout ll = (LinearLayout) v;
+            TextView tv = ll.findViewById(R.id.subcategory_text_view);
+            loreTitle = tv.getText().toString();
 
-                groupNumber = groupPosition;
+            groupNumber = groupPosition;
 
-                startLoreActivity();
-                return false;
-            }
+            startLoreActivity();
+            return false;
         });
     }
 
@@ -174,12 +168,7 @@ public class CategoriesFragment extends Fragment {
                 @Override
                 public void onGlobalLayout() {
                     legendsExpandableView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    legendsExpandableView.post( new Runnable() {
-                        @Override
-                        public void run() {
-                            legendsExpandableView.expandGroup(groupNumber);
-                        }
-                    });
+                    legendsExpandableView.post(() -> legendsExpandableView.expandGroup(groupNumber));
                 }
             });
         }

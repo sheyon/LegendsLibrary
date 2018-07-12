@@ -121,31 +121,28 @@ public class LoreActivity extends AppCompatActivity
         TextView categoryTextView = findViewById(R.id.loreActivity_category_text_view);
         TextView buzzingTextView = findViewById(R.id.loreActivity_buzzing_text_view);
         favedImageView = findViewById(R.id.loreActivity_fave_imageView);
-        favedImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    String modTitleString = "\"" + titleString + "\"";
+        favedImageView.setOnClickListener(view -> {
+            try {
+                String modTitleString = "\"" + titleString + "\"";
 
-                    //EXECUTE UPDATE QUERY
-                    db.execSQL(Queries.UPDATE_FAVE + modTitleString + ";");
+                //EXECUTE UPDATE QUERY
+                db.execSQL(Queries.UPDATE_FAVE + modTitleString + ";");
 
-                    //GET UPDATED CURSOR TO SET THE NEW FAVED STATE
-                    String[] selectionArgs = { titleString };
-                    Cursor cursor = db.rawQuery(Queries.GET_FAVE, selectionArgs);
-                    if (cursor != null) {
-                        cursor.moveToFirst();
+                //GET UPDATED CURSOR TO SET THE NEW FAVED STATE
+                String[] selectionArgs1 = { titleString };
+                Cursor cursor1 = db.rawQuery(Queries.GET_FAVE, selectionArgs1);
+                if (cursor1 != null) {
+                    cursor1.moveToFirst();
 
-                        int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
-                        setStar(faved);
+                    int faved = cursor1.getInt(cursor1.getColumnIndex(LoreLibrary.COLUMN_FAVED));
+                    setStar(faved);
 
-                        cursor.close();
-                    }
+                    cursor1.close();
                 }
-                catch (SQLiteException e) {
-                    Log.w("WARNING!", "Unable to update fave! " + e);
-                    Toast.makeText(getBaseContext(), R.string.toast_cannot_favorite, Toast.LENGTH_SHORT).show();
-                }
+            }
+            catch (SQLiteException e) {
+                Log.w("WARNING!", "Unable to update fave! " + e);
+                Toast.makeText(getBaseContext(), R.string.toast_cannot_favorite, Toast.LENGTH_SHORT).show();
             }
         });
 

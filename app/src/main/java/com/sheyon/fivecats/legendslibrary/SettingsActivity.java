@@ -105,26 +105,20 @@ public class SettingsActivity extends NavigationDrawerActivity {
         fontSize = legendsPrefs.getFontSizePref();
         updateFontSize(fontSizeTextView);
 
-        fontDecrement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fontSize--;
-                if (fontSize <= -1) {
-                    fontSize = 0;
-                }
-                updateFontSize(fontSizeTextView);
+        fontDecrement.setOnClickListener(v -> {
+            fontSize--;
+            if (fontSize <= -1) {
+                fontSize = 0;
             }
+            updateFontSize(fontSizeTextView);
         });
 
-        fontIncrement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fontSize++;
-                if (fontSize >= 3) {
-                    fontSize = 2;
-                }
-                updateFontSize(fontSizeTextView);
+        fontIncrement.setOnClickListener(v -> {
+            fontSize++;
+            if (fontSize >= 3) {
+                fontSize = 2;
             }
+            updateFontSize(fontSizeTextView);
         });
     }
 
@@ -135,23 +129,19 @@ public class SettingsActivity extends NavigationDrawerActivity {
     private void setupApplyButton() {
         Button settingsApplyButton = findViewById(R.id.settings_lang_button);
 
-        settingsApplyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                legendsPrefs.setLangPref(langSelection);
-                legendsPrefs.setNormalizationPref(langCheckbox.isChecked());
-                legendsPrefs.setWildcardAlwaysOnPref(wildcardOn.isChecked());
-                legendsPrefs.setDoubleWildcardPref(doubleWildcard.isChecked());
-                legendsPrefs.setFontSizePref(fontSize);
-                legendsPrefs.setImagePref(displayImages.isChecked());
+        settingsApplyButton.setOnClickListener(v -> {
+            legendsPrefs.setLangPref(langSelection);
+            legendsPrefs.setNormalizationPref(langCheckbox.isChecked());
+            legendsPrefs.setWildcardAlwaysOnPref(wildcardOn.isChecked());
+            legendsPrefs.setDoubleWildcardPref(doubleWildcard.isChecked());
+            legendsPrefs.setFontSizePref(fontSize);
+            legendsPrefs.setImagePref(displayImages.isChecked());
+            legendsPrefs.setTswSorting(tswSorting.isChecked());
 
-                //RESET THE SPINNER CAT NUMBER TO KEEP THE ARRAY FROM PERMANENTLY CRASHING
-                legendsPrefs.setTswSorting(tswSorting.isChecked());
-                legendsPrefs.setSpinnerPosition(0);
+            //RESET THE SPINNER CAT NUMBER TO KEEP THE ARRAY FROM PERMANENTLY CRASHING
+            legendsPrefs.setSpinnerPosition(0);
 
-                restartDatabase();
-            }
+            restartDatabase();
         });
     }
 

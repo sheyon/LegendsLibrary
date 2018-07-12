@@ -56,7 +56,6 @@ public class AlphabeticalFragment extends Fragment implements FragmentVisibility
         }
 
         listView.setAdapter(adapter);
-        listView.setVerticalScrollbarPosition(LegendsPreferences.getInstance(getContext()).getAlphabeticalPosition());
     }
 
     public void refreshCursor() {
