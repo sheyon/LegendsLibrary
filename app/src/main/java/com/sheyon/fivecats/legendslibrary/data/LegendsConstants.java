@@ -4,8 +4,8 @@ import android.provider.BaseColumns;
 
 public final class LegendsConstants
 {
-    //Version 7 = App Version 1.7
-    public static final int DATABASE_VERSION = 7;
+    //Version 8 = App Version 1.7.1
+    public static final int DATABASE_VERSION = 8;
     public static final String DB_EN = "lore_library.db";
     public static final String DB_DE = "lore_library_DE.db";
     public static final String DB_FR = "lore_library_FR.db";
