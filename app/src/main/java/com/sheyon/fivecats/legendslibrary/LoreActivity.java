@@ -25,9 +25,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import com.crashlytics.android.Crashlytics;
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.Queries;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
@@ -59,7 +58,6 @@ public class LoreActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lore);
 
-        //Crashlytics.getInstance();
         legendsPrefs = LegendsPreferences.getInstance(this);
         db = LegendsDatabase.getInstance(this);
 
@@ -123,31 +121,28 @@ public class LoreActivity extends AppCompatActivity
         TextView categoryTextView = findViewById(R.id.loreActivity_category_text_view);
         TextView buzzingTextView = findViewById(R.id.loreActivity_buzzing_text_view);
         favedImageView = findViewById(R.id.loreActivity_fave_imageView);
-        favedImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    String modTitleString = "\"" + titleString + "\"";
+        favedImageView.setOnClickListener(view -> {
+            try {
+                String modTitleString = "\"" + titleString + "\"";
 
-                    //EXECUTE UPDATE QUERY
-                    db.execSQL(Queries.UPDATE_FAVE + modTitleString + ";");
+                //EXECUTE UPDATE QUERY
+                db.execSQL(Queries.UPDATE_FAVE + modTitleString + ";");
 
-                    //GET UPDATED CURSOR TO SET THE NEW FAVED STATE
-                    String[] selectionArgs = { titleString };
-                    Cursor cursor = db.rawQuery(Queries.GET_FAVE, selectionArgs);
-                    if (cursor != null) {
-                        cursor.moveToFirst();
+                //GET UPDATED CURSOR TO SET THE NEW FAVED STATE
+                String[] selectionArgs1 = { titleString };
+                Cursor cursor1 = db.rawQuery(Queries.GET_FAVE, selectionArgs1);
+                if (cursor1 != null) {
+                    cursor1.moveToFirst();
 
-                        int faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
-                        setStar(faved);
+                    int faved = cursor1.getInt(cursor1.getColumnIndex(LoreLibrary.COLUMN_FAVED));
+                    setStar(faved);
 
-                        cursor.close();
-                    }
+                    cursor1.close();
                 }
-                catch (SQLiteException e) {
-                    Log.w("WARNING!", "Unable to update fave! " + e);
-                    Toast.makeText(getBaseContext(), R.string.toast_cannot_favorite, Toast.LENGTH_SHORT).show();
-                }
+            }
+            catch (SQLiteException e) {
+                Log.w("WARNING!", "Unable to update fave! " + e);
+                Toast.makeText(getBaseContext(), R.string.toast_cannot_favorite, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -172,11 +167,6 @@ public class LoreActivity extends AppCompatActivity
     }
 
     private void adjustFontSize(TextView buzzingTextView, TextView blackSignalTextView){
-        //IF FONT SIZE PREFS DO NOT EXIST, CREATE THEM (DEFAULT: 0)
-        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_FONT_SIZE)) {
-            legendsPrefs.setFontSizePref(0);
-        }
-
         switch (legendsPrefs.getFontSizePref()) {
             //SetLineSpacingMultiplier does not seem to work from the Styles.XML; SET PROGRAMATICALLY!
             case 0:
@@ -244,7 +234,7 @@ public class LoreActivity extends AppCompatActivity
                 flavorImageCursor.close();
             }
             catch (CursorIndexOutOfBoundsException e) {
-                Log.e ("ERROR", "Could not find image resource");
+                Log.w ("WARNING", "Could not find image resource, using default");
                 flavorImageView.setImageResource(R.drawable.flavor_default);
             }
         }
@@ -257,11 +247,6 @@ public class LoreActivity extends AppCompatActivity
     }
 
     private void showFlavorImage(ImageView imageView) {
-        //IF PREFS DON'T EXIST, CREATE THEM. (DEFAULT: SHOW IMAGES)
-        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_SHOW_IMAGES)) {
-            legendsPrefs.setImagePref(true);
-        }
-
         //HIDE IMAGE IF NEEDED
         if (!legendsPrefs.getImagePref()) {
             imageView.setVisibility(View.GONE);
@@ -269,7 +254,7 @@ public class LoreActivity extends AppCompatActivity
     }
 
     private CharSequence highlight(String originalText, TextView textView) {
-        Boolean normalize = legendsPrefs.getNormalizationPref();
+        Boolean normalize = legendsPrefs.isUsingNormalization();
 
         //IF ROMANIAN CHARACTERS FOUND, OVERRIDE NORMALIZATION (ENGLISH ONLY)
         if ( legendsPrefs.getLangPref() == 0 &&
@@ -332,7 +317,7 @@ public class LoreActivity extends AppCompatActivity
                 }
                 else {
                     //DOUBLE WILDCARDS WILL RETURN *RESULT, *RESULT*, and RESULT*
-                    if (legendsPrefs.getDoubleWildcardPref()) {
+                    if (legendsPrefs.isUsingDoubleWildcards()) {
                         textView.setText(highlighted);
                     }
                     else {

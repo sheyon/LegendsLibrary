@@ -3,6 +3,7 @@ package com.sheyon.fivecats.legendslibrary;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -17,8 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.Categories;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
@@ -31,7 +32,7 @@ public class CategoriesFragment extends Fragment {
     private LegendsPreferences legendsPreferences;
     private SQLiteDatabase db;
 
-    private int spinnerCatNumber;
+    private int catNumber;
     private int groupNumber = -1;
     private String loreTitle;
 
@@ -41,18 +42,18 @@ public class CategoriesFragment extends Fragment {
         setHasOptionsMenu(false);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_categories_layout, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_categories_layout, container, false);
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         legendsPreferences = LegendsPreferences.getInstance(getContext());
         db = LegendsDatabase.getInstance(getContext());
 
         setupSpinner(view);
         setupExpandableView(view);
-
-        return view;
     }
 
     private void setupSpinner(View view) {
@@ -63,37 +64,40 @@ public class CategoriesFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    spinnerCatNumber = LoreLibrary.CAT_0;
-                    legendsPreferences.setSpinnerCatNumber(spinnerCatNumber);
+                if (spinner.getSelectedItem().toString().equals(getResources().getString(R.string.spinner_choose))) {
+                    catNumber = Categories.CAT_0;
+                    legendsPreferences.setSpinnerPosition(position);
                     closeCursor();
                     return;
                 }
-                if (position == 1) {
-                    spinnerCatNumber = LoreLibrary.CAT_1_SOL;
+                else if (spinner.getSelectedItem().toString().equals(getResources().getString(R.string.spinner_solomon))) {
+                    catNumber = Categories.CAT_1_SOL;
                 }
-                if (position == 2) {
-                    spinnerCatNumber = LoreLibrary.CAT_2_EGY;
+                else if (spinner.getSelectedItem().toString().equals(getResources().getString(R.string.spinner_egypt))) {
+                    catNumber = Categories.CAT_2_EGY;
                 }
-                if (position == 3) {
-                    spinnerCatNumber = LoreLibrary.CAT_3_TRN;
+                else if (spinner.getSelectedItem().toString().equals(getResources().getString(R.string.spinner_trans))) {
+                    catNumber = Categories.CAT_3_TRN;
                 }
-                if (position == 4) {
-                    spinnerCatNumber = LoreLibrary.CAT_4_TOK;
+                else if (spinner.getSelectedItem().toString().equals(getResources().getString(R.string.spinner_tokyo))) {
+                    catNumber = Categories.CAT_4_TOK;
                 }
-                if (position == 5) {
-                    spinnerCatNumber = LoreLibrary.CAT_5_GBL;
+                else if (spinner.getSelectedItem().toString().equals(getResources().getString(R.string.spinner_africa))) {
+                    catNumber = Categories.CAT_9_AFR;
                 }
-                if (position == 6) {
-                    spinnerCatNumber = LoreLibrary.CAT_6_BES;
+                else if (spinner.getSelectedItem().toString().equals(getResources().getString(R.string.spinner_global))) {
+                    catNumber = Categories.CAT_5_GBL;
                 }
-                if (position == 7) {
-                    spinnerCatNumber = LoreLibrary.CAT_7_EVN;
+                else if (spinner.getSelectedItem().toString().equals(getResources().getString(R.string.spinner_bestiary))) {
+                    catNumber = Categories.CAT_6_BES;
                 }
-                if (position == 8 && legendsPreferences.getTswSorting()) {
-                    spinnerCatNumber = LoreLibrary.CAT_8_ISU;
+                else if (spinner.getSelectedItem().toString().equals(getResources().getString(R.string.spinner_events))) {
+                    catNumber = Categories.CAT_7_EVN;
                 }
-                legendsPreferences.setSpinnerCatNumber(spinnerCatNumber);
+                else if (spinner.getSelectedItem().toString().equals(getResources().getString(R.string.spinner_issues))) {
+                    catNumber = Categories.CAT_8_ISU;
+                }
+                legendsPreferences.setSpinnerPosition(position);
                 displayCategoryScreen();
             }
 
@@ -106,7 +110,7 @@ public class CategoriesFragment extends Fragment {
 
     private void setupNewSpinnerAdapter() {
         ArrayAdapter<CharSequence> spinnerAdapter;
-        if (legendsPreferences.getTswSorting()) {
+        if (legendsPreferences.isUsingTswSorting()) {
             spinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.categories_array_tsw, R.layout.spinner_custom_layout);
         } else {
             spinnerAdapter = ArrayAdapter.createFromResource(getContext(), R.array.categories_array_swl, R.layout.spinner_custom_layout);
@@ -117,39 +121,33 @@ public class CategoriesFragment extends Fragment {
 
     private void setupExpandableView(View view) {
         legendsExpandableView = view.findViewById(R.id.legends_expandable_list);
-        legendsExpandableView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                LinearLayout ll = (LinearLayout) v;
-                TextView tv = ll.findViewById(R.id.category_text_view);
-                int style = tv.getTypeface().getStyle();
+        legendsExpandableView.setOnGroupClickListener((parent, v, groupPosition, id) -> {
+            LinearLayout ll = (LinearLayout) v;
+            TextView tv = ll.findViewById(R.id.category_text_view);
+            int style = tv.getTypeface().getStyle();
 
-                //IF THE TEXT STYLE IS BOLDED, EXPAND THE CATEGORY
-                if ( style == 1 ) {
-                    groupNumber = groupPosition;
-                    return false;
-                }
-                //IF NOT, LAUNCH THE LORE PAGE
-                else {
-                    loreTitle = tv.getText().toString();
-                    startLoreActivity();
-                    return true;
-                }
+            //IF THE TEXT STYLE IS BOLDED, EXPAND THE CATEGORY
+            if ( style == 1 ) {
+                groupNumber = groupPosition;
+                return false;
+            }
+            //IF NOT, LAUNCH THE LORE PAGE
+            else {
+                loreTitle = tv.getText().toString();
+                startLoreActivity();
+                return true;
             }
         });
 
-        legendsExpandableView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                LinearLayout ll = (LinearLayout) v;
-                TextView tv = ll.findViewById(R.id.subcategory_text_view);
-                loreTitle = tv.getText().toString();
+        legendsExpandableView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
+            LinearLayout ll = (LinearLayout) v;
+            TextView tv = ll.findViewById(R.id.subcategory_text_view);
+            loreTitle = tv.getText().toString();
 
-                groupNumber = groupPosition;
+            groupNumber = groupPosition;
 
-                startLoreActivity();
-                return false;
-            }
+            startLoreActivity();
+            return false;
         });
     }
 
@@ -160,11 +158,8 @@ public class CategoriesFragment extends Fragment {
         //THIS ENSURES THE CATEGORIES MATCH TSW OR SWL SORTING PREFERENCES
         setupNewSpinnerAdapter();
 
-        //THIS ENSURES SWL-MODE DOESN'T CRASH PERMANENTLY
-        if (!legendsPreferences.getTswSorting() && legendsPreferences.getSpinnerCatNumber() == LoreLibrary.CAT_8_ISU) {
-            legendsPreferences.setSpinnerCatNumber(0);
-        }
-        spinner.setSelection(legendsPreferences.getSpinnerCatNumber());
+        //THIS ENSURES SWL-MODE DOESN'T CRASH PERMANENTLY IF STUCK ON ISSUES CATEGORY
+        resetSpinnerPosition();
 
         if (groupNumber != -1) {
             ViewTreeObserver vto = legendsExpandableView.getViewTreeObserver();
@@ -173,12 +168,7 @@ public class CategoriesFragment extends Fragment {
                 @Override
                 public void onGlobalLayout() {
                     legendsExpandableView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    legendsExpandableView.post( new Runnable() {
-                        @Override
-                        public void run() {
-                            legendsExpandableView.expandGroup(groupNumber);
-                        }
-                    });
+                    legendsExpandableView.post(() -> legendsExpandableView.expandGroup(groupNumber));
                 }
             });
         }
@@ -198,7 +188,7 @@ public class CategoriesFragment extends Fragment {
     private void displayCategoryScreen() {
         closeCursor();
 
-        String[] selectionArgs = { Integer.toString(spinnerCatNumber), Integer.toString(spinnerCatNumber) };
+        String[] selectionArgs = { Integer.toString(catNumber), Integer.toString(catNumber) };
 //        String[] mergedQuery = { Queries.UNION_1, Queries.UNION_2};
 //        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 //        String unionQuery = qb.buildUnionQuery(mergedQuery, null, null);
@@ -211,19 +201,17 @@ public class CategoriesFragment extends Fragment {
         legendsExpandableView.setAdapter(legendsCursorTreeAdapter);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        legendsPreferences.setSpinnerCatNumber(spinnerCatNumber);
+    private void resetSpinnerPosition() {
+        if (!legendsPreferences.isUsingTswSorting() && legendsPreferences.getSpinnerPosition() == Categories.CAT_8_ISU) {
+            legendsPreferences.setSpinnerPosition(0);
+        }
+        spinner.setSelection(legendsPreferences.getSpinnerPosition());
     }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        if (!legendsPreferences.getTswSorting() && legendsPreferences.getSpinnerCatNumber() == LoreLibrary.CAT_8_ISU) {
-            legendsPreferences.setSpinnerCatNumber(0);
-        }
-        spinner.setSelection(legendsPreferences.getSpinnerCatNumber());
+        resetSpinnerPosition();
     }
 
     private void closeCursor() {

@@ -11,9 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="?attr/colorPrimary"
+        android:background="@color/colorPrimary"
         android:elevation="4dp"
-        android:minHeight="?attr/actionBarSize" />
+        android:minHeight="?android:attr/actionBarSize"
+        tools:ignore="UnusedAttribute" />
 
     <ScrollView
         android:id="@+id/loreActivity_scrollView"
@@ -137,6 +138,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="true"
+                        android:focusable="true"
                         android:padding="8dp"
                         android:scaleType="fitEnd"
                         android:src="@drawable/lore"
@@ -193,6 +195,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="true"
+                        android:focusable="true"
                         android:padding="8dp"
                         android:scaleType="fitEnd"
                         android:src="@drawable/blacklore"

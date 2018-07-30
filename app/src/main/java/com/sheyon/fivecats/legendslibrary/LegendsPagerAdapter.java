@@ -16,17 +16,13 @@ class LegendsPagerAdapter extends com.sbrukhanda.fragmentviewpager.adapters.Frag
     public Fragment instantiateFragment(int position) {
         switch (position) {
             case 0:
-                AlphabeticalFragment tab1 = new AlphabeticalFragment();
-                return tab1;
+                return new AlphabeticalFragment();
             case 1:
-                CategoriesFragment tab2 = new CategoriesFragment();
-                return tab2;
+                return new CategoriesFragment();
             case 2:
-                FavoritesFragment tab3 = new FavoritesFragment();
-                return tab3;
+                return new FavoritesFragment();
             case 3:
-                SearchFragment tab4 = new SearchFragment();
-                return tab4;
+                return new SearchFragment();
         }
         return null;
     }

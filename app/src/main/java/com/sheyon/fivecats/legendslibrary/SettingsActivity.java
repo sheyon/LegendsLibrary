@@ -1,11 +1,8 @@
 package com.sheyon.fivecats.legendslibrary;
 
-import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,14 +14,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.Languages;
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends NavigationDrawerActivity {
 
     private SQLiteDatabase db;
-    private UniversalDrawer universalDrawer;
     private CheckBox langCheckbox;
     private CheckBox wildcardOn;
     private CheckBox doubleWildcard;
@@ -40,28 +36,24 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         db = LegendsDatabase.getInstance(this);
+        legendsPrefs = LegendsPreferences.getInstance(this);
 
         Toolbar toolbar = findViewById(R.id.settingsActivity_toolbar);
         setSupportActionBar(toolbar);
 
-        universalDrawer = new UniversalDrawer();
-        universalDrawer.setupDrawer(this, toolbar);
+        setupDrawer(this, toolbar);
 
         RelativeLayout relativeLayout = findViewById(R.id.settingsActivity_relativeLayout);
         ScrollView scrollView = findViewById(R.id.settingsActivity_scrollView);
         RotationHandler.setupRotationLayout(this, relativeLayout, scrollView, toolbar);
 
-        legendsPrefs = LegendsPreferences.getInstance(getApplicationContext());
-
-        setupLangSpinner();
-        setupLangCheckbox();
+        setupSpinner();
+        setupCheckboxes();
         setupApplyButton();
-        setupSearchCheckboxes();
-        setupMiscCheckboxes();
         setupFontSize();
     }
 
-    private void setupLangSpinner() {
+    private void setupSpinner() {
         Spinner langSpinner = findViewById(R.id.settings_lang_spinner);
 
         ArrayAdapter langSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.languages_array, android.R.layout.simple_spinner_item);
@@ -72,48 +64,37 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (parent.getItemAtPosition(position).equals("English")) {
-                    langSelection = LoreLibrary.LANG_EN;
+                    langSelection = Languages.LANG_EN;
                 }
                 if (parent.getItemAtPosition(position).equals("Deutsch")) {
-                    langSelection = LoreLibrary.LANG_DE;
+                    langSelection = Languages.LANG_DE;
                 }
                 if (parent.getItemAtPosition(position).equals("Français")) {
-                    langSelection = LoreLibrary.LANG_FR;
+                    langSelection = Languages.LANG_FR;
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                langSelection = LoreLibrary.LANG_EN;
+                langSelection = Languages.LANG_EN;
             }
         });
 
         langSpinner.setSelection(legendsPrefs.getLangPref());
     }
 
-    private void setupLangCheckbox() {
+    private void setupCheckboxes() {
         langCheckbox = findViewById(R.id.settings_lang_checkbox);
-        langCheckbox.setChecked(legendsPrefs.getNormalizationPref());
-    }
-
-    private void setupSearchCheckboxes() {
         wildcardOn = findViewById(R.id.settings_search_wildcard_on);
-        wildcardOn.setChecked(legendsPrefs.getWildcardAlwaysOnPref());
-
         doubleWildcard = findViewById(R.id.settings_search_double_wildcard);
-        doubleWildcard.setChecked(legendsPrefs.getDoubleWildcardPref());
-    }
-
-    private void setupMiscCheckboxes() {
         displayImages = findViewById(R.id.settings_display_images);
-        displayImages.setChecked(legendsPrefs.getImagePref());
-
-        //IF TSW SORTING PREFS DO NOT EXIST, CREATE THEM (DEFAULT: FALSE)
-        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_TSW_SORTING)) {
-            legendsPrefs.setTswSorting(false);
-        }
         tswSorting = findViewById(R.id.settings_categories);
-        tswSorting.setChecked(legendsPrefs.getTswSorting());
+
+        langCheckbox.setChecked(legendsPrefs.isUsingNormalization());
+        wildcardOn.setChecked(legendsPrefs.isUsingWildcards());
+        doubleWildcard.setChecked(legendsPrefs.isUsingDoubleWildcards());
+        displayImages.setChecked(legendsPrefs.getImagePref());
+        tswSorting.setChecked(legendsPrefs.isUsingTswSorting());
     }
 
     private void setupFontSize() {
@@ -121,34 +102,23 @@ public class SettingsActivity extends AppCompatActivity {
         Button fontIncrement = findViewById(R.id.settings_font_increment);
         final TextView fontSizeTextView = findViewById(R.id.settings_font_size);
 
-        //IF FONT SIZE PREFS DO NOT EXIST, CREATE THEM (DEFAULT: 0)
-        if (!legendsPrefs.doesContain(LegendsPreferences.PREF_FONT_SIZE)) {
-            legendsPrefs.setFontSizePref(0);
-        }
-
         fontSize = legendsPrefs.getFontSizePref();
         updateFontSize(fontSizeTextView);
 
-        fontDecrement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fontSize--;
-                if (fontSize <= -1) {
-                    fontSize = 0;
-                }
-                updateFontSize(fontSizeTextView);
+        fontDecrement.setOnClickListener(v -> {
+            fontSize--;
+            if (fontSize <= -1) {
+                fontSize = 0;
             }
+            updateFontSize(fontSizeTextView);
         });
 
-        fontIncrement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fontSize++;
-                if (fontSize >= 3) {
-                    fontSize = 2;
-                }
-                updateFontSize(fontSizeTextView);
+        fontIncrement.setOnClickListener(v -> {
+            fontSize++;
+            if (fontSize >= 3) {
+                fontSize = 2;
             }
+            updateFontSize(fontSizeTextView);
         });
     }
 
@@ -159,59 +129,33 @@ public class SettingsActivity extends AppCompatActivity {
     private void setupApplyButton() {
         Button settingsApplyButton = findViewById(R.id.settings_lang_button);
 
-        settingsApplyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                legendsPrefs.setLangPref(langSelection);
-                legendsPrefs.setNormalizationPref(langCheckbox.isChecked());
-                legendsPrefs.setWildcardAlwaysOnPref(wildcardOn.isChecked());
-                legendsPrefs.setDoubleWildcardPref(doubleWildcard.isChecked());
-                legendsPrefs.setFontSizePref(fontSize);
-                legendsPrefs.setImagePref(displayImages.isChecked());
+        settingsApplyButton.setOnClickListener(v -> {
+            legendsPrefs.setLangPref(langSelection);
+            legendsPrefs.setNormalizationPref(langCheckbox.isChecked());
+            legendsPrefs.setWildcardAlwaysOnPref(wildcardOn.isChecked());
+            legendsPrefs.setDoubleWildcardPref(doubleWildcard.isChecked());
+            legendsPrefs.setFontSizePref(fontSize);
+            legendsPrefs.setImagePref(displayImages.isChecked());
+            legendsPrefs.setTswSorting(tswSorting.isChecked());
 
-                //RESET THE SPINNER CAT NUMBER TO KEEP THE ARRAY FROM PERMANENTLY CRASHING
-                legendsPrefs.setTswSorting(tswSorting.isChecked());
-                legendsPrefs.setSpinnerCatNumber(0);
+            //RESET THE SPINNER CAT NUMBER TO KEEP THE ARRAY FROM PERMANENTLY CRASHING
+            legendsPrefs.setSpinnerPosition(0);
 
-                restartDatabase();
-            }
+            restartDatabase();
         });
     }
 
     private void restartDatabase() {
         db.close();
 
+        //WHEN SWITCHING LANGUAGES, MAKE SURE THE DATABASES ARE UPGRADED TO THE LATEST VERSION
+        LegendsDatabase.initiateUpgrade(this, legendsPrefs);
+
         db = LegendsDatabase.getInstance(this);
         if (db.isReadOnly()) {
             Toast.makeText(this, R.string.toast_write_db_fail, Toast.LENGTH_LONG).show();
-        }
-        else {
+        } else {
             Toast.makeText(this, R.string.toast_lang_changes, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        universalDrawer.mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        universalDrawer.mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
-        if (universalDrawer.mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        // Handle your other action bar items...
-        return super.onOptionsItemSelected(item);
     }
 }

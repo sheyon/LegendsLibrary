@@ -9,18 +9,23 @@ public class LegendsPreferences {
     private static LegendsPreferences legendsPrefs;
     private static final String PREFS_FILE_KEY = "com.sheyon.fivecats.legendslibrary.PREFS_FILE_KEY";
 
-    public static final String PREF_LANG = "LANG_PREFS";
-    public static final String PREF_NORMALIZATION = "NORMALIZATION_PREFS";
-    public static final String PREF_WILDCARD_ON = "WILDCARD_ON_PREFS";
-    public static final String PREF_DOUBLE_WILDCARD = "DOUBLE_WILDCARD_PREFS";
-    public static final String PREF_SHOW_IMAGES = "SHOW_IMAGES_PREF";
-    public static final String PREF_FONT_SIZE = "FONT_SIZE_PREF";
-    public static final String PREF_TSW_SORTING = "TSW_SORTING_PREF";
+    private static final String DB_UPGRADE_COMPLETED = "UPGRADE_COMPLETED" + LegendsConstants.DATABASE_VERSION;
+    private static final String DB_UPGRADE_COMPLETED_DE = "UPGRADE_COMPLETED_DE" + LegendsConstants.DATABASE_VERSION;
+    private static final String DB_UPGRADE_COMPLETED_FR = "UPGRADE_COMPLETED_FR" + LegendsConstants.DATABASE_VERSION;
 
-    public static final String ALPHABETICAL_POSITION = "ALPHABETICAL_POSITION";
-    public static final String LORE_TITLE = "LORE_TITLE";
-    public static final String LORE_PAGE_POSITION = "LORE_PAGE_POSITION";
-    public static final String SPINNER_CAT_NUMBER = "SPINNER_CAT_NUMBER";
+    //LANG PREF IS THE ONLY ONE THAT NEEDS TO BE CHECKED IF IT EXISTS ON START-UP/INSTALL
+    public static final String PREF_LANG = "LANG_PREFS";
+    private static final String PREF_NORMALIZATION = "NORMALIZATION_PREFS";
+    private static final String PREF_WILDCARD_ON = "WILDCARD_ON_PREFS";
+    private static final String PREF_DOUBLE_WILDCARD = "DOUBLE_WILDCARD_PREFS";
+    private static final String PREF_SHOW_IMAGES = "SHOW_IMAGES_PREF";
+    private static final String PREF_FONT_SIZE = "FONT_SIZE_PREF";
+    private static final String PREF_TSW_SORTING = "TSW_SORTING_PREF";
+
+    private static final String ALPHABETICAL_POSITION = "ALPHABETICAL_POSITION";
+    private static final String LORE_TITLE = "LORE_TITLE";
+    private static final String LORE_PAGE_POSITION = "LORE_PAGE_POSITION";
+    private static final String SPINNER_POSITION = "SPINNER_POSITION";
 
     public static final int LANG_EN = 0;
     public static final int LANG_DE = 1;
@@ -37,7 +42,7 @@ public class LegendsPreferences {
         return legendsPrefs;
     }
 
-    private LegendsPreferences (Context context) {
+    private LegendsPreferences(Context context) {
         mPref = context.getSharedPreferences(PREFS_FILE_KEY, Context.MODE_PRIVATE);
     }
 
@@ -45,15 +50,33 @@ public class LegendsPreferences {
     SETTERS
     -------*/
 
+    public void setDbUpgradeCompleted(boolean val) {
+        doEdit();
+        mEditor.putBoolean(DB_UPGRADE_COMPLETED, val);
+        doCommit();
+    }
+
+    public void setDbUpgradeCompletedDE(boolean val) {
+        doEdit();
+        mEditor.putBoolean(DB_UPGRADE_COMPLETED_DE, val);
+        doCommit();
+    }
+
+    public void setDBUpgradeCompletedFR(boolean val) {
+        doEdit();
+        mEditor.putBoolean(DB_UPGRADE_COMPLETED_FR, val);
+        doCommit();
+    }
+
     public void setTswSorting(boolean val) {
         doEdit();
         mEditor.putBoolean(PREF_TSW_SORTING, val);
         doCommit();
     }
 
-    public void setSpinnerCatNumber(int val) {
+    public void setSpinnerPosition(int val) {
         doEdit();
-        mEditor.putInt(SPINNER_CAT_NUMBER, val);
+        mEditor.putInt(SPINNER_POSITION, val);
         doCommit();
     }
 
@@ -75,7 +98,7 @@ public class LegendsPreferences {
         doCommit();
     }
 
-    public void setFontSizePref(int val){
+    public void setFontSizePref(int val) {
         doEdit();
         mEditor.putInt(PREF_FONT_SIZE, val);
         doCommit();
@@ -111,21 +134,33 @@ public class LegendsPreferences {
         doCommit();
     }
 
-    public boolean doesContain(String prefKey){
+    public boolean doesNotContain(String prefKey) {
         doEdit();
-        return mPref.contains(prefKey);
+        return !mPref.contains(prefKey);
     }
 
     /*-------
     GETTERS
     -------*/
 
-    public boolean getTswSorting() {
+    public boolean isUpgradeCompleted() {
+        return mPref.getBoolean(DB_UPGRADE_COMPLETED, false);
+    }
+
+    public boolean isUpgradeCompletedDE() {
+        return mPref.getBoolean(DB_UPGRADE_COMPLETED_DE, false);
+    }
+
+    public boolean isUpgradeCompletedFR() {
+        return mPref.getBoolean(DB_UPGRADE_COMPLETED_FR, false);
+    }
+
+    public boolean isUsingTswSorting() {
         return mPref.getBoolean(PREF_TSW_SORTING, false);
     }
 
-    public int getSpinnerCatNumber() {
-        return mPref.getInt(SPINNER_CAT_NUMBER, 0);
+    public int getSpinnerPosition() {
+        return mPref.getInt(SPINNER_POSITION, 0);
     }
 
     public int getLorePagePosition() {
@@ -152,15 +187,15 @@ public class LegendsPreferences {
         return mPref.getInt(PREF_LANG, 0);
     }
 
-    public boolean getNormalizationPref() {
+    public boolean isUsingNormalization() {
         return mPref.getBoolean(PREF_NORMALIZATION, true);
     }
 
-    public boolean getWildcardAlwaysOnPref() {
+    public boolean isUsingWildcards() {
         return mPref.getBoolean(PREF_WILDCARD_ON, false);
     }
 
-    public boolean getDoubleWildcardPref() {
+    public boolean isUsingDoubleWildcards() {
         return mPref.getBoolean(PREF_DOUBLE_WILDCARD, false);
     }
 

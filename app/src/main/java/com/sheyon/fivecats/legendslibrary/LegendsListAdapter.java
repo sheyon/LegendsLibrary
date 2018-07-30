@@ -15,8 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.Queries;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
@@ -79,7 +79,6 @@ class LegendsListAdapter extends CursorAdapter implements View.OnClickListener
         String categoryText = cursor.getString(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_CATEGORY_NAME));
         int faved = cursor.getInt(cursor.getColumnIndexOrThrow(LoreLibrary.COLUMN_FAVED));
 
-        //SOMETHING ABOUT THIS BLOCK IS CAUSING LOG SPAM ON A PHYSICAL DEVICE; OTHERWISE HARMLESS
         if (prefixText != null) {
             loreTitle_TV.setText("" + prefixText + titleText);
         }

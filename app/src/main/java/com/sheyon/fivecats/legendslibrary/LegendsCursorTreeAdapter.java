@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.CursorTreeAdapter;
 import android.widget.TextView;
 
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.LoreLibrary;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.Queries;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.LoreLibrary;
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 
 class LegendsCursorTreeAdapter extends CursorTreeAdapter
@@ -65,7 +65,7 @@ class LegendsCursorTreeAdapter extends CursorTreeAdapter
 
         //RESET STYLES
         categoryHeader.setAllCaps(true);
-        categoryHeader.setTypeface(Typeface.defaultFromStyle(0), 1);
+        categoryHeader.setTypeface(Typeface.DEFAULT, 1);
         categoryHeader.setTextSize(2, 20);
 
         //FILL IN THE CATEGORY HEADER
@@ -84,7 +84,7 @@ class LegendsCursorTreeAdapter extends CursorTreeAdapter
                 categoryHeader.setText(categoryText);
             }
             categoryHeader.setAllCaps(false);
-            categoryHeader.setTypeface(Typeface.defaultFromStyle(0), 0);
+            categoryHeader.setTypeface(Typeface.DEFAULT, 0);
             categoryHeader.setTextSize(2, 16);
             return;
         }
@@ -115,7 +115,7 @@ class LegendsCursorTreeAdapter extends CursorTreeAdapter
             subcategoryHeader.setText(subcategoryText);
         }
         subcategoryHeader.setAllCaps(false);
-        subcategoryHeader.setTypeface(Typeface.defaultFromStyle(0), 0);
+        subcategoryHeader.setTypeface(Typeface.DEFAULT, 0);
         subcategoryHeader.setTextSize(2, 16);
     }
 }

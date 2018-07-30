@@ -2,26 +2,28 @@
     <string name="app_name">Legends Library</string>
 
     <string-array name="categories_array_tsw">
-        <item>[Choose a category:]</item>
-        <item>Solomon Island</item>
-        <item>Valley of the Sun God</item>
-        <item>Transylvania</item>
-        <item>Tokyo</item>
-        <item>Global</item>
-        <item>The Bestiary</item>
-        <item>Events</item>
-        <item>Issues</item>
+        <item>@string/spinner_choose</item>
+        <item>@string/spinner_solomon</item>
+        <item>@string/spinner_egypt</item>
+        <item>@string/spinner_trans</item>
+        <item>@string/spinner_tokyo</item>
+        <item>@string/spinner_africa</item>
+        <item>@string/spinner_global</item>
+        <item>@string/spinner_bestiary</item>
+        <item>@string/spinner_events</item>
+        <item>@string/spinner_issues</item>
     </string-array>
 
     <string-array name="categories_array_swl">
-        <item>[Choose a category:]</item>
-        <item>Solomon Island</item>
-        <item>Valley of the Sun God</item>
-        <item>Transylvania</item>
-        <item>Tokyo</item>
-        <item>Global</item>
-        <item>The Bestiary</item>
-        <item>Events</item>
+        <item>@string/spinner_choose</item>
+        <item>@string/spinner_solomon</item>
+        <item>@string/spinner_egypt</item>
+        <item>@string/spinner_trans</item>
+        <item>@string/spinner_tokyo</item>
+        <item>@string/spinner_africa</item>
+        <item>@string/spinner_global</item>
+        <item>@string/spinner_bestiary</item>
+        <item>@string/spinner_events</item>
     </string-array>
 
     <string-array name="languages_array">
@@ -35,6 +37,17 @@
         <item>@string/drawer_settings</item>
         <item>@string/drawer_about</item>
     </string-array>
+
+    <string name="spinner_choose">[Choose a category:]</string>
+    <string name="spinner_solomon">Solomon Island</string>
+    <string name="spinner_egypt">Valley of the Sun God</string>
+    <string name="spinner_trans">Transylvania</string>
+    <string name="spinner_tokyo">Tokyo</string>
+    <string name="spinner_africa">South Africa</string>
+    <string name="spinner_global">Global</string>
+    <string name="spinner_bestiary">The Bestiary</string>
+    <string name="spinner_events">Events</string>
+    <string name="spinner_issues">Issues</string>
 
     <string name="lore_header_buzzing">The Buzzing</string>
     <string name="lore_header_blackSignal">The Black Signal</string>
@@ -104,7 +117,7 @@
     <string name="about_aboutText">The Legends Library is a resource for players of the modern horror MMORPG the <b>Secret World</b> and <b>Secret World: Legends</b> by Funcom. All in-game Legends (or Lore, as some players might know them) are compiled into a searchable database for reading or research. The author hopes that you enjoy this resource, made completely free and ad-free to you, as you peer into the world of secret societies, magic, and twisting horrors.
     \n\nBut don\'t look too deeply, sweetling&#8230;</string>
     <string name="about_privacyText">The Legends Library is an off-line app. It collects no information about you, your device, or your habits. It does not communicate to any outside servers. Rest assured that the author is not an agent of the Illuminati (or any other secret society) and has no interest or desire to collect or sell any information about you to third-parties, especially without your consent.</string>
-    <string name="about_legalText">The Legends Library application and logo are the author\'s own copyright © 2017. They may not be redistributed or altered or sold for commercial use.
+    <string name="about_legalText">The Legends Library application and logo are the author\'s own copyright © 2017-2018. They may not be redistributed or altered or sold for commercial use.
     \n\n<b>The Secret World</b> and <b>Secret World: Legends</b> are registered trademarks of Funcom Oslo AS. Unless otherwise indicated, the information presented within this app are properties of Funcom.
     \n\nThe author is unaffiliated with Funcom, and this app is not authorized or endorsed by the Company.</string>
     <string name="about_contactText">I am reachable by email, Twitter, and Tumblr. Tumblr is also the development blog where you may follow the progress of this app. All feedback, suggestions, and bug reports are welcome.

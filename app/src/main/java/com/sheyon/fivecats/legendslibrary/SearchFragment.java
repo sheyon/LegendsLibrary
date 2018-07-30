@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -25,7 +26,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.sbrukhanda.fragmentviewpager.FragmentVisibilityListener;
-import com.sheyon.fivecats.legendslibrary.data.LegendsContract.Queries;
+import com.sheyon.fivecats.legendslibrary.data.LegendsConstants.Queries;
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
@@ -70,23 +71,23 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
         clearFavorites.setVisible(false);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_search_layout, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_search_layout, container, false);
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         db = LegendsDatabase.getInstance(getContext());
         setupSearchBar(view);
         setupListView(view);
-
-        return view;
     }
 
     private void getPrefs(){
         LegendsPreferences legendsPrefs = LegendsPreferences.getInstance(getContext());
         prefsLang = legendsPrefs.getLangPref();
-        prefsNormalization = legendsPrefs.getNormalizationPref();
-        prefsWildcardOn = legendsPrefs.getWildcardAlwaysOnPref();
+        prefsNormalization = legendsPrefs.isUsingNormalization();
+        prefsWildcardOn = legendsPrefs.isUsingWildcards();
     }
 
     private void setupSearchBar(View view) {
