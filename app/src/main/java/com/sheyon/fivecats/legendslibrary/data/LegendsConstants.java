@@ -221,5 +221,13 @@ public final class LegendsConstants
                 "select lore._id AS _id, lore.categoryId AS categoryId, lore.title\n" +
                 "from lore\n" +
                 "where prefix || title LIKE ?";
+
+        //OUT-OF-BOUNDS QUERY
+        public static final String OOB_QUERY =
+                "SELECT * FROM lore\n" +
+                "WHERE title LIKE ?\n" +
+                "UNION\n" +
+                "SELECT * FROM lore\n" +
+                "WHERE prefix || title LIKE ?";
     }
 }
