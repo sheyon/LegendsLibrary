@@ -1,5 +1,6 @@
 package com.sheyon.fivecats.legendslibrary;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
@@ -53,6 +54,7 @@ public class LoreActivity extends AppCompatActivity
     private ImageView favedImageView;
     private LegendsPreferences legendsPrefs;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,47 +66,55 @@ public class LoreActivity extends AppCompatActivity
         titleString = getIntent().getStringExtra("loreTitle");
         searchString = getIntent().getStringExtra("searchString");
 
-        //NULL CATCH; IT SHOULD NEVER HAPPEN, BUT IT DO
+        //NULL FIX; IT SHOULD NEVER HAPPEN, BUT IT DO
         if (titleString == null) {
             Log.w("WARNING", "TitleString null! Using backup.");
             titleString = legendsPrefs.getLoreTitle();
         }
 
-        //NULL CATCH; IT SHOULD NEVER HAPPEN, BUT IT DO
-        //FOR DEBUG, SET TO NUMBER OTHER THAN ZERO TO FORCE CursorOutOfBoundsException
-        int categoryNumber = 0;
-        if (categoryNumber == 0) {
-            String [] catchArgs = { titleString, titleString };
-            Cursor catchCursor = db.rawQuery(Queries.CAT_ID_CATCH, catchArgs);
-            if (catchCursor != null) {
-                if (!catchCursor.moveToFirst()) {
-                    catchCursor.moveToFirst();
-                }
-                categoryNumber = catchCursor.getInt(catchCursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_ID));
-                catchCursor.close();
+        //NULL FIX; IT SHOULD NEVER HAPPEN, BUT IT DO
+        Cursor getTextCursor;
+        String [] catNumArgs = { titleString, titleString };
+        try {
+            //throw new CursorIndexOutOfBoundsException("GO TO JAIL!");
+            int categoryNumber = 0;
+            Cursor catNumCursor = db.rawQuery(Queries.CAT_ID_CATCH, catNumArgs);
+
+            if (catNumCursor != null && catNumCursor.moveToFirst()) {
+                categoryNumber = catNumCursor.getInt(catNumCursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_ID));
+                catNumCursor.close();
+            }
+
+            SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+            String [] union = { Queries.SINGLE_LORE_UNION_1, Queries.SINGLE_LORE_UNION_2 };
+            String joinedQuery = qb.buildUnionQuery(union, null, null);
+
+            String[] selectionArgs = { Integer.toString(categoryNumber), titleString, Integer.toString(categoryNumber), titleString };
+
+            getTextCursor = db.rawQuery(joinedQuery, selectionArgs);
+            if (getTextCursor != null && getTextCursor.moveToFirst()) {
+                buzzingText = getTextCursor.getString(getTextCursor.getColumnIndex(LoreLibrary.COLUMN_BUZZING));
+                blackSignalText = getTextCursor.getString(getTextCursor.getColumnIndex(LoreLibrary.COLUMN_BLACK_SIGNAL));
+                categoryString = getTextCursor.getString(getTextCursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_NAME));
+                faved = getTextCursor.getInt(getTextCursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
+            }
+        } catch (CursorIndexOutOfBoundsException e) {
+            Log.e("ERROR", "Can't find Cat# for some reason. " + e);
+            String[] oobArgs = { titleString, titleString };
+            getTextCursor = db.rawQuery(Queries.OOB_QUERY, oobArgs);
+
+            if (getTextCursor != null && getTextCursor.moveToFirst()) {
+                buzzingText = getTextCursor.getString(getTextCursor.getColumnIndex(LoreLibrary.COLUMN_BUZZING));
+                blackSignalText = getTextCursor.getString(getTextCursor.getColumnIndex(LoreLibrary.COLUMN_BLACK_SIGNAL));
+                faved = getTextCursor.getInt(getTextCursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
             }
         }
-
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        String [] union = { Queries.SINGLE_LORE_UNION_1, Queries.SINGLE_LORE_UNION_2 };
-        String joinedQuery = qb.buildUnionQuery(union, null, null);
-
-        String[] selectionArgs = { Integer.toString(categoryNumber), titleString, Integer.toString(categoryNumber), titleString };
-
-        Cursor cursor = db.rawQuery(joinedQuery, selectionArgs);
-        if (cursor != null) {
-            cursor.moveToFirst();
-            buzzingText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BUZZING));
-            blackSignalText = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_BLACK_SIGNAL));
-            categoryString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_CATEGORY_NAME));
-            faved = cursor.getInt(cursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
-
-            //FULL TITLE STRING IS FOR THE FAVE TOASTS; SAVE IT SO YOU CAN USE IT LATER
-            fullTitleString = titleString;
-            //TRUNCATES THE TITLE SO PREFIXES DON'T BREAK FAVES
-            titleString = cursor.getString(cursor.getColumnIndex(LoreLibrary.COLUMN_TITLE));
-
-            cursor.close();
+        //FULL TITLE STRING IS FOR THE FAVE TOASTS; SAVE IT SO YOU CAN USE IT LATER
+        fullTitleString = titleString;
+        //TRUNCATES THE TITLE SO PREFIXES DON'T BREAK FAVES
+        if (getTextCursor != null) {
+            titleString = getTextCursor.getString(getTextCursor.getColumnIndex(LoreLibrary.COLUMN_TITLE));
+            getTextCursor.close();
         }
 
         RelativeLayout relativeLayout = findViewById(R.id.loreActivity_relativeLayout);
@@ -130,14 +140,14 @@ public class LoreActivity extends AppCompatActivity
 
                 //GET UPDATED CURSOR TO SET THE NEW FAVED STATE
                 String[] selectionArgs1 = { titleString };
-                Cursor cursor1 = db.rawQuery(Queries.GET_FAVE, selectionArgs1);
-                if (cursor1 != null) {
-                    cursor1.moveToFirst();
+                Cursor getFavesCursor = db.rawQuery(Queries.GET_FAVE, selectionArgs1);
+                if (getFavesCursor != null) {
+                    getFavesCursor.moveToFirst();
 
-                    int faved = cursor1.getInt(cursor1.getColumnIndex(LoreLibrary.COLUMN_FAVED));
+                    int faved = getFavesCursor.getInt(getFavesCursor.getColumnIndex(LoreLibrary.COLUMN_FAVED));
                     setStar(faved);
 
-                    cursor1.close();
+                    getFavesCursor.close();
                 }
             }
             catch (SQLiteException e) {
@@ -150,7 +160,23 @@ public class LoreActivity extends AppCompatActivity
         TextView blackSignalTextView = findViewById(R.id.loreActivity_signal_text_view);
 
         titleTextView.setText(fullTitleString);
-        categoryTextView.setText(categoryString);
+        if (categoryString != null) {
+            categoryTextView.setText(categoryString);
+        } else {
+            switch (legendsPrefs.getLangPref()) {
+                case LegendsPreferences.LANG_EN:
+                    categoryTextView.setText("Taste and see…");
+                    break;
+                case LegendsPreferences.LANG_DE:
+                    categoryTextView.setText("Koste sie und staune…");
+                    break;
+                case LegendsPreferences.LANG_FR:
+                    categoryTextView.setText("Goûte et comprends…");
+                    break;
+                default:
+                    categoryTextView.setText("Taste and see…");
+            }
+        }
 
         setStar(faved);
         initiateHighlighter(buzzingTextView, buzzingText, blackSignalTextView, blackSignalText);
@@ -304,11 +330,11 @@ public class LoreActivity extends AppCompatActivity
                 if (!wildcardFlag){
                     //WILDCARD-OFF WILL RETURN WHOLE WORDS ONLY
                     if ( (highlighted.charAt(spanStart - 1) == ' ' || highlighted.charAt(spanStart - 1) == '\n' || highlighted.charAt(spanStart - 1) == '-' ||
-                    highlighted.charAt(spanStart - 1) == '\"' || highlighted.charAt(spanStart - 1) == '\'') &&
+                    highlighted.charAt(spanStart - 1) == '\"' || highlighted.charAt(spanStart - 1) == '\'' || highlighted.charAt(spanStart - 1) == '/') &&
                             (highlighted.charAt(spanEnd) == ' ' || highlighted.charAt(spanEnd) == '.' || highlighted.charAt(spanEnd) == ',' ||
                                     highlighted.charAt(spanEnd) == '\'' || highlighted.charAt(spanEnd) == '-' || highlighted.charAt(spanEnd) == '?' ||
                                     highlighted.charAt(spanEnd) == '!' || highlighted.charAt(spanEnd) == ';' || highlighted.charAt(spanEnd) == ':' ||
-                                    highlighted.charAt(spanEnd) == '\"' ) ) {
+                                    highlighted.charAt(spanEnd) == '\"' || highlighted.charAt(spanEnd) == '/') ) {
                         textView.setText(highlighted);
                     }
                     else {
@@ -323,7 +349,7 @@ public class LoreActivity extends AppCompatActivity
                     else {
                         //SIMPLE WILDCARD WILL RETURN ONLY RESULT*
                         if ( highlighted.charAt(spanStart - 1) == ' ' || highlighted.charAt(spanStart - 1) == '\n' || highlighted.charAt(spanStart - 1) == '-' ||
-                                highlighted.charAt(spanStart - 1) == '\"' || highlighted.charAt(spanStart - 1) == '\'') {
+                                highlighted.charAt(spanStart - 1) == '\"' || highlighted.charAt(spanStart - 1) == '\'' || highlighted.charAt(spanStart - 1) == '/') {
                             textView.setText(highlighted);
                         }
                         else {
@@ -362,13 +388,8 @@ public class LoreActivity extends AppCompatActivity
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        //STUPID HACKJOB. POST DELAY SINCE THE LAYOUT -STILL- ISN'T COMPLETELY DRAWN BEFORE IT CAN SCROLL
-        scrollView.postDelayed( new Runnable() {
-            @Override
-            public void run() {
-                scrollView.scrollTo(0, legendsPrefs.getLorePagePosition());
-            }
-        }, 250);
+        //STUPID HACKJOB. POST DELAY SINCE THE LAYOUT STILL ISN'T COMPLETELY DRAWN BEFORE IT CAN SCROLL
+        scrollView.postDelayed(() -> scrollView.scrollTo(0, legendsPrefs.getLorePagePosition()), 250);
     }
 
     @Override
