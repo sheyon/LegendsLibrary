@@ -4,8 +4,8 @@ import android.provider.BaseColumns;
 
 public final class LegendsConstants
 {
-    //Version 7 = App Version 1.7
-    public static final int DATABASE_VERSION = 7;
+    //Version 8 = App Version 1.7.1
+    public static final int DATABASE_VERSION = 8;
     public static final String DB_EN = "lore_library.db";
     public static final String DB_DE = "lore_library_DE.db";
     public static final String DB_FR = "lore_library_FR.db";
@@ -221,5 +221,13 @@ public final class LegendsConstants
                 "select lore._id AS _id, lore.categoryId AS categoryId, lore.title\n" +
                 "from lore\n" +
                 "where prefix || title LIKE ?";
+
+        //OUT-OF-BOUNDS QUERY
+        public static final String OOB_QUERY =
+                "SELECT * FROM lore\n" +
+                "WHERE title LIKE ?\n" +
+                "UNION\n" +
+                "SELECT * FROM lore\n" +
+                "WHERE prefix || title LIKE ?";
     }
 }
