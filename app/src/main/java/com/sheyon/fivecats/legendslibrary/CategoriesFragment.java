@@ -202,7 +202,7 @@ public class CategoriesFragment extends Fragment {
     }
 
     private void resetSpinnerPosition() {
-        if (!legendsPreferences.isUsingTswSorting() && legendsPreferences.getSpinnerPosition() == Categories.CAT_8_ISU) {
+        if (!legendsPreferences.isUsingTswSorting() && spinner.getSelectedItem().toString().equals(getResources().getString(R.string.spinner_issues))) {
             legendsPreferences.setSpinnerPosition(0);
         }
         spinner.setSelection(legendsPreferences.getSpinnerPosition());
