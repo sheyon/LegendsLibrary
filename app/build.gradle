@@ -2,12 +2,11 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion '28.0.1'
+    buildToolsVersion '28.0.2'
     defaultConfig {
         applicationId "com.sheyon.fivecats.legendslibrary"
-        minSdkVersion 19
+        compileSdkVersion 28
         multiDexEnabled true
-        targetSdkVersion 28
         versionCode 12
         versionName '1.7.2'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -22,7 +21,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    flavorDimensions "api"
     productFlavors {
+        sdk19 {
+            dimension 'api'
+            minSdkVersion 19
+            targetSdkVersion 28
+        }
+        sdk16 {
+            dimension 'api'
+            minSdkVersion 16
+            targetSdkVersion 27
+            applicationIdSuffix '.jellybean'
+            versionNameSuffix '-jellybean'
+            versionCode 1600 + android.defaultConfig.versionCode
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -45,7 +58,8 @@ dependencies {
     implementation 'com.android.support:design:28.0.0-rc02'
     implementation 'com.android.support:support-v4:28.0.0-rc02'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-    implementation 'com.github.ranaparamveer:android-sqlite-asset-helper:v2.0.7'
     implementation 'com.sbrukhanda.fragmentviewpager:fragmentviewpager:1.0.0'
+    sdk19Implementation 'com.github.ranaparamveer:android-sqlite-asset-helper:v2.0.7'
+    sdk16Implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
     testImplementation 'junit:junit:4.12'
 }
