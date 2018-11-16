@@ -71,6 +71,8 @@ public class LegendsDatabase {
                 db.execSQL("UPDATE lore SET categoryId = 8, subcatId = NULL WHERE _id = 132;");     //Sinking City
                 db.execSQL("UPDATE lore SET title = \"Samhain 2012\" WHERE _id = 76;");
                 db.execSQL("UPDATE image SET title = \"Samhain 2012\" WHERE _id = 76;");
+                db.execSQL("UPDATE lore SET title = \"Samhain 2014\" WHERE _id = 78;");
+                db.execSQL("UPDATE image SET title = \"Samhain 2014\" WHERE _id = 78;");
 
                 LanguageAction lore2TswEn = () -> {
                     db.execSQL("UPDATE lore SET title = \"Guardians of Gaia\", categoryId = 7, subcatId = NULL WHERE _id = 74;");
@@ -101,6 +103,8 @@ public class LegendsDatabase {
                 db.execSQL("UPDATE lore SET categoryId = 5, subcatId = 17 WHERE _id = 132;");
                 db.execSQL("UPDATE lore SET title = \"Samhain 2017\" WHERE _id = 76;");
                 db.execSQL("UPDATE image SET title = \"Samhain 2017\" WHERE _id = 76;");
+                db.execSQL("UPDATE lore SET title = \"Samhain 2018\" WHERE _id = 78;");
+                db.execSQL("UPDATE image SET title = \"Samhain 2018\" WHERE _id = 78;");
 
                 LanguageAction lore2SwlEn = () -> {
                     db.execSQL("UPDATE lore SET title = \"Golems and the Fourth Age\", categoryId = 5, subcatId = 15 WHERE _id = 74;");
