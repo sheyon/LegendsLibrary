@@ -140,6 +140,7 @@ public class SettingsActivity extends NavigationDrawerActivity {
 
             //RESET THE SPINNER CAT NUMBER TO KEEP THE ARRAY FROM PERMANENTLY CRASHING
             legendsPrefs.setSpinnerPosition(0);
+            legendsPrefs.setAlphabeticalPosition(0);
 
             restartDatabase();
         });
