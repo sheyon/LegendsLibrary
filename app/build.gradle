@@ -27,14 +27,16 @@ android {
             dimension 'api'
             minSdkVersion 19
             targetSdkVersion 28
+            versionCode 1900 + android.defaultConfig.versionCode
         }
         sdk16 {
             dimension 'api'
             minSdkVersion 16
             targetSdkVersion 27
-            applicationIdSuffix '.jellybean'
-            versionNameSuffix '-jellybean'
+            maxSdkVersion 27
             versionCode 1600 + android.defaultConfig.versionCode
+            //applicationIdSuffix '.jellybean'
+            //versionNameSuffix '-jellybean'
         }
     }
     compileOptions {
