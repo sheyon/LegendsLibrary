@@ -1,13 +1,13 @@
 package com.sheyon.fivecats.legendslibrary;
 
-import android.app.Application;
-
 import com.sheyon.fivecats.legendslibrary.data.LegendsDatabase;
 import com.sheyon.fivecats.legendslibrary.data.LegendsPreferences;
 
 import java.util.Locale;
 
-public class LegendsApp extends Application {
+import androidx.multidex.MultiDexApplication;
+
+public class LegendsApp extends MultiDexApplication {
 
     @Override
     public void onCreate() {

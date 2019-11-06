@@ -5,10 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -197,7 +197,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
         if (prefsNormalization && prefsLang != 0) {
             searchString = normalizeSearchString(searchString);
 
-            modString = "'"+searchString+"'";
+            modString = "\""+searchString+"\"";
             String [] selectionArgs = { modString, modString, modString };
 
             cursor = db.rawQuery(Queries.QUERY_FTS_NORMALIZED, selectionArgs);
@@ -206,7 +206,7 @@ public class SearchFragment extends Fragment implements FragmentVisibilityListen
             //FOR EN, DE, FR (UN-NORMALIZED); CHECK FOR ROMANIAN WORDS FIRST
             searchString = checkForRomanianWords(searchString);
 
-            modString = "'"+searchString+"'";
+            modString = "\""+searchString+"\"";
             String [] selectionArgs = { modString, modString, modString };
 
             cursor = db.rawQuery(Queries.QUERY_FTS, selectionArgs);

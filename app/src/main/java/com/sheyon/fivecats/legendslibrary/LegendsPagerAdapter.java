@@ -1,7 +1,7 @@
 package com.sheyon.fivecats.legendslibrary;
 
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.Fragment;
 
 class LegendsPagerAdapter extends com.sbrukhanda.fragmentviewpager.adapters.FragmentStatePagerAdapter {
 
