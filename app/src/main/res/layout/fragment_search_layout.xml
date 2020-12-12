@@ -51,7 +51,7 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical">
 
-        <android.support.v4.widget.ContentLoadingProgressBar
+        <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/progress_circle_search"
             style="@android:style/Widget.ProgressBar"
             android:layout_width="wrap_content"
