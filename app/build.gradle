@@ -33,8 +33,8 @@ android {
         sdk16 {
             dimension 'api'
             minSdkVersion 16
-            targetSdkVersion 33
-            maxSdkVersion 33
+            targetSdkVersion 27
+            maxSdkVersion 27
             versionCode 1600 + android.defaultConfig.versionCode
             //applicationIdSuffix '.jellybean'
             //versionNameSuffix '-jellybean'
@@ -60,7 +60,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'com.google.android.material:material:1.6.0'
     implementation 'com.sbrukhanda.fragmentviewpager:fragmentviewpager:1.0.0'
     implementation 'com.android.support:multidex:1.0.3'
     sdk19Implementation 'com.github.ranaparamveer:android-sqlite-asset-helper:v2.0.7'
