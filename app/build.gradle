@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
     buildToolsVersion '30.0.3'
     defaultConfig {
         applicationId "com.sheyon.fivecats.legendslibrary"
-        compileSdkVersion 30
+        compileSdkVersion 33
         multiDexEnabled true
         versionCode 15
         versionName '1.8'
@@ -26,7 +26,7 @@ android {
         sdk19 {
             dimension 'api'
             minSdkVersion 19
-            targetSdkVersion 29
+            targetSdkVersion 33
             versionCode 1900 + android.defaultConfig.versionCode
         }
         sdk16 {
@@ -57,10 +57,10 @@ dependencies {
     androidTestImplementation('androidx.test.espresso:espresso-core:3.2.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'com.sbrukhanda.fragmentviewpager:fragmentviewpager:1.0.0'
     implementation 'com.android.support:multidex:1.0.3'
     sdk19Implementation 'com.github.ranaparamveer:android-sqlite-asset-helper:v2.0.7'
