@@ -7,8 +7,8 @@ android {
         applicationId "com.sheyon.fivecats.legendslibrary"
         compileSdkVersion 33
         multiDexEnabled true
-        versionCode 15 // Increment this for next release
-        versionName '1.8'
+        versionCode 16 // Increment this for next release
+        versionName '1.8.1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         targetSdkVersion 33
     }

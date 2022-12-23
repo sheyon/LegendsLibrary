@@ -156,7 +156,7 @@ public class LegendsDatabase {
             //AssetHelper AUTOMATICALLY INCREMENTS THE DATABASE IF VERSIONS DO NOT MATCH, UNDO THAT CHANGE SO THE DATABASE CAN FORCE UPGRADE
             db.setVersion(LegendsConstants.DATABASE_VERSION - 1);
             upgradeHelper[0].setForcedUpgrade(LegendsConstants.DATABASE_VERSION);
-            db.close();
+            //db.close();
 
             db = upgradeHelper[0].getWritableDatabase();
             if (!oldFavorites.isEmpty()) {
