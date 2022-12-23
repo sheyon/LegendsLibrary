@@ -34,6 +34,7 @@
 
     <string-array name="drawer_items">
         <item>@string/drawer_legends</item>
+        <item>@string/drawer_cards</item>
         <item>@string/drawer_settings</item>
         <item>@string/drawer_about</item>
     </string-array>
@@ -53,6 +54,7 @@
     <string name="lore_header_blackSignal">The Black Signal</string>
 
     <string name="drawer_legends">Legends Library</string>
+    <string name="drawer_cards">Trading Cards</string>
     <string name="drawer_settings">Settings</string>
     <string name="drawer_about">About</string>
 
@@ -124,5 +126,22 @@
     \n\nMy character\'s name is <b>Markel</b>. Give me a wave if you happen to see me in the game!</string>
     <string name="about_thanksText">The Secret World community is truly one of the most helpful among MMOs. The author would like to thank the following people for their help in translating this app:
     \n\nKuro-Hebi (Français)</string>
+
+    <string name="card_AkmaDesc"></string>
+    <string name="card_GearyDesc"></string>
+    <string name="card_SonnacDesc"></string>
+    <string name="card_AssaultRifleDesc"></string>
+    <string name="card_BladeDesc"></string>
+    <string name="card_BloodDesc"></string>
+    <string name="card_ChaosDesc"></string>
+    <string name="card_HammerDesc"></string>
+    <string name="card_ElementalismDesc"></string>
+    <string name="card_FistDesc"></string>
+    <string name="card_PistolsDesc"></string>
+    <string name="card_ShotgunDesc"></string>
+    <string name="card_KingsmouthDesc"></string>
+    <string name="card_ScorchedDesertDesc"></string>
+    <string name="card_BeseigedFarmlandsDesc"></string>
+
 
 </resources>

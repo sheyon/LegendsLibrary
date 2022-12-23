@@ -42,6 +42,13 @@ abstract class NavigationDrawerActivity extends AppCompatActivity {
                     mDrawerLayout.closeDrawer(mDrawerList);
                 }
             }
+            if (mDrawerItems[position].equals(activity.getString(R.string.drawer_cards))) {
+                Intent intent = new Intent(activity, CardsActivity.class);
+                if (activity.getClass() != CardsActivity.class) {
+                    activity.startActivity(intent);
+                    mDrawerLayout.closeDrawer(mDrawerList);
+                }
+            }
             if (mDrawerItems[position].equals(activity.getString(R.string.drawer_settings))) {
                 Intent intent = new Intent(activity, SettingsActivity.class);
                 if (activity.getClass() != SettingsActivity.class) {

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <string-array name="cardResource">
+            <item>card_akma</item>
+            <item>card_kirsten_geary</item>
+            <item>card_richard_sonnac</item>
+            <item>card_kingsmouth_town</item>
+            <item>card_scorched_desert</item>
+            <item>card_besieged_farmlands</item>
+            <item>card_assault_rifle</item>
+            <item>card_blade</item>
+            <item>card_blood</item>
+            <item>card_chaos</item>
+            <item>card_elementalism</item>
+            <item>card_fist</item>
+            <item>card_hammer</item>
+            <item>card_pistols</item>
+            <item>card_shotgun</item>
+        </string-array>
+        <string-array name="cardFoil">
+            <item>foil_akma</item>
+            <item>foil_kirsten_geary</item>
+            <item>foil_richard_sonnac</item>
+            <item>foil_kingsmouth_town</item>
+            <item>foil_scorched_desert</item>
+            <item>foil_beseiged_farmlands</item>
+            <item>foil_assault_rifle</item>
+            <item>foil_blade</item>
+            <item>foil_blood</item>
+            <item>foil_chaos</item>
+            <item>foil_elementalism</item>
+            <item>foil_fist</item>
+            <item>foil_hammer</item>
+            <item>foil_pistols</item>
+            <item>foil_shotgun</item>
+        </string-array>
+        <string-array name="cardDesc">
+            <item>A refugee from the Hell Dimensions and a companion demon to Hana, Akma serves as a recruiter for the Dragon.</item>
+            <item>Some say life and death are bitches, and there are those in the Illuminati who say she\'s got them both beat.</item>
+            <item>Regal and eloquent, he is the new face of the lions of the Secret World.</item>
+            <item>A sleepy New England town. Most of the residents are no longer alive, but they are all walking.</item>
+            <item>The air is as dry as a mummy\'s whispered lie. Aten cultists chant in the sandy ruins, worshiping the sun that kills with its stare.</item>
+            <item>A Transylvanian farmland where ghouls give cadavers their razor-toothed kisses and monsters are ground into sausage in a blood-stained barn.</item>
+            <item>There is a comfort in defying the rising tide of darkness with controlled bursts of high velocity artillery.</item>
+            <item>Anima and concentration attain a razor sharp level of focus when channeled through a blade.</item>
+            <item>Blood greases the gears that make the supernal world turn — a primordial power both sacred and profane.</item>
+            <item>Walk between raindrops. See the punchlines to the jokes the universe tells itself in fractal patterns and jagged chance. Harness chaos.</item>
+            <item>Breath storms. Shout lightning. Sing fire. Whisper ice. Bend gravity. The most basic and powerful laws of the universe thrum through one\'s fingers.</item>
+            <item>The weapon fits like a glove. Anima surges through the sharp points, unlocking something primal — hereditary memories of natural armaments. It feels… right.</item>
+            <item>The weight of the weapon feels good. And the repeating beat of hammer-smashing-monster-skulls sounds like laughter in the face of the apocalypse.</item>
+            <item>Two guns. Two hands. Anima bleeds into the chambers, awakening the bullets to magic.</item>
+            <item>Sometimes the only thing separating this world from the legion of unholy horrors is a spray of hot metal and a deafening boom.</item>
+        </string-array>
+</resources>
